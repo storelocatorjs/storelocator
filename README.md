@@ -2,7 +2,7 @@
 
 *Easily build a storelocator in Javascript*<br />
 
-See store-locator.bitbucket.io for complete docs and demos.<br />
+See [store-locator.bitbucket.io](https://store-locator.bitbucket.io) for complete docs and demos.<br />
 
 Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Storelocator is responsive desktop, tablet and mobile, and included a full webservice PHP with ajax requests. List of included features:
 
@@ -29,13 +29,13 @@ It can also be used independently, as in the [demo](https://store-locator.bitbuc
 
 ## Download
 
-Download Storelocator.js on store-locator.bitbucket.io/download
+Download Storelocator.js on [store-locator.bitbucket.io/download](https://store-locator.bitbucket.io/download)
 
 ## Licences
 
 ### Commercial license
 
-If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a Storelocator.js Commercial License at store-locator.bitbucket.io
+If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a Storelocator.js Commercial License at [store-locator.bitbucket.io](https://store-locator.bitbucket.io).
 
 ## How it works
 
