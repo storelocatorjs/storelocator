@@ -12,21 +12,21 @@ Storelocator is a **fast** and **lightweight** Javascript library to easily buil
 
 Storelocator is **responsive** desktop, tablet and mobile, and is autonomous with a full PHP webservice which includes ajax requests includes. List of included features:
 
-* [Responsive design](https://store-locator.bitbucket.io/features.md#responsive-design)
-* [Map with options](https://store-locator.bitbucket.io/features.md#maps-options)
-* [Search with autocomplete](https://store-locator.bitbucket.io/features.md#autocomplete)
-* [Browser geolocation](https://store-locator.bitbucket.io/features.md#geolocation)
-* [Filters by category](https://store-locator.bitbucket.io/features.md#filters)
-* [PHP class and webservice](https://store-locator.bitbucket.io/features.md#php-class-and-webservice)
-* [AJAX research](https://store-locator.bitbucket.io/features.md#ajax-research)
-* [JSON structure](https://store-locator.bitbucket.io/features.md#json-structure)
-* [Markers](https://store-locator.bitbucket.io/features.md#markers)
-* [Clusters](https://store-locator.bitbucket.io/features.md#clusters)
-* [SVG for markers style](https://store-locator.bitbucket.io/features.md#markers)
-* [Update markers on bounds changed](https://store-locator.bitbucket.io/features.md#markers-update-on-bounds-changed)
-* [List of results](https://store-locator.bitbucket.io/features.md#results)
-* [Native info window popin](https://store-locator.bitbucket.io/features.md#infowindow)
-* [Loader](https://store-locator.bitbucket.io/features.md#loader)
+* [Responsive design](https://store-locator.bitbucket.io/features/#responsive-design)
+* [Map with options](https://store-locator.bitbucket.io/features/#maps-options)
+* [Search with autocomplete](https://store-locator.bitbucket.io/features/#autocomplete)
+* [Browser geolocation](https://store-locator.bitbucket.io/features/#geolocation)
+* [Filters by category](https://store-locator.bitbucket.io/features/#filters)
+* [PHP class and webservice](https://store-locator.bitbucket.io/features/#php-class-and-webservice)
+* [AJAX research](https://store-locator.bitbucket.io/features/#ajax-research)
+* [JSON structure](https://store-locator.bitbucket.io/features/#json-structure)
+* [Markers](https://store-locator.bitbucket.io/features/#markers)
+* [Clusters](https://store-locator.bitbucket.io/features/#clusters)
+* [SVG for markers style](https://store-locator.bitbucket.io/features/#markers)
+* [Update markers on bounds changed](https://store-locator.bitbucket.io/features/#markers-update-on-bounds-changed)
+* [List of results](https://store-locator.bitbucket.io/features/#results)
+* [Native info window popin](https://store-locator.bitbucket.io/features/#infowindow)
+* [Loader](https://store-locator.bitbucket.io/features/#loader)
 
 This module is fully writen in Javascript native. No need to import an additional librairy like jQuery or Handlebars. #YouMightNotNeedJquery<br />
 
