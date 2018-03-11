@@ -6,6 +6,10 @@ See [store-locator.bitbucket.io](https://store-locator.bitbucket.io) for complet
 
 Storelocator is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with Gzip, it has no dependency with any framework or library and is write in **Javascript native**.
 
+<center style="image-rendering: -webkit-optimize-contrast;">
+<img src="https://store-locator.bitbucket.io/img/desktop.jpg" alt="Storelocator on desktop" />
+</center>
+
 Storelocator is **responsive** desktop, tablet and mobile, and is autonomous with a full PHP webservice which includes ajax requests includes. List of included features:
 
 * Responsive design
