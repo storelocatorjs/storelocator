@@ -4,7 +4,9 @@
 
 See [store-locator.bitbucket.io](https://store-locator.bitbucket.io) for complete docs and demos.<br />
 
-Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Storelocator is responsive desktop, tablet and mobile, and included a full webservice PHP with ajax requests. List of included features:
+Storelocator is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with Gzip, it has no dependency with any framework or library and is write in **Javascript native**.
+
+Storelocator is **responsive** desktop, tablet and mobile, and is autonomous with a full PHP webservice which includes ajax requests includes. List of included features:
 
 * Responsive design
 * Map with options
@@ -33,7 +35,7 @@ Download Storelocator.js on [store-locator.bitbucket.io/download](https://store-
 
 ## Licences
 
-### Commercial license
+### Commercial licenses
 
 If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a Storelocator.js Commercial License at [store-locator.bitbucket.io](https://store-locator.bitbucket.io).
 
@@ -49,17 +51,21 @@ If you want to use Storelocator to develop commercial sites, themes, projects, a
   <form id="form-search" name="form-search">
     <input type="text" id="input-search" placeholder="Enter a location" autocomplete="off" value="" required />
     <div class="aside-filters">
-      <div class="form-checkbox">
-        <input type="checkbox" name="category-1" id="category-1" class="filter-map-js" checked="checked" value="1" />
-        <label for="category-1" class="category-1">Catégorie 1</label>
+      <div class="filters-row">
+          <div class="form-checkbox">
+              <input type="checkbox" name="category-1" id="category-1" class="filter-map-js" checked="checked" value="1" />
+          <label for="category-1" class="category-1">Restaurant</label>
+        </div>
+        <div class="form-checkbox">
+            <input type="checkbox" name="category-2" id="category-2" class="filter-map-js" checked="checked" value="2" />
+          <label for="category-2" class="category-2">Bar</label>
+        </div>
       </div>
-      <div class="form-checkbox">
-        <input type="checkbox" name="category-2" id="category-2" class="filter-map-js" checked="checked" value="2" />
-        <label for="category-2" class="category-2">Catégorie 2</label>
-      </div>
-      <div class="form-checkbox">
-        <input type="checkbox" name="category-3" id="category-3" class="filter-map-js" checked="checked" value="3" />
-        <label for="category-3" class="category-3">Catégorie 3</label>
+      <div class="filters-row">
+        <div class="form-checkbox">
+          <input type="checkbox" name="category-3" id="category-3" class="filter-map-js" checked="checked" value="3" />
+          <label for="category-3" class="category-3">Concept store</label>
+        </div>
       </div>
     </div>
   </form>
