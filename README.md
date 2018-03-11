@@ -1,8 +1,8 @@
 # Storelocator.js <small>with Google Maps</small>
 
-*Easily build a storelocator in Javascript*<br />
+## Easily build a storelocator in Javascript
 
-See [store-locator.bitbucket.io](https://store-locator.bitbucket.io) for complete docs and demos.<br />
+See [https://store-locator.bitbucket.io](https://store-locator.bitbucket.io) for complete docs and demos.<br />
 
 Storelocator is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with Gzip, it has no dependency with any framework or library and is write in **Javascript native**.
 
@@ -12,21 +12,21 @@ Storelocator is a **fast** and **lightweight** Javascript library to easily buil
 
 Storelocator is **responsive** desktop, tablet and mobile, and is autonomous with a full PHP webservice which includes ajax requests includes. List of included features:
 
-* Responsive design
-* Map with options
-* Search with autocomplete
-* Browser geolocation
-* Filters by category
-* PHP class and webservice
-* AJAX research
-* JSON structure
-* Markers
-* Clusters
-* SVG for markers style
-* Update markers on bounds changed
-* List of results
-* Native info window popin
-* Loader
+* [Responsive design](https://store-locator.bitbucket.io/features.md#responsive-design)
+* [Map with options](https://store-locator.bitbucket.io/features.md#maps-options)
+* [Search with autocomplete](https://store-locator.bitbucket.io/features.md#autocomplete)
+* [Browser geolocation](https://store-locator.bitbucket.io/features.md#geolocation)
+* [Filters by category](https://store-locator.bitbucket.io/features.md#filters)
+* [PHP class and webservice](https://store-locator.bitbucket.io/features.md#php-class-and-webservice)
+* [AJAX research](https://store-locator.bitbucket.io/features.md#ajax-research)
+* [JSON structure](https://store-locator.bitbucket.io/features.md#json-structure)
+* [Markers](https://store-locator.bitbucket.io/features.md#markers)
+* [Clusters](https://store-locator.bitbucket.io/features.md#clusters)
+* [SVG for markers style](https://store-locator.bitbucket.io/features.md#markers)
+* [Update markers on bounds changed](https://store-locator.bitbucket.io/features.md#markers-update-on-bounds-changed)
+* [List of results](https://store-locator.bitbucket.io/features.md#results)
+* [Native info window popin](https://store-locator.bitbucket.io/features.md#infowindow)
+* [Loader](https://store-locator.bitbucket.io/features.md#loader)
 
 This module is fully writen in Javascript native. No need to import an additional librairy like jQuery or Handlebars. #YouMightNotNeedJquery<br />
 
