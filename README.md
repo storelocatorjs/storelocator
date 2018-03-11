@@ -35,13 +35,14 @@ It can also be used independently, as in the [demo](https://store-locator.bitbuc
 
 ## Download
 
-Download Storelocator.js on [store-locator.bitbucket.io/download](https://store-locator.bitbucket.io/download)
+Download Storelocator.js on [https://store-locator.bitbucket.io/download](https://store-locator.bitbucket.io/download)
 
 ## Licences
 
 ### Commercial licenses
 
-If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a Storelocator.js Commercial License at [store-locator.bitbucket.io](https://store-locator.bitbucket.io).
+If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license. With this option, your source code is kept proprietary.<br />
+Purchase a Storelocator.js Commercial License at [https://store-locator.bitbucket.io](https://store-locator.bitbucket.io).
 
 ## How it works
 
