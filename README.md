@@ -1,3 +1,5 @@
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/store-locator/store-locator)
+
 # Storelocator.js <small>with Google Maps</small>
 
 ## Easily build a storelocator in Javascript
