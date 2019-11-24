@@ -189,3 +189,4 @@ var myStorelocator = new Storelocator(options, function(map){
     //Ready
 });
 ```
+
