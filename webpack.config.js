@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
 	return {
 		watch: !isProduction,
 		entry: {
-			vlite: './src/storelocator/config.js',
+			storelocator: './src/storelocator/config.js',
 			demo: './src/demo/config.js'
 		},
 		watchOptions: {

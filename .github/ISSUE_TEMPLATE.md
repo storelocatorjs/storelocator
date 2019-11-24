@@ -30,9 +30,9 @@ Please include any additional information necessary here. Including the followin
 
 ### versions
 
-#### vlitejs
+#### storelocatorjs
 
-What version of `vlitejs` does this occur with?
+What version of `storelocatorjs` does this occur with?
 
 #### Browsers
 

@@ -10,82 +10,15 @@
 
 'use strict'
 
-class Storelocator {
-	constructor (options, callback) {
-		let defaultOptions = {
-			apiKey: '', // {String} mandatory parameter
-			urlWebservice: '', // {String}
-			debug: false, // {Bool}
-			breakpointMobile: '767px', // {String}
+import templateSidebarItemResult from './templates/sidebar-item-result'
+import templateInfoWindow from './templates/info-window'
+import defaultOptions from './default-options'
+import Markers from './markers'
 
-			cluster: {
-				status: true, // {Bool}
-				options: {
-					gridSize: 50, // {Int}
-					maxZoom: 13, // {Int}
-					imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-					zoomOnClick: true, // {Bool}
-					averageCenter: true, // {Bool}
-					minimumClusterSize: 2, // {Int}
-					styles: [] // {Array}
-				}
-			},
-
-			geolocation: {
-				status: true, // {Bool}
-				startOnLoad: false // {Bool}
-			},
-
-			updateMarkerOnBoundsChanged: {
-				status: true, // {Bool}
-				maxMarkersInViewportLimit: 30, // {Int}
-				stepRadius: 50, // {Int} in kilometers
-				maxRadius: 150 // {Int} in kilometers
-			},
-
-			requests: {
-				searchRadius: 50, // {Int} in kilometers
-				storeLimit: 20 // {Int}
-			},
-
-			map: {
-				options: {
-					center: [46.227638, 2.213749], // {Array} latitude and longitude
-					mapTypeId: 'roadmap', // {String}
-					zoom: 6, // {Int}
-					scrollwheel: true, // {Bool}
-					disableDefaultUI: false, // {Bool}
-					mapTypeControl: false, // {Bool}
-					streetViewControl: false, // {Bool}
-					scaleControl: false, // {Bool}
-					fullscreenControl: true, // {Bool}
-					styles: [] // {Array}
-				},
-				markers: {
-					width: 30, // {Int} in pixel
-					height: 40, // {Int} in pixel
-					styles: [{
-						category: 'userPosition', // {String}
-						colorBackground: '#4285f4', // {String}
-						colorBorder: '#4285f4' // {String}
-					}]
-				}
-			},
-
-			selectors: {
-				container: '.container-storelocator', // {String}
-				loader: '.storelocator-loader', // {String}
-				mapGeoloc: '.map-geoloc-js', // {String}
-				mapAside: '.map-aside', // {String}
-				formSearch: '#form-search', // {String}
-				inputSearch: '#input-search', // {String}
-				filtersSearch: '.filter-map-js', // {String}
-				asideResults: '.aside-results' // {String}
-			}
-		}
-
-		this.options = this.extend(true, defaultOptions, options)
-		this.callback = callback
+export default class Storelocator {
+	constructor ({options, onReady}) {
+		this.options = Object.assign({}, defaultOptions, options)
+		this.onReady = onReady
 		this.isLoading = false
 		this.isBrowserIE = !!((document.documentMode && document.documentMode >= 9))
 		this.isMobile = window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches
@@ -147,7 +80,7 @@ class Storelocator {
 
 	initNavMobile () {
 		let buttons = this.containerStorelocator.querySelectorAll('.switch-view-js')
-		let mapView = this.containerStorelocator.querySelector('#container-google-maps');
+		let mapView = this.containerStorelocator.querySelector('#storelocator-googleMaps');
 
 		[].forEach.call(buttons, button => {
 			button.addEventListener('click', e => {
@@ -192,10 +125,11 @@ class Storelocator {
 		// Create global variables for Google Maps
 		this.overlayRed = null
 		this.overlayGreen = null
-		this.markers = []
 		this.currentInfoWindow = null
 		this.infoWindowOpened = false
 		this.boundsChangeTimer = null
+
+		this.Markers = new Markers()
 
 		this.serviceDistanceMatrix = new window.google.maps.DistanceMatrixService()
 		this.boundsGlobal = new window.google.maps.LatLngBounds()
@@ -218,7 +152,8 @@ class Storelocator {
 		}
 
 		// Clone object before to prevent reference
-		let cloneMapOptions = this.extend(true, {}, this.options.map.options)
+		let cloneMapOptions = Object.assign({}, this.options.map.options)
+
 		cloneMapOptions.center = new window.google.maps.LatLng(cloneMapOptions.center[0], cloneMapOptions.center[1])
 
 		// Init Google Maps API
@@ -228,12 +163,12 @@ class Storelocator {
 			this.offsetMapWithAsideBar()
 		}
 
-		if (typeof MarkerClusterer !== 'undefined') {
+		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
 				// Documentation: https://googlemaps.github.io/js-marker-clusterer/docs/reference.html
 				// Clone object before to prevent reference
 				let cloneClusterOptions = this.extend(true, this.options.cluster.options)
-				this.markerCluster = new window.MarkerClusterer(this.map, this.markers, cloneClusterOptions)
+				this.markerCluster = new window.MarkerClusterer(this.map, this.Markers.markers, cloneClusterOptions)
 			}
 		} else {
 			this.log('warn', 'Storelocator :: Cluster option is enabled, you need to load MarkerClusterer.js in your vendor before use it.')
@@ -249,8 +184,8 @@ class Storelocator {
 			})
 		}
 
-		if (typeof this.callback === 'function') {
-			this.callback(this.map)
+		if (typeof this.onReady === 'function') {
+			this.onReady(this.map)
 		}
 	}
 
@@ -315,12 +250,12 @@ class Storelocator {
 	}
 
 	boundsChanged () {
-		if (this.markers.length) {
+		if (this.Markers.markers.length) {
 			clearTimeout(this.boundsChangeTimer)
 			this.boundsChangeTimer = setTimeout(() => {
 				let listMarkerIndexInViewport = []
 
-				this.markers.forEach((marker, index) => {
+				this.Markers.markers.forEach((marker, index) => {
 					if (marker.getVisible() && this.map.getBounds().contains(marker.getPosition())) {
 						listMarkerIndexInViewport.push(index)
 					}
@@ -331,7 +266,7 @@ class Storelocator {
 					this.refreshMapOnBoundsChanged({
 						updatePosition: true
 					})
-				} else if (listMarkerIndexInViewport.length === this.markers.length) {
+				} else if (listMarkerIndexInViewport.length === this.Markers.markers.length) {
 					// If user see already all markers, zoom is too small, increase it until maxRadius
 					if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
 						this.refreshMapOnBoundsChanged({
@@ -455,6 +390,26 @@ class Storelocator {
 		this.searchData.lng = lng
 		this.searchData.position = new window.google.maps.LatLng(lat, lng)
 
+		// let fetchConf = {
+		// 	method: 'POST',
+		// 	body: JSON.stringify(dataAjax)
+		// }
+
+		// fetch(this.options.urlWebservice, fetchConf)
+		// 	.then(response => {
+		// 		if (!response.ok) {
+		// 			throw Error(response.statusText)
+		// 		}
+		// 		return response
+		// 	})
+		// 	.then(res => res.json())
+		// 	.then(jsonResponse => {
+		// 		console.log(jsonResponse)
+		// 	})
+		// 	.catch(error => {
+		// 		throw new Error('error', error)
+		// 	})
+
 		this.ajax({
 			url: this.options.urlWebservice,
 			type: 'POST',
@@ -509,11 +464,10 @@ class Storelocator {
 		let noResult = true
 		let {stores} = options
 		let {fitBounds} = options
-		let hmlListResult = `<p class="aside-intro">${stores.length} results sorted by distance correspond to your research</p><ul>`
-		let origin
+		let hmlListResult = `<p class="storelocator-sidebarIntro">${stores.length} results sorted by distance correspond to your research</p><ul>`
 
 		// Destroy old markers before parse new stores
-		this.destroyMarkers()
+		this.Markers.destroyMarkers()
 
 		// Reset infoWindow status
 		this.infoWindowOpened = false
@@ -527,12 +481,12 @@ class Storelocator {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
-			this.markers.push(this.geolocationData.marker)
+			this.Markers.markers.push(this.geolocationData.marker)
 			this.boundsGlobal.extend(this.geolocationData.position)
 		}
 
 		// Get lat/lng from searchData
-		origin = this.searchData.position
+		let origin = this.searchData.position
 
 		// Loop on all stores by category
 		stores.forEach((store, index) => {
@@ -541,35 +495,19 @@ class Storelocator {
 			store.position = new window.google.maps.LatLng(store.lat, store.lng)
 
 			this.boundsGlobal.extend(store.position)
-			this.createMarkers(store)
+			this.Markers.createMarkers(store)
 
-			hmlListResult += `<li class="category-${store.category}">
-                                <div class="detail-store">
-                                    ${store.title
-                                        ? `<span class="store-title"><a href="" title="See on the map" class="store-center-marker-js" data-marker-index="${index}">${index + 1}. <span>${store.title}</span></a></span>`
-                                    : ``}
-                                    <a href="http://www.google.fr/maps/dir/${origin}/${store.lat},${store.lng}" title="See the itinerary on Google Maps" target="_blank" class="store-distance"><span>${store.distance.toFixed(2)}km</span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" class="store-icon-route" viewBox="1772 1772 19.185 20" enable-background="new 1772 1772 19.185 20" xml:space="preserve"><path d="M1791.074,1775.318c0.074,0.073,0.11,0.159,0.11,0.257c0,0.096-0.036,0.182-0.11,0.257l-1.574,1.573c-0.209,0.21-0.464,0.313-0.761,0.313h-15.009c-0.192,0-0.361-0.069-0.502-0.213c-0.141-0.141-0.211-0.31-0.211-0.502v-2.859c0-0.192,0.07-0.36,0.211-0.502c0.141-0.141,0.31-0.211,0.502-0.211h6.434v-0.716c0-0.192,0.07-0.36,0.211-0.502c0.141-0.143,0.31-0.213,0.502-0.213h1.431c0.193,0,0.361,0.07,0.502,0.213c0.142,0.142,0.211,0.31,0.211,0.502v0.716h5.719c0.297,0,0.552,0.102,0.761,0.312L1791.074,1775.318z M1780.164,1785.58h2.856v5.716c0,0.196-0.069,0.361-0.211,0.505c-0.141,0.141-0.309,0.211-0.502,0.211h-1.431c-0.192,0-0.361-0.07-0.502-0.211c-0.141-0.144-0.211-0.309-0.211-0.505V1785.58zM1789.454,1780.577c0.193,0,0.361,0.07,0.502,0.211c0.142,0.142,0.212,0.31,0.212,0.502v2.859c0,0.192-0.07,0.361-0.212,0.504c-0.141,0.142-0.309,0.212-0.502,0.212h-15.009c-0.297,0-0.551-0.105-0.76-0.314l-1.574-1.572c-0.075-0.076-0.111-0.162-0.111-0.258c0-0.097,0.036-0.184,0.111-0.257l1.574-1.576c0.209-0.209,0.463-0.311,0.76-0.311h5.719v-2.146h2.856v2.146H1789.454z"/></svg></a>
-                                    ${store.address
-                                        ? `<span class="store-address">${store.address}</span>`
-                                    : ``}
-                                    ${store.zipcode
-                                        ? `<span class="store-zipcode">${store.zipcode}</span>`
-                                    : ``}
-                                    ${store.city
-                                        ? `<span class="store-city">${store.city}</span>`
-                                    : ``}
-                                    ${store.phone
-                                        ? `<span class="store-phone"><a href="tel:${store.phone}" title="Call">${store.phone}</a></span>`
-                                    : ``}
-                                </div>
-                            </li>`
+			hmlListResult += templateSidebarItemResult({
+				store: store,
+				origin: origin
+			})
 		})
 
 		hmlListResult += `</ul>`
 
 		// If no result, show error message and center map on current country
 		if (noResult) {
-			this.asideResults.innerHTML = '<p class="no-results">No results for your request.<br />Please try a new search with differents choices.</p>'
+			this.asideResults.innerHTML = '<p class="storelocator-sidebarNoResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 			if (this.overlayGreen !== null) {
 				this.overlayGreen.setMap(null)
 			}
@@ -582,7 +520,7 @@ class Storelocator {
 			// Add all maskers to cluster if option is enabled
 			if (typeof MarkerClusterer !== 'undefined') {
 				if (this.options.cluster.status) {
-					this.markerCluster.addMarkers(this.markers)
+					this.markerCluster.addMarkers(this.Markers.markers)
 				}
 			}
 
@@ -616,7 +554,7 @@ class Storelocator {
 				e.preventDefault()
 
 				let currentLink = e.target.parentNode
-				let currentMarker = this.markers[currentLink.getAttribute('data-marker-index')]
+				let currentMarker = this.Markers.markers[currentLink.getAttribute('data-marker-index')]
 
 				this.map.panTo(currentMarker.getPosition())
 				this.map.setZoom(16)
@@ -681,96 +619,14 @@ class Storelocator {
 		})
 	}
 
-	destroyMarkers () {
-		// Destroy all maskers references in cluster is enabled
-		if (typeof MarkerClusterer !== 'undefined') {
-			if (this.options.cluster.status) {
-				this.markerCluster.clearMarkers()
-			}
-		}
-
-		// Loop backwards on markers and remove them
-		for (let i = this.markers.length - 1; i >= 0; i--) {
-			let currentMarker = this.markers[i]
-
-			// Remove listener from marker instance
-			window.google.maps.event.clearInstanceListeners(currentMarker)
-
-			// Remove the marker
-			currentMarker.setMap(null)
-		}
-
-		this.markers = []
-	}
-
-	createMarkers (data) {
-		// Build marker
-		let options = {
-			position: data.position,
-			map: this.map,
-			optimized: true,
-			label: {
-				text: (data.index + 1).toString(),
-				fontFamily: 'Roboto, Arial, sans-serif',
-				fontSize: '13px',
-				fontWeight: '500',
-				color: '#fff'
-			}
-		}
-
-		// Disable SVG for IE, they don't works
-		if (!this.isBrowserIE) {
-			options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory(data.category) : ''
-		}
-
-		let marker = new window.google.maps.Marker(options)
-
-		// Push marker data in marker
-		marker.store = data
-
-		this.markers.push(marker)
-
-		// Click on marker to show infoWindow
-		window.google.maps.event.addListener(marker, 'click', () => {
-			this.infoWindowOpened = true
-			this.openInfoWindow(marker)
-		})
-	}
-
 	openInfoWindow (currentMarker) {
-		let currentStore = currentMarker.store
-		let hmlinfoWindow = ''
-		let origin
-
 		// Get lat/lng from searchData
-		origin = this.searchData.position
+		let origin = this.searchData.position
 
-		hmlinfoWindow = `<div class="wrapper-info-window">
-                            ${currentStore.picture
-                                ? `<span class="store-picture"><a href="${currentStore.link}" title="Visit website" target="_blank"><img src="${currentStore.picture}" alt="${currentStore.title}" /></a></span>`
-                            : ``}
-                            <div class="detail-store">
-                                ${currentStore.title
-                                    ? `<span class="store-title">${currentStore.index + 1}. ${currentStore.title}</span>`
-                                : ``}
-                                <a href="http://www.google.fr/maps/dir/${origin}/${currentStore.lat},${currentStore.lng}" title="See the itinerary on Google Maps" target="_blank" class="store-distance"><span>${currentStore.distance.toFixed(2)}km</span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" class="store-icon-route" viewBox="1772 1772 19.185 20" enable-background="new 1772 1772 19.185 20" xml:space="preserve"><path d="M1791.074,1775.318c0.074,0.073,0.11,0.159,0.11,0.257c0,0.096-0.036,0.182-0.11,0.257l-1.574,1.573c-0.209,0.21-0.464,0.313-0.761,0.313h-15.009c-0.192,0-0.361-0.069-0.502-0.213c-0.141-0.141-0.211-0.31-0.211-0.502v-2.859c0-0.192,0.07-0.36,0.211-0.502c0.141-0.141,0.31-0.211,0.502-0.211h6.434v-0.716c0-0.192,0.07-0.36,0.211-0.502c0.141-0.143,0.31-0.213,0.502-0.213h1.431c0.193,0,0.361,0.07,0.502,0.213c0.142,0.142,0.211,0.31,0.211,0.502v0.716h5.719c0.297,0,0.552,0.102,0.761,0.312L1791.074,1775.318z M1780.164,1785.58h2.856v5.716c0,0.196-0.069,0.361-0.211,0.505c-0.141,0.141-0.309,0.211-0.502,0.211h-1.431c-0.192,0-0.361-0.07-0.502-0.211c-0.141-0.144-0.211-0.309-0.211-0.505V1785.58zM1789.454,1780.577c0.193,0,0.361,0.07,0.502,0.211c0.142,0.142,0.212,0.31,0.212,0.502v2.859c0,0.192-0.07,0.361-0.212,0.504c-0.141,0.142-0.309,0.212-0.502,0.212h-15.009c-0.297,0-0.551-0.105-0.76-0.314l-1.574-1.572c-0.075-0.076-0.111-0.162-0.111-0.258c0-0.097,0.036-0.184,0.111-0.257l1.574-1.576c0.209-0.209,0.463-0.311,0.76-0.311h5.719v-2.146h2.856v2.146H1789.454z"/></svg></a>
-                                ${currentStore.address
-                                    ? `<span class="store-address">${currentStore.address}</span>`
-                                : ``}
-                                ${currentStore.zipcode
-                                    ? `<span class="store-zipcode">${currentStore.zipcode}</span>`
-                                : ``}
-                                ${currentStore.city
-                                    ? `<span class="store-city">${currentStore.city}</span>`
-                                : ``}
-                                ${currentStore.phone
-                                    ? `<span class="store-phone"><a href="tel:${currentStore.phone}" title="Call">${currentStore.phone}</a></span>`
-                                : ``}
-                                ${typeof currentStore.link !== 'undefined'
-                                ? `<a href="${currentStore.link}" title="Visit website" target="_blank" class="store-website">${currentStore.link}</a>`
-                                : ``}
-                            </div>
-                        </div>`
+		let hmlinfoWindow = templateInfoWindow({
+			store: currentMarker.store,
+			origin: origin
+		})
 
 		this.infoWindow.setContent(hmlinfoWindow)
 
@@ -855,41 +711,6 @@ class Storelocator {
 		request.send(sendData)
 	}
 
-	extend () {
-		let extended = {}
-		let deep = false
-		let i = 0
-		let {length} = arguments
-
-		// Check if a deep merge
-		if (Object.prototype.toString.call(arguments[0]) === '[object Boolean]') {
-			[deep] = arguments
-			i++
-		}
-
-		// Merge the object into the extended object
-		let merge = obj => {
-			for (let prop in obj) {
-				if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-					// If deep merge and property is an object, merge properties
-					if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
-						extended[prop] = this.extend(true, extended[prop], obj[prop])
-					} else {
-						extended[prop] = obj[prop]
-					}
-				}
-			}
-		}
-
-		// Loop through each object and conduct a merge
-		for (; i < length; i++) {
-			let obj = arguments[i]
-			merge(obj)
-		}
-
-		return extended
-	}
-
 	/* eslint-disable no-console */
 	log (method, message) {
 		if (this.options.debug) {
@@ -898,5 +719,3 @@ class Storelocator {
 	}
 	/* eslint-enable no-console */
 }
-
-window.Storelocator = Storelocator

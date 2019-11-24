@@ -55,21 +55,21 @@ Purchase a Storelocator.js Commercial License at [https://store-locator.bitbucke
 
   <div class="storelocator-loader"></div>
 
-  <form id="form-search" name="form-search">
-    <input type="text" id="input-search" placeholder="Enter a location" autocomplete="off" value="" required />
-    <div class="aside-filters">
-      <div class="filters-row">
-          <div class="form-checkbox">
+  <form class="storelocator-formSearch" name="form-search">
+    <input type="text" class="storelocator-inputSearch" placeholder="Enter a location" autocomplete="off" value="" required />
+    <div class="storelocator-formFilters">
+      <div class="storelocator-formFiltersRow">
+          <div class="storelocator-formCheckbox">
               <input type="checkbox" name="category-1" id="category-1" class="filter-map-js" checked="checked" value="1" />
           <label for="category-1" class="category-1">Restaurant</label>
         </div>
-        <div class="form-checkbox">
+        <div class="storelocator-formCheckbox">
             <input type="checkbox" name="category-2" id="category-2" class="filter-map-js" checked="checked" value="2" />
           <label for="category-2" class="category-2">Bar</label>
         </div>
       </div>
-      <div class="filters-row">
-        <div class="form-checkbox">
+      <div class="storelocator-formFiltersRow">
+        <div class="storelocator-formCheckbox">
           <input type="checkbox" name="category-3" id="category-3" class="filter-map-js" checked="checked" value="3" />
           <label for="category-3" class="category-3">Concept store</label>
         </div>
@@ -77,13 +77,13 @@ Purchase a Storelocator.js Commercial License at [https://store-locator.bitbucke
     </div>
   </form>
 
-  <div id="container-google-maps">
+  <div id="storelocator-googleMaps">
     <div id="google-map"></div>
-    <button class="map-geoloc-js"></button>
+    <button class="storelocator-geolocButton"></button>
   </div>
 
-  <div class="map-aside">
-    <div class="aside-results"></div>
+  <div class="storelocator-sidebar">
+    <div class="storelocator-sidebarResults"></div>
   </div>
 
 </div>
@@ -176,12 +176,12 @@ var options = {
     selectors: {
         container: '.container-storelocator', // {String}
         loader: '.storelocator-loader', // {String}
-        mapGeoloc: '.map-geoloc-js', // {String}
-        mapAside: '.map-aside', // {String}
-        formSearch: '#form-search', // {String}
-        inputSearch: '#input-search', // {String}
+        mapGeoloc: '.storelocator-geolocButton', // {String}
+        mapAside: '.storelocator-sidebar', // {String}
+        formSearch: '.storelocator-formSearch', // {String}
+        inputSearch: '.storelocator-inputSearch', // {String}
         filtersSearch: '.filter-map-js', // {String}
-        asideResults: '.aside-results' // {String}
+        asideResults: '.storelocator-sidebarResults' // {String}
     }
 };
 

@@ -87,7 +87,7 @@ Storelocator include by default Google Maps Autocomplete, `places` librairy is a
 
 ### Geolocation
 
-Storelocator integrate its own geolocation button `.map-geoloc-js`, you can easily change the CSS.
+Storelocator integrate its own geolocation button `.storelocator-geolocButton`, you can easily change the CSS.
 
 !!! warning
     Geolocation need SSL certificat with https on Google Chrome and somes others recents browsers.<br />More information <a href="https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only" title="HTML5 Geolocation API">here</a>.
@@ -293,13 +293,13 @@ List of results are synchronized with markers. The list is filtered by category 
 A small ES6 template string is use to built the HTML of each result.
 
 ```html
-<div class="detail-store">
-    <span class="store-title">{title}</span>
-    <span class="store-distance"><a href="http://www.google.fr/maps/dir/{origin}/{destination}" title="Itinerary" target="_blank">{distance}km</a></span>
-    <span class="store-address">{address}</span>
-    <span class="store-zipcode">{zipcode}</span>
-    <span class="store-city">{city}</span>
-    <span class="store-phone"><a href="tel:{phone}" title="Call">{phone}</a></span>
+<div class="storelocator-detailStore">
+    <span class="storelocator-detailStoreTitle">{title}</span>
+    <span class="storelocator-detailStoreDistance"><a href="http://www.google.fr/maps/dir/{origin}/{destination}" title="Itinerary" target="_blank">{distance}km</a></span>
+    <span class="storelocator-detailStoreAddress">{address}</span>
+    <span class="storelocator-detailStoreZipcode">{zipcode}</span>
+    <span class="storelocator-detailStoreCity">{city}</span>
+    <span class="storelocator-detailStorePhone"><a href="tel:{phone}" title="Call">{phone}</a></span>
 </div>
 ```
 
@@ -313,13 +313,13 @@ Storelocator allow you to show more information of the marker when user click on
 ```html
 <div class="wrapper-info-window">
     <span class="store-picture">><a href="{link}" title="Visit website" target="_blank"><img src="{picture}" alt="{title}" /></a></span>
-    <div class="detail-store">
-        <span class="store-title">{title}</span>
-        <span class="store-distance"><a href="http://www.google.fr/maps/dir/${origin}/${destination}" title="Itinerary" target="_blank">{distance}km</a></span>
-        <span class="store-address">{address}</span>
-        <span class="store-zipcode">{zipcode}</span>
-        <span class="store-city">{city}</span>
-        <span class="store-phone"><a href="tel:{phone}" title="Call">{phone}</a></span>
+    <div class="storelocator-detailStore">
+        <span class="storelocator-detailStoreTitle">{title}</span>
+        <span class="storelocator-detailStoreDistance"><a href="http://www.google.fr/maps/dir/${origin}/${destination}" title="Itinerary" target="_blank">{distance}km</a></span>
+        <span class="storelocator-detailStoreAddress">{address}</span>
+        <span class="storelocator-detailStoreZipcode">{zipcode}</span>
+        <span class="storelocator-detailStoreCity">{city}</span>
+        <span class="storelocator-detailStorePhone"><a href="tel:{phone}" title="Call">{phone}</a></span>
         <span class="store-link"><a href="{link}" title="Visit website" target="_blank">{link}</a></span>
     </div>
 </div>

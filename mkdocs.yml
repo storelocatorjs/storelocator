@@ -32,7 +32,6 @@ theme:
   font:
     text: 'Roboto'
     code: 'Ubuntu Mono'
-  # logo: 'images/logo-vlite-small.svg'
   feature:
     tabs: false
 

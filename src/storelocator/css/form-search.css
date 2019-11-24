@@ -1,5 +1,7 @@
+@import "./vars";
+
 .storelocator {
-    #form-search {
+    &-formSearch {
         position: absolute;
         top: 20px;
         left: 20px;
@@ -11,161 +13,161 @@
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
 
-        #input-search {
-            width: 100%;
-            height: 40px;
-            padding-left: 10px;
-            font-size: 15px;
-            margin-bottom: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
-        }
-
         .geoloc-adress {
             font-size: 12px;
             display: block;
         }
+    }
 
-        .aside-filters {
-            font-size: 0;
+    &-inputSearch {
+        width: 100%;
+        height: 40px;
+        padding-left: 10px;
+        font-size: 15px;
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+    }
 
-            .filters-row {
-                display: flex;
-                align-items: center;
-                margin-top: 15px;
+    &-formFilters {
+        font-size: 0;
 
-                &:first-child {
-                    margin-top: 0;
-                }
-            }
+        label {
+            position: relative;
+            padding: 3px 5px 4px 37px;
+            cursor: pointer;
 
-            .form-checkbox {
-                font-size: 13px;
-                position: relative;
+            &::before {
+                content: '';
                 display: block;
-                width: 50%;
-                padding: 4px 0;
-            }
-
-            label {
-                position: relative;
-                padding: 3px 5px 4px 37px;
-                cursor: pointer;
-
-                &::before {
-                    content: '';
-                    display: block;
-                    width: 20px;
-                    height: 20px;
-                    background-color: #fff;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    border-radius: 3px;
-                }
-
-                &::after {
-                    content: '';
-                    display: block;
-                    opacity: 0;
-                    width: 14px;
-                    height: 14px;
-                    position: absolute;
-                    top: 4px;
-                    left: 4px;
-                    border-radius: 3px;
-                    transition: opacity 200ms ease-out;
-                }
-
-                &.category-1 {
-                    &::before {
-                        border: 1px solid #f60;
-                    }
-
-                    &::after {
-                        background-color: #f60;
-                    }
-                }
-
-                &.category-2 {
-                    &::before {
-                        border: 1px solid #fc3;
-                    }
-
-                    &::after {
-                        background-color: #fc3;
-                    }
-                }
-
-                &.category-3 {
-                    &::before {
-                        border: 1px solid #ea4c89;
-                    }
-
-                    &::after {
-                        background-color: #ea4c89;
-                    }
-                }
-            }
-
-            input[type=checkbox] {
+                width: 20px;
+                height: 20px;
+                background-color: #fff;
                 position: absolute;
                 top: 0;
                 left: 0;
-                opacity: 0;
+                border-radius: 3px;
+            }
 
-                &:checked + label::after {
-                    opacity: 1;
+            &::after {
+                content: '';
+                display: block;
+                opacity: 0;
+                width: 14px;
+                height: 14px;
+                position: absolute;
+                top: 4px;
+                left: 4px;
+                border-radius: 3px;
+                transition: opacity 200ms ease-out;
+            }
+
+            &.category-1 {
+                &::before {
+                    border: 1px solid #f60;
+                }
+
+                &::after {
+                    background-color: #f60;
+                }
+            }
+
+            &.category-2 {
+                &::before {
+                    border: 1px solid #fc3;
+                }
+
+                &::after {
+                    background-color: #fc3;
+                }
+            }
+
+            &.category-3 {
+                &::before {
+                    border: 1px solid #ea4c89;
+                }
+
+                &::after {
+                    background-color: #ea4c89;
                 }
             }
         }
+
+        input[type=checkbox] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+
+            &:checked + label::after {
+                opacity: 1;
+            }
+        }
+    }
+
+    &-formFiltersRow {
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    &-formCheckbox {
+        font-size: 13px;
+        position: relative;
+        display: block;
+        width: 50%;
+        padding: 4px 0;
     }
 }
 
 @media screen and (max-width: var(--breakpointModile)) {
     .storelocator {
-        #form-search {
+        &-formSearch {
             box-shadow: none;
             position: relative;
             top: auto;
             left: auto;
             width: 100%;
             height: auto;
+        }
 
-            #input-search {
-                height: 43px;
-            }
+        &-formFilters {
+            label {
+                padding-top: 5px;
+                padding-bottom: 6px;
+                font-size: 14px;
 
-            .aside-filters {
-                label {
-                    padding-top: 5px;
-                    padding-bottom: 6px;
-                    font-size: 14px;
-
-                    &::before {
-                        width: 24px;
-                        height: 24px;
-                        border-width: 2px !important;
-                    }
-
-                    &::after {
-                        width: 16px;
-                        height: 16px;
-                        top: 6px;
-                        left: 6px;
-                    }
+                &::before {
+                    width: 24px;
+                    height: 24px;
+                    border-width: 2px !important;
                 }
 
-                .form-checkbox {
-                    padding: 5px 0 6px;
-                }
-
-                input[type=checkbox] {
-                    top: 4px;
-                    left: 4px;
+                &::after {
+                    width: 16px;
+                    height: 16px;
+                    top: 6px;
+                    left: 6px;
                 }
             }
+
+            .storelocator-formCheckbox {
+                padding: 5px 0 6px;
+            }
+
+            input[type=checkbox] {
+                top: 4px;
+                left: 4px;
+            }
+        }
+
+        &-inputSearch {
+            height: 43px;
         }
     }
 }

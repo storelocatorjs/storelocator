@@ -1,71 +1,71 @@
-.storelocator {
-    .detail-store {
-        position: relative;
-        font-size: 13px;
+@import "./vars";
+
+.storelocator-detailStore {
+    position: relative;
+    font-size: 13px;
+
+    &-detailStoreTitle {
+        margin-bottom: 10px;
+        text-transform: capitalize;
+        font-weight: 500;
+        font-size: 16px;
 
         span {
-            display: block;
-            font-weight: 400;
-
-            &:last-child {
-                padding-bottom: 0;
-            }
+            display: inline;
         }
+    }
 
-        a {
-            text-decoration: none;
-            color: #000;
-        }
+    &-detailStoreDistance {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        color: #9a9a9a;
 
-        .store-title {
-            margin-bottom: 10px;
-            text-transform: capitalize;
-            font-weight: 500;
-            font-size: 16px;
-
-            span {
-                display: inline;
-            }
-        }
-
-        .store-distance {
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            color: #9a9a9a;
-
-            span {
-                display: inline-block;
-                vertical-align: top;
-                margin-top: 2px;
-            }
-
-            .store-icon-route {
-                fill: #9a9a9a;
-                width: 20px;
-                margin-left: 10px;
-            }
-        }
-
-        .store-zipcode,
-        .store-city {
+        span {
             display: inline-block;
             vertical-align: top;
+            margin-top: 2px;
         }
 
-        .store-address,
-        .store-zipcode,
-        .store-city,
-        .store-phone {
-            padding-bottom: 12px;
+        &-detailStoreIconRoute {
+            fill: #9a9a9a;
+            width: 20px;
+            margin-left: 10px;
         }
+    }
+
+    span {
+        display: block;
+        font-weight: 400;
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: #000;
+    }
+
+    &-detailStoreZipcode,
+    &-detailStoreCity {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    &-detailStoreAddress,
+    &-detailStoreZipcode,
+    &-detailStoreCity,
+    &-detailStorePhone {
+        padding-bottom: 12px;
     }
 }
 
 @media screen and (max-width: var(--breakpointModile)) {
     .storelocator {
-        .detail-store {
+        &-detailStore {
             font-size: 14px;
         }
     }

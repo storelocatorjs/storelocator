@@ -1,5 +1,16 @@
+@import "./vars";
+
 .storelocator {
-    .storelocator-nav {
+    &-navBorder {
+        transition: width 200ms ease-in;
+        width: 0%;
+        height: 2px;
+        background-color: #484848;
+        position: absolute;
+        bottom: 0;
+    }
+
+    &-nav {
         display: none;
         height: 40px;
         position: relative;
@@ -24,28 +35,19 @@
             &.active {
                 color: #000;
             }
-
-            .storelocator-nav-border {
-                transition: width 200ms ease-in;
-                width: 0%;
-                height: 2px;
-                background-color: #484848;
-                position: absolute;
-                bottom: 0;
-            }
         }
 
         li {
             width: 50%;
             height: 100%;
 
-            .active .storelocator-nav-border {
+            .active .storelocator-navBorder {
                 width: 100%;
             }
 
             &:first-child {
                 a {
-                    .storelocator-nav-border {
+                    .storelocator-navBorder {
                         right: 0;
                     }
                 }
@@ -53,7 +55,7 @@
 
             &:nth-child(2) {
                 a {
-                    .storelocator-nav-border {
+                    .storelocator-navBorder {
                         left: 0;
                     }
                 }

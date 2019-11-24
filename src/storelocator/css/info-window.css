@@ -1,3 +1,5 @@
+@import "./vars";
+
 .storelocator {
     .wrapper-info-window {
         padding: 20px 0 20px 20px;
@@ -19,22 +21,22 @@
                 height: auto;
             }
         }
+    }
 
-        .detail-store {
-            max-width: 250px;
+    &-detailStore {
+        max-width: 250px;
 
-            .store-title {
-                padding-right: 90px;
-            }
-
-            .store-distance {
-                top: 1px;
-                transform: none;
-            }
-
-            .store-website:hover {
-                text-decoration: underline;
-            }
+        .store-website:hover {
+            text-decoration: underline;
         }
+    }
+
+    &-detailStoreTitle {
+        padding-right: 90px;
+    }
+
+    &-detailStoreDistance {
+        top: 1px;
+        transform: none;
     }
 }
