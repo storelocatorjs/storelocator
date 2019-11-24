@@ -1,0 +1,67 @@
+.storelocator {
+    #container-google-maps {
+        overflow: hidden;
+
+        &,
+        #google-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-geoloc-js {
+            position: absolute;
+            right: 15px;
+            bottom: 115px;
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+
+            &::before {
+                content: '';
+                background-image: url(//maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png);
+                background-size: 180px 18px;
+                display: block;
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+}
+
+/* Override autocomplete styles */
+.pac-container {
+    .pac-item {
+        padding: 4px 5px 3px;
+    }
+
+    .pac-icon {
+        margin-right: 9px;
+        margin-left: 5px;
+    }
+}
+
+@media screen and (max-width: var(--breakpointModile)) {
+    .storelocator {
+        #container-google-maps {
+            position: relative;
+            top: auto;
+            left: auto;
+            height: 0;
+            padding-top: 100%;
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+}

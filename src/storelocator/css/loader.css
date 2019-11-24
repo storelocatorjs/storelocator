@@ -1,0 +1,61 @@
+@keyframes loading {
+    from {
+        left: 50%;
+        width: 0;
+        z-index: 100;
+    }
+
+    33.3333% {
+        left: 0;
+        width: 100%;
+        z-index: 10;
+    }
+
+    to {
+        left: 0;
+        width: 100%;
+    }
+}
+
+.storelocator {
+    .&-loader {
+        transition: transform 150ms ease-in-out, opacity 150ms ease-in;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        z-index: 10;
+        opacity: 0;
+
+        &.active {
+            opacity: 1;
+        }
+
+        .loader-bar {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            width: 0;
+            height: 100%;
+            left: 50%;
+            text-align: center;
+
+            &:nth-child(1) {
+                background-color: #f60;
+                animation: loading 3s linear infinite;
+            }
+
+            &:nth-child(2) {
+                background-color: #fc3;
+                animation: loading 3s linear 1s infinite;
+            }
+
+            &:nth-child(3) {
+                background-color: #ea4c89;
+                animation: loading 3s linear 2s infinite;
+            }
+        }
+    }
+}

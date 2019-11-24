@@ -1,0 +1,109 @@
+/* Override default theme */
+
+/* Head Download page : licence blocs */
+.md-container .licence-list {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 60px;
+}
+
+.md-container .licence-list li {
+    width: calc(33.33% - 13px);
+    margin: 0 auto;
+}
+
+.md-container .licence-list a {
+    border-width: 2px;
+    border-style: solid;
+    display: block;
+    text-align: center;
+    border-radius: 8px;
+    padding-top: 15px;
+}
+
+.md-container .licence-list span {
+    padding: 0 10px;
+    display: block;
+}
+
+.md-container .licence-list .licence-button__project {
+    padding-bottom: 3px;
+}
+
+.md-container .licence-list .licence-button__title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.md-container .licence-list .licence-button__license {
+    padding-bottom: 7px;
+}
+
+.md-container .licence-list .licence-button__for {
+    font-style: italic;
+}
+
+.md-container .licence-list .licence-button__price {
+    background-color: #03a9f4;
+    padding: 15px 10px;
+    margin-top: 15px;
+}
+
+.md-container .licence-list .licence-button__price__euro {
+    display: inline-block;
+    color: #fff;
+    padding: 0;
+}
+
+.md-container .licence-list .licence-button__price__value {
+    display: inline-block;
+    color: #fff;
+    padding: 0;
+    font-weight: bold;
+}
+
+/* Feature page : iPad and iPhone */
+.wrapper-screenshot-touch img {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 50%;
+}
+
+.wrapper-screenshot-touch img:last-child {
+    max-width: 27%;
+    margin-left: -80px;
+}
+
+@media screen and (max-width: 750px) {
+    /* Download page : licence blocs */
+    .md-container .licence-list {
+        display: block;
+    }
+
+    .md-container .licence-list li {
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    .md-container .licence-list li:first-child {
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    /* Feature page : iPad and iPhone */
+    .wrapper-screenshot-touch img {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .wrapper-screenshot-touch img:last-child {
+        max-width: 60%;
+        margin-left: 0;
+    }
+}

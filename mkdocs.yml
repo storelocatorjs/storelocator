@@ -1,0 +1,60 @@
+# Project information
+site_name: 'storelocatorjs'
+site_description: 'Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a PHP webservice with Ajax'
+site_author: 'Joris DANIEL aka Yoriiis'
+site_url: 'https://yoriiis.github.io/storelocatorjs/'
+repo_name: 'yoriiis/storelocatorjs'
+repo_url: 'https://github.com/yoriiis/storelocatorjs'
+use_directory_urls: false
+
+# Pages
+nav:
+  - Overview: index.md
+  - Getting started: getting-started.md
+  - How it works: how-it-works.md
+  - Features: features.md
+  - Demo: demo.html
+  - Download: download.md
+  - Licences: licences.md
+
+# Copyright
+copyright: 'Copyright &copy; 2019 - Joris DANIEL aka Yoriiis'
+
+# Documentation and theme
+theme:
+  name: 'material'
+  custom_dir: 'docs/theme'
+  # favicon: 'images/storelocatorjs-favicon.png'
+  language: 'en'
+  palette:
+    primary: 'white'
+    accent: 'white'
+  font:
+    text: 'Roboto'
+    code: 'Ubuntu Mono'
+  # logo: 'images/logo-vlite-small.svg'
+  feature:
+    tabs: false
+
+# Options
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/yoriiis'
+    - type: 'linkedin'
+      link: 'https://www.linkedin.com/in/jorisdaniel'
+
+# Google Analytics
+google_analytics:
+  - 'UA-108758282-2'
+  - 'auto'
+
+# Extensions
+markdown_extensions:
+  - markdown.extensions.admonition
+  - markdown.extensions.codehilite:
+      linenums: true
+  - markdown.extensions.toc:
+      permalink: true
+  - pymdownx.details
+  - meta
