@@ -29,13 +29,13 @@
                 border-top: none;
             }
 
-            .no-touch &:hover {
+            /* .no-touch &:hover {
                 background-color: rgba(201, 198, 198, 0.1);
 
                 .storelocator-detailStoreTitle span {
                     text-decoration: underline;
                 }
-            }
+            } */
 
             &.category-1 {
                 border-left-color: #f60;
