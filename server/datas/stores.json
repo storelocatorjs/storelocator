@@ -1,0 +1,60 @@
+[{
+    "category": "1",
+    "id": 1,
+    "title": "Le crabe Marteau",
+    "address": "34 Avenue de la Perrière",
+    "city": "Lorient",
+    "zipcode": "56100",
+    "phone": "(+33) 02 97 59 40 71",
+    "picture": "https://store-locator.bitbucket.io/demo/images/store-crabe-marteau.jpg",
+    "link": "http://www.crabemarteau.fr",
+    "lat": 48.8764076,
+    "lng": 2.2884175
+}, {
+    "category": "2",
+    "id": 2,
+    "title": "Le Piment Café",
+    "address": "15 Rue de Sévigné",
+    "city": "Paris",
+    "zipcode": "75004",
+    "phone": "(+33) 01 42 74 33 75",
+    "picture": "https://store-locator.bitbucket.io/demo/images/store-piment-cafe.jpg",
+    "lat": 48.8565815,
+    "lng": 2.3602533
+}, {
+    "category": "1",
+    "id": 3,
+    "title": "Le Petit Troquet",
+    "address": "28 Rue de l'Exposition",
+    "city": "Paris",
+    "zipcode": "75007",
+    "phone": "(+33) 01 47 05 80 39",
+    "picture": "https://store-locator.bitbucket.io/demo/images/store-petit-troquet.jpg",
+    "link": "http://www.leptittroquet.fr",
+    "lat": 48.8573705,
+    "lng": 2.3010083
+}, {
+    "category": "3",
+    "id": 4,
+    "title": "Mama Petula - concept store végétal",
+    "address": "82 Avenue Denfert-Rochereau",
+    "city": "Paris",
+    "zipcode": "75014",
+    "phone": "(+33) 01 47 05 80 39",
+    "picture": "https://store-locator.bitbucket.io/demo/images/store-mama-petula.jpg",
+    "link": "http://www.mamapetula.com",
+    "lat": 48.8367948,
+    "lng": 2.3323415
+}, {
+    "category": "2",
+    "id": 5,
+    "title": "Café El Sur",
+    "address": "35 Boulevard Saint-Germain",
+    "city": "Paris",
+    "zipcode": "75004",
+    "phone": "(+33) 01 43 25 58 28",
+    "picture": "https://store-locator.bitbucket.io/demo/images/store-cafe-elsur.jpg",
+    "link": "http://www.cafe-elsur.com",
+    "lat": 48.8493894,
+    "lng": 2.3492624
+}]
