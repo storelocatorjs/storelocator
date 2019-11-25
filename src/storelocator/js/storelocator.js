@@ -1,7 +1,7 @@
 /**
 * @license Commercial
 * @name Storelocator
-* @version 1.0.0
+* @version 2.0.0
 * @author: Joris DANIEL <joris.daniel@gmail.com>
 * @description: Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a PHP webservice with Ajax
 * {@link https://store-locator.bitbucket.io}
@@ -13,7 +13,7 @@
 import templateSidebarItemResult from './templates/sidebar-item-result'
 import templateInfoWindow from './templates/info-window'
 import defaultOptions from './default-options'
-import { serializeForm, log } from './utils'
+import { serializeForm, log, isMobile, isBrowserIE } from './utils'
 
 /**
  * storelocatorjs
@@ -30,10 +30,9 @@ export default class Storelocator {
 		this.options = Object.assign({}, defaultOptions, options)
 		this.onReady = onReady
 		this.isLoading = false
-		this.isBrowserIE = !!((document.documentMode && document.documentMode >= 9))
 
 		this.cacheSelectors()
-		this.initLoader()
+		this.buildLoader()
 		this.initNavMobile()
 
 		window.googleMapLoaded = () => {
@@ -50,13 +49,6 @@ export default class Storelocator {
 	}
 
 	/**
-	 * Check if breakpoint mobile is enabled
-	 */
-	isMobile () {
-		return window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches
-	}
-
-	/**
 	 * Cache DOM selectors
 	 */
 	cacheSelectors () {
@@ -70,11 +62,14 @@ export default class Storelocator {
 	}
 
 	/**
-	 * Initialize the loader
+	 * Build the loader
 	 */
-	initLoader () {
+	buildLoader () {
 		this.loader = this.containerStorelocator.querySelector(this.options.selectors.loader)
-		this.loader.innerHTML = '<div class="loader-bar"></div><div class="loader-bar"></div><div class="loader-bar"></div>'
+		this.loader.innerHTML = `
+			<div class="loader-bar"></div>
+			<div class="loader-bar"></div>
+			<div class="loader-bar"></div>`
 	}
 
 	/**
@@ -181,7 +176,7 @@ export default class Storelocator {
 		// Init Google Maps API
 		this.map = new window.google.maps.Map(this.containerStorelocator.querySelector('#google-map'), cloneMapOptions)
 
-		if (!this.isMobile()) {
+		if (!isMobile()) {
 			this.offsetMapWithAsideBar()
 		}
 
@@ -291,7 +286,7 @@ export default class Storelocator {
 			this.map.setZoom(16)
 			this.openInfoWindow(currentMarker)
 
-			if (this.isMobile()) {
+			if (isMobile()) {
 				this.containerStorelocator.querySelector('.switch-view-js.view-map').click()
 				window.google.maps.event.trigger(this.map, 'resize')
 			} else {
@@ -313,7 +308,7 @@ export default class Storelocator {
 			}
 
 			// Disable SVG for IE, they don't works
-			if (!this.isBrowserIE) {
+			if (!isBrowserIE()) {
 				options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory('userPosition').url : ''
 			}
 
@@ -341,12 +336,12 @@ export default class Storelocator {
 	}
 
 	boundsChanged () {
-		if (this.markers.length) {
+		if (this.length) {
 			clearTimeout(this.boundsChangeTimer)
 			this.boundsChangeTimer = setTimeout(() => {
 				let listMarkerIndexInViewport = []
 
-				this.markers.forEach((marker, index) => {
+				this.forEach((marker, index) => {
 					if (marker.getVisible() && this.map.getBounds().contains(marker.getPosition())) {
 						listMarkerIndexInViewport.push(index)
 					}
@@ -357,7 +352,7 @@ export default class Storelocator {
 					this.refreshMapOnBoundsChanged({
 						updatePosition: true
 					})
-				} else if (listMarkerIndexInViewport.length === this.markers.length) {
+				} else if (listMarkerIndexInViewport.length === this.length) {
 					// If user see already all markers, zoom is too small, increase it until maxRadius
 					if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
 						this.refreshMapOnBoundsChanged({
@@ -447,8 +442,23 @@ export default class Storelocator {
 
 		let {lat} = options
 		let {lng} = options
+		let categories = []
 		let {storeLimit = this.options.requests.storeLimit} = options
-		let dataAjax = serializeForm(lat, lng, storeLimit)
+
+		this.filtersSearch.forEach(filter => {
+			if (filter.checked) {
+				categories.push(filter.value)
+			}
+		})
+
+		let dataAjax = serializeForm({
+			lat: lat,
+			lng: lng,
+			storeLimit: storeLimit,
+			currentRadius: this.currentRadius,
+			inputValue: this.inputSearch.value,
+			categories: categories
+		})
 		let {fitBounds = true} = options
 
 		// Update search data stored
@@ -503,10 +513,14 @@ export default class Storelocator {
 		let noResult = true
 		let {stores} = options
 		let {fitBounds} = options
-		let hmlListResult = `<p class="storelocator-sidebarIntro">${stores.length} results sorted by distance correspond to your research</p><ul>`
+		let hmlListResult = `
+			<p class="storelocator-sidebarIntro">
+				${stores.length} results sorted by distance correspond to your research
+			</p>
+			<ul>`
 
 		// Destroy old markers before parse new stores
-		this.Markers.destroyMarkers()
+		this.destroyMarkers()
 
 		// Reset infoWindow status
 		this.infoWindowOpened = false
@@ -520,7 +534,7 @@ export default class Storelocator {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
-			this.markers.push(this.geolocationData.marker)
+			this.push(this.geolocationData.marker)
 			this.boundsGlobal.extend(this.geolocationData.position)
 		}
 
@@ -534,7 +548,7 @@ export default class Storelocator {
 			store.position = new window.google.maps.LatLng(store.lat, store.lng)
 
 			this.boundsGlobal.extend(store.position)
-			this.Markers.createMarkers(store)
+			this.createMarkers(store)
 
 			hmlListResult += templateSidebarItemResult({
 				store: store,
@@ -546,7 +560,11 @@ export default class Storelocator {
 
 		// If no result, show error message and center map on current country
 		if (noResult) {
-			this.asideResults.innerHTML = '<p class="storelocator-sidebarNoResults">No results for your request.<br />Please try a new search with differents choices.</p>'
+			this.asideResults.innerHTML = `
+				<p class="storelocator-sidebarNoResults">
+					No results for your request.<br />
+					Please try a new search with differents choices.
+				</p>`
 			if (this.overlayGreen !== null) {
 				this.overlayGreen.setMap(null)
 			}
@@ -578,7 +596,7 @@ export default class Storelocator {
 
 			// Offset the map on desktop only, when the fitBounds is requested
 			if (fitBounds) {
-				if (!this.isMobile()) {
+				if (!isMobile()) {
 					this.offsetMapWithAsideBar()
 				}
 			}
@@ -673,7 +691,7 @@ export default class Storelocator {
 		}
 
 		// Loop backwards on markers and remove them
-		for (let i = this.markers.length - 1; i >= 0; i--) {
+		for (let i = this.length - 1; i >= 0; i--) {
 			let currentMarker = this.markers[i]
 
 			// Remove listener from marker instance
@@ -702,7 +720,7 @@ export default class Storelocator {
 		}
 
 		// Disable SVG for IE, they don't works
-		if (!this.isBrowserIE) {
+		if (!isBrowserIE()) {
 			options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory(data.category) : ''
 		}
 
@@ -711,7 +729,7 @@ export default class Storelocator {
 		// Push marker data in marker
 		marker.store = data
 
-		this.markers.push(marker)
+		this.push(marker)
 
 		// Click on marker to show infoWindow
 		window.google.maps.event.addListener(marker, 'click', () => {
@@ -751,7 +769,11 @@ export default class Storelocator {
 	generateSVG (options) {
 		let customSVG = {
 			mimetype: 'data:image/svg+xml;base64,',
-			svg: '<svg width="' + options.width + 'px" height="' + options.height + 'px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve"><path fill="{{colorBorder}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/><path fill="{{colorBackground}}" class="st0" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/></svg>'
+			svg: `
+				<svg width="${options.width}px" height="${options.height}px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve">
+					<path fill="{{colorBorder}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/>
+					<path fill="{{colorBackground}}" class="st0" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/>
+				</svg>`
 		}
 
 		customSVG.scaledSize = new window.google.maps.Size(options.width, options.height)
