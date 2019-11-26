@@ -87,6 +87,7 @@
 .storelocator-detailStore {
         position: relative;
         font-size: 13px;
+        color: #000;
     }
 
 .storelocator-detailStoreTitle {
@@ -154,6 +155,7 @@
         width: 100%;
         height: auto;
         padding: 20px;
+        background-color: #fff;
     }
 
 .storelocator-inputSearch {
@@ -162,7 +164,6 @@
         padding-left: 10px;
         font-size: 15px;
         margin-bottom: 20px;
-        background-color: rgba(255, 255, 255, 0.8);
         border: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     }
@@ -179,7 +180,6 @@
                 display: block;
                 width: 20px;
                 height: 20px;
-                background-color: #fff;
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -240,7 +240,6 @@
             height: 161px;
             z-index: 5;
             border-radius: 5px 5px 0 0;
-            background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
         }
 }
@@ -280,15 +279,6 @@
             -webkit-transform: none;
                     transform: none;
         }
-
-.storelocator-navBorder {
-        transition: width 200ms ease-in;
-        width: 0%;
-        height: 2px;
-        background-color: #484848;
-        position: absolute;
-        bottom: 0;
-    }
 
 .storelocator-nav {
         height: 40px;
@@ -413,24 +403,25 @@
 
 .storelocator-geolocButton {
         position: absolute;
-        right: 15px;
-        bottom: 115px;
-        width: 30px;
-        height: 30px;
+        right: 10px;
+        bottom: 105px;
+        width: 40px;
+        height: 40px;
         background-color: #fff;
         border: none;
         cursor: pointer;
-        border-radius: 8px;
     }
 
 .storelocator-geolocButton::before {
             content: '';
-            background-image: url(//maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png);
+            background-image: url(//maps.gstatic.com/tactile/mylocation/mylocation-sprite-2x.png);
             background-size: 180px 18px;
             display: block;
             position: absolute;
-            top: 6px;
-            left: 6px;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+                    transform: translate(-50%, -50%);
             width: 18px;
             height: 18px;
         }
@@ -453,19 +444,19 @@
             left: 0;
             width: 100%;
             height: 100%;
+            padding-top: 0;
         }
 }
 
 html,
 body {
-    height: 100%;
+    height: auto;
     margin: 0;
 }
 
 .storelocator {
     position: relative;
-    height: 100%;
-    font-family: 'Roboto', arial, sans-serif;
+    height: auto;
 }
 
 .storelocator,
@@ -473,14 +464,14 @@ body {
         box-sizing: border-box;
     }
 
-@media screen and (max-width: 750px) {
+@media only screen and (min-width: 750px) {
     html,
     body {
-        height: auto;
+        height: 100%;
     }
 
     .storelocator {
-        height: auto;
+        height: 100%;
     }
 }
 

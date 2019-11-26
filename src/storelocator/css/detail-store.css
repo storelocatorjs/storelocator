@@ -4,6 +4,7 @@
     &-detailStore {
         position: relative;
         font-size: 13px;
+        color: var(--colorDetailStore);
     }
 
     &-detailStoreTitle {
@@ -15,7 +16,7 @@
 
         a {
             text-decoration: none;
-            color: #000;
+            color: var(--colorDetailStore);
         }
 
         span {
@@ -28,7 +29,7 @@
         top: 50%;
         right: 0;
         transform: translateY(-50%);
-        color: #9a9a9a;
+        color: var(--colorDetailStoreDistance);
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -36,7 +37,7 @@
     }
 
     &-detailStoreIconRoute {
-        fill: #9a9a9a;
+        fill: var(--colorDetailStoreDistance);
         width: 20px;
         margin-left: 10px;
     }
@@ -61,7 +62,7 @@
 
         a {
             text-decoration: none;
-            color: #000;
+            color: var(--colorDetailStore);
         }
     }
 }

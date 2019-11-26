@@ -375,7 +375,7 @@ exports.default = _default;
 * @name Storelocator
 * @version 2.0.0
 * @author: Joris DANIEL <joris.daniel@gmail.com>
-* @description: Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a PHP webservice with Ajax
+* @description: Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a Node.js webservice with Fetch API
 * {@link https://store-locator.bitbucket.io}
 * @copyright 2018 Joris DANIEL <https://store-locator.bitbucket.io>
 **/
@@ -569,8 +569,6 @@ class Storelocator {
         let cloneClusterOptions = this.extend(true, this.options.cluster.options);
         this.markerCluster = new window.MarkerClusterer(this.map, this.markers, cloneClusterOptions);
       }
-    } else {
-      this.log('warn', 'Storelocator :: Cluster option is enabled, you need to load MarkerClusterer.js in your vendor before use it.');
     } // Detect zoom changed and bounds changed to refresh marker on the map
 
 
@@ -600,8 +598,6 @@ class Storelocator {
       if (this.options.geolocation.startOnLoad) {
         if (window.location.protocol === 'https:') {
           this.checkUserPosition();
-        } else {
-          this.log('warn', 'Storelocator :: Geolocation no longer work on insecure origins, use HTTPS.');
         }
       }
     }
@@ -708,14 +704,12 @@ class Storelocator {
         this.inputSearch.value = '';
       }
 
-      this.log('log', 'Storelocator :: geolocation success : ' + lat + ',' + lng);
       this.triggerRequest({
         'lat': lat,
         'lng': lng,
         fitBounds: true
       });
     }, response => {
-      this.log('warn', 'Storelocator :: geolocation-error', response);
       this.loading(false);
     });
   }
@@ -882,8 +876,6 @@ class Storelocator {
           stores: data,
           fitBounds: fitBounds
         });
-      } else {
-        this.log('warn', 'Storelocator :: Error ajax_get_stores.php, WS_stores has mandatory params (lat, lng)');
       }
     }).catch(error => {
       this.loading(false);
@@ -1223,18 +1215,6 @@ class Storelocator {
     };
     customSVG.scaledSize = new window.google.maps.Size(options.width, options.height);
     return customSVG.mimetype + btoa(customSVG.svg.replace(new RegExp('{{colorBackground}}', 'g'), options.colorBackground));
-  }
-  /**
-   * Log message
-   * @param {Function} method Method of global console object
-   * @param {String} message Message to post
-   */
-
-
-  log(method, message) {
-    if (this.options.debug) {
-      console[method](message);
-    }
   }
   /**
    * Check if browser is an old Internet Explorer

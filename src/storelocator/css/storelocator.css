@@ -2,14 +2,13 @@
 
 html,
 body {
-    height: 100%;
+    height: auto;
     margin: 0;
 }
 
 .storelocator {
     position: relative;
-    height: 100%;
-    font-family: 'Roboto', arial, sans-serif;
+    height: auto;
 
     &,
     * {
@@ -20,10 +19,10 @@ body {
 @media (--media-tablet) {
     html,
     body {
-        height: auto;
+        height: 100%;
     }
 
     .storelocator {
-        height: auto;
+        height: 100%;
     }
 }

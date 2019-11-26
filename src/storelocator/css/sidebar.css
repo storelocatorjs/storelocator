@@ -31,7 +31,7 @@
         padding: 20px;
         font-size: 13px;
         line-height: 20px;
-        color: #c9c6c6;
+        color: var(--grey);
         font-style: italic;
     }
 
@@ -40,7 +40,7 @@
         line-height: 20px;
         font-style: italic;
         padding: 10px 20px;
-        color: #c9c6c6;
+        color: var(--grey);
         margin: 0;
     }
 }

@@ -45,17 +45,17 @@
             text-align: center;
 
             &:nth-child(1) {
-                background-color: #f60;
+                background-color: var(--colorLoader1);
                 animation: loading 3s linear infinite;
             }
 
             &:nth-child(2) {
-                background-color: #fc3;
+                background-color: var(--colorLoader2);
                 animation: loading 3s linear 1s infinite;
             }
 
             &:nth-child(3) {
-                background-color: #ea4c89;
+                background-color: var(--colorLoader3);
                 animation: loading 3s linear 2s infinite;
             }
         }

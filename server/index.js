@@ -6,18 +6,22 @@ const port = 3000
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+// Enable CORS
 app.use(cors())
+
+// Enable JSON parser
 app.use(bodyParser.json())
 
+// Declare the main route to filter stores
 app.post('/', (request, response) => {
 	response.header('Content-type', 'application/json')
 
 	// Get request parameters
 	const lat = request.body['lat'] || null
 	const lng = request.body['lng'] || null
-	const categories = request.body['categories'] || []
-	const radius = request.body['radius'] || 50
-	const limit = request.body['storesLimit'] || 0
+	const categories = request.body['categories'] || null
+	const radius = request.body['radius'] || null
+	const limit = request.body['storesLimit'] || null
 	let results = null
 
 	// Filter stores if parameters are valid
@@ -32,11 +36,10 @@ app.post('/', (request, response) => {
 		})
 		results = stores.filter()
 	}
+
+	// Send status 200 with JSON results
 	response.status(200).json(results)
 })
 
-app.get('*', function (req, res) {
-	res.send('404 Not found', 404)
-})
-
+// Listen on specific port
 app.listen(port, () => console.log(`Server listening on port ${port}`))

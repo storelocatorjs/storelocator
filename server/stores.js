@@ -1,28 +1,48 @@
+/**
+ * Class Stores to filter stores in Node.js
+ * @module storelocatorjs/Stores
+ */
 const Stores = class Stores {
-	constructor (options) {
-		this.options = options
+	/**
+	 * Instanciate the constructor
+	 * @constructor
+	 * @param {Object} database Database of stores (JSON)
+	 * @param {String} lat Latitude of the request
+	 * @param {String} lng Longitude of the request
+	 * @param {Array} categories Selected categories of the request
+	 * @param {Integer} radius Radius of the request
+	 * @param {Integer} limit Limit of results of the request
+	 */
+	constructor ({database, lat, lng, categories = [], radius = 50, limit = 0}) {
+		this.database = database
+		this.lat = lat
+		this.lng = lng
+		this.categories = categories
+		this.radius = radius
+		this.limit = limit
 	}
 
+	/**
+	 * Filter stores according to request options
+	 * @return {Object} List of stores filtered (JSON)
+	 */
 	filter () {
-		let stores
-		if (this.options.categories.length === 0) {
-			stores = this.options.database
-		} else {
-			stores = this.filterStoreByCategory(this.options.categories)
-		}
-		return this.filterStoreByGeoPosition({
-			stores: stores,
-			lat: this.options.lat,
-			lng: this.options.lng,
-			radius: this.options.radius,
-			limit: this.options.limit
-		})
+		// Check if the request is filtered by category
+		let stores = this.categories.length === 0 ? this.options.database : this.filterStoreByCategory(this.categories)
+
+		// Filter store by geoposition
+		return this.filterStoreByGeoPosition(stores)
 	}
 
+	/**
+	 * Filter store by categories in the database
+	 * @param {Array} categories Array of selected categories
+	 * @return {Object} Stores filtered by categories
+	 */
 	filterStoreByCategory (categories) {
 		let storesFiltered = []
 
-		// Search in all stores, with filter
+		// Loop on all stores, with filter
 		for (let i = 0, lengthStores = this.options.database.length; i < lengthStores; i++) {
 			let currentStore = this.options.database[i]
 			if (categories.indexOf(currentStore.category) !== -1) {
@@ -33,22 +53,24 @@ const Stores = class Stores {
 		return storesFiltered
 	}
 
-	filterStoreByGeoPosition ({
-		stores,
-		lat,
-		lng,
-		radius,
-		limit
-	}) {
+	/**
+	 * Filter store by geoposition
+	 * @param {Object} stores Stores filtered by categories
+	 * @return {Object} Stores filtered by geoposition
+	 */
+	filterStoreByGeoPosition (stores) {
 		let listStores = []
 		let currentStore
 		let storesByDistance
 
+		// Loop on all store and calculate distance between point
 		for (let i = 0, lengthStores = stores.length; i < lengthStores; i++) {
 			currentStore = stores[i]
+
+			// Calculate the distance between store coordinate and request coordinate
 			storesByDistance = this.getDistanceBetweenCoordinate({
-				lat1: lat,
-				lng1: lng,
+				lat1: this.lat,
+				lng1: this.lng,
 				lat2: currentStore.lat,
 				lng2: currentStore.lng,
 				unit: 'K'
@@ -70,11 +92,11 @@ const Stores = class Stores {
 
 		let storesFiltered = []
 		for (let i = 0, lengthStores = listStores.length; i < lengthStores; i++) {
-			if (listStores[i].distance > radius) {
+			if (listStores[i].distance > this.radius) {
 				break
 			}
 			storesFiltered.push(listStores[i])
-			if (limit !== 0 && storesFiltered.length === limit) {
+			if (this.limit !== 0 && storesFiltered.length === this.limit) {
 				break
 			}
 		}
@@ -123,10 +145,20 @@ const Stores = class Stores {
 		}
 	}
 
+	/**
+	 * Utils function to calculate a degree to a radius
+	 * @param {Float} x Number
+	 * @return Radius number
+	 */
 	deg2rad (x) {
 		return x * (Math.PI / 180)
 	}
 
+	/**
+	 * Utils function to calculate a radius to a degree
+	 * @param {Float} x Number
+	 * @return Degree number
+	 */
 	rad2deg (x) {
 		return x * (180 / Math.PI)
 	}
