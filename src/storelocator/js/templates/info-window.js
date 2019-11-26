@@ -1,7 +1,7 @@
 import svgRoute from '../../svg/route.svg'
 
 export default function ({store, origin}) {
-	return `<div class="wrapper-info-window">
+	return `<div class="storelocator-infoWIndow">
                 ${store.picture
                     ? `<span class="store-picture">
                         <a href="${store.link}" title="Visit website" target="_blank">

@@ -311,7 +311,7 @@ A small ES6 template string is use to built the HTML of each result.
 Storelocator allow you to show more information of the marker when user click on it. It uses the native Google Maps infoWindow with a small ES6 template string to built the HTML of the info window.
 
 ```html
-<div class="wrapper-info-window">
+<div class="storelocator-infoWIndow">
     <span class="store-picture">><a href="{link}" title="Visit website" target="_blank"><img src="{picture}" alt="{title}" /></a></span>
     <div class="storelocator-detailStore">
         <span class="storelocator-detailStoreTitle">{title}</span>

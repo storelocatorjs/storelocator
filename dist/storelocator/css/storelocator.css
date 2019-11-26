@@ -98,7 +98,12 @@
         text-transform: capitalize;
         font-weight: 500;
         font-size: 16px;
+        display: block;
     }
+    .storelocator-detailStoreTitle a {
+            text-decoration: none;
+            color: #000;
+        }
     .storelocator-detailStoreTitle span {
             display: inline;
         }
@@ -120,28 +125,25 @@
         width: 20px;
         margin-left: 10px;
     }
-    .storelocator span {
-        display: block;
-        font-weight: 400;
-    }
-    .storelocator span:last-child {
-            padding-bottom: 0;
-        }
-    .storelocator a {
-        text-decoration: none;
-        color: #000;
-    }
-    .storelocator-detailStoreZipcode,
     .storelocator-detailStoreCity {
         display: inline-block;
         vertical-align: top;
-    }
-    .storelocator-detailStoreAddress,
-    .storelocator-detailStoreZipcode,
-    .storelocator-detailStoreCity,
-    .storelocator-detailStorePhone {
         padding-bottom: 12px;
     }
+    .storelocator-detailStoreAddress {
+        display: block;
+        padding-bottom: 12px;
+    }
+    .storelocator-detailStoreZipcode {
+        padding-bottom: 12px;
+    }
+    .storelocator-detailStorePhone {
+        display: block;
+    }
+    .storelocator-detailStorePhone a {
+            text-decoration: none;
+            color: #000;
+        }
 
 @media screen and (max-width: var(--breakpointModile)) {
         .storelocator-detailStore {
@@ -292,41 +294,45 @@
         }
 }
 
-.storelocator .wrapper-info-window {
+.storelocator-infoWIndow {
         padding: 20px 0 20px 20px;
     }
 
-        .storelocator .wrapper-info-window .store-picture {
+        .storelocator-infoWIndow .store-picture {
             margin-bottom: 20px;
             display: block;
             max-width: 250px;
         }
 
-        .storelocator .wrapper-info-window .store-picture a {
+        .storelocator-infoWIndow .store-picture a {
                 display: block;
                 width: 100%;
                 height: auto;
             }
 
-        .storelocator .wrapper-info-window .store-picture img {
+        .storelocator-infoWIndow .store-picture img {
                 display: block;
                 width: 100%;
                 height: auto;
             }
-    .storelocator-detailStore {
-        max-width: 250px;
-    }
-    .storelocator-detailStore .store-website:hover {
-            text-decoration: underline;
+
+        .storelocator-infoWIndow-detailStore {
+            max-width: 250px;
         }
-    .storelocator-detailStoreTitle {
-        padding-right: 90px;
-    }
-    .storelocator-detailStoreDistance {
-        top: 1px;
-        -webkit-transform: none;
-                transform: none;
-    }
+
+        .storelocator-infoWIndow-detailStore .store-website:hover {
+                text-decoration: underline;
+            }
+
+        .storelocator-infoWIndow-detailStoreTitle {
+            padding-right: 90px;
+        }
+
+        .storelocator-infoWIndow-detailStoreDistance {
+            top: 1px;
+            -webkit-transform: none;
+                    transform: none;
+        }
 
 .storelocator-navBorder {
         transition: width 200ms ease-in;
@@ -402,26 +408,26 @@
             border-left-width: 5px;
             padding: 20px;
             border-top: 1px solid #e7e7e7;
+
+            /* &[data-category="1"] {
+                border-left-color: #f60;
+            }
+
+            &[data-category="2"] {
+                border-left-color: #fc3;
+            }
+
+            &[data-category="3"] {
+                border-left-color: #ea4c89;
+            } */
         }
     .storelocator-sidebarResults > ul > li:first-child {
                 border-top: none;
             }
-    /* .no-touch &:hover {
-                background-color: rgba(201, 198, 198, 0.1);
-
-                .storelocator-detailStoreTitle span {
-                    text-decoration: underline;
-                }
-            } */
-    .storelocator-sidebarResults > ul > li.category-1 {
-                border-left-color: #f60;
-            }
-    .storelocator-sidebarResults > ul > li.category-2 {
-                border-left-color: #fc3;
-            }
-    .storelocator-sidebarResults > ul > li.category-3 {
-                border-left-color: #ea4c89;
-            }
+    .storelocator-sidebarResultsList {
+        padding: 0;
+        margin: 0;
+    }
     .storelocator-sidebarNoResults {
         margin: 0;
         padding: 20px;
@@ -436,10 +442,11 @@
         font-style: italic;
         padding: 10px 20px;
         color: #c9c6c6;
+        margin: 0;
     }
 
 @media screen and (max-width: var(--breakpointModile)) {
-        .storelocator .storelocator-sidebar {
+        .storelocator-sidebar {
             box-shadow: none;
             position: relative;
             top: auto;
@@ -448,19 +455,19 @@
             height: auto;
         }
 
-            .storelocator .storelocator-sidebar .storelocator-sidebar {
+            .storelocator-sidebar-sidebar {
                 display: none;
             }
 
-                .storelocator .storelocator-sidebar .storelocator-sidebar.active {
+                .storelocator-sidebar-sidebar.active {
                     display: block;
                 }
 
-            .storelocator .storelocator-sidebar .storelocator-sidebarResults {
+            .storelocator-sidebar-sidebarResults {
                 border: none;
             }
 
-            .storelocator .storelocator-sidebar .storelocator-sidebarIntro {
+            .storelocator-sidebar-sidebarIntro {
                 font-size: 14px;
             }
 }
@@ -536,12 +543,7 @@ body {
     position: relative;
     height: 100%;
     font-family: 'Roboto', arial, sans-serif;
-    color: rgb(33, 33, 33);
 }
-
-.storelocator a {
-        color: rgb(33, 33, 33);
-    }
 
 @media screen and (max-width: var(--breakpointModile)) {
     html,

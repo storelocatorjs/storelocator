@@ -1,7 +1,7 @@
 @import "./vars";
 
 .storelocator {
-    .wrapper-info-window {
+    &-infoWIndow {
         padding: 20px 0 20px 20px;
 
         .store-picture {
@@ -21,22 +21,22 @@
                 height: auto;
             }
         }
-    }
 
-    &-detailStore {
-        max-width: 250px;
+        &-detailStore {
+            max-width: 250px;
 
-        .store-website:hover {
-            text-decoration: underline;
+            .store-website:hover {
+                text-decoration: underline;
+            }
         }
-    }
 
-    &-detailStoreTitle {
-        padding-right: 90px;
-    }
+        &-detailStoreTitle {
+            padding-right: 90px;
+        }
 
-    &-detailStoreDistance {
-        top: 1px;
-        transform: none;
+        &-detailStoreDistance {
+            top: 1px;
+            transform: none;
+        }
     }
 }

@@ -11,6 +11,7 @@
 'use strict'
 
 import templateSidebarItemResult from './templates/sidebar-item-result'
+import templateMarkerSvg from './templates/marker-svg'
 import templateInfoWindow from './templates/info-window'
 import defaultOptions from './default-options'
 
@@ -32,6 +33,7 @@ export default class Storelocator {
 
 		this.cacheSelectors()
 		this.buildLoader()
+		this.markerStyles = this.getColorByMarkerCategory()
 
 		window.googleMapLoaded = () => {
 			if (this.options.geolocation.status) {
@@ -144,8 +146,8 @@ export default class Storelocator {
 	 */
 	initMap () {
 		// Create global variables for Google Maps
-		this.overlayRed = null
-		this.overlayGreen = null
+		this.overlayGlobal = null
+		this.overlayLimit = null
 		this.markers = []
 		this.currentInfoWindow = null
 		this.infoWindowOpened = false
@@ -186,7 +188,6 @@ export default class Storelocator {
 
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
-				// Documentation: https://googlemaps.github.io/js-marker-clusterer/docs/reference.html
 				// Clone object before to prevent reference
 				let cloneClusterOptions = this.extend(true, this.options.cluster.options)
 				this.markerCluster = new window.MarkerClusterer(this.map, this.markers, cloneClusterOptions)
@@ -205,15 +206,19 @@ export default class Storelocator {
 			})
 		}
 
+		// Called the user callback if available
 		if (typeof this.onReady === 'function') {
 			this.onReady(this.map)
 		}
 	}
 
+	/**
+	 * Initialize the user geolocation
+	 */
 	initGeolocation () {
-		// If navigator support geolocation, aks user
+		// Check the browser support
 		if (navigator.geolocation) {
-			// Enable geolocation on map load
+			// Start geolocation on page load
 			if (this.options.geolocation.startOnLoad) {
 				if (window.location.protocol === 'https:') {
 					this.checkUserPosition()
@@ -299,6 +304,10 @@ export default class Storelocator {
 		}
 	}
 
+	/**
+	 * Check user position with Google Maps geolocation API
+	 * Get the user current position if available
+	 */
 	checkUserPosition () {
 		navigator.geolocation.getCurrentPosition(position => {
 			let lat = position.coords.latitude
@@ -339,8 +348,11 @@ export default class Storelocator {
 		})
 	}
 
+	/**
+	 * Function called on user map moved event
+	 */
 	boundsChanged () {
-		if (this.length) {
+		if (this.markers.length) {
 			clearTimeout(this.boundsChangeTimer)
 			this.boundsChangeTimer = setTimeout(() => {
 				let listMarkerIndexInViewport = []
@@ -356,7 +368,7 @@ export default class Storelocator {
 					this.refreshMapOnBoundsChanged({
 						updatePosition: true
 					})
-				} else if (listMarkerIndexInViewport.length === this.length) {
+				} else if (listMarkerIndexInViewport.length === this.markers.length) {
 					// If user see already all markers, zoom is too small, increase it until maxRadius
 					if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
 						this.refreshMapOnBoundsChanged({
@@ -368,6 +380,11 @@ export default class Storelocator {
 		}
 	}
 
+	/**
+	 * Refresh the map on user map moved
+	 * Trigger a request with the new map position
+	 * @param {Object} options Options to refresh the map
+	 */
 	refreshMapOnBoundsChanged (options) {
 		let radius = this.options.requests.searchRadius
 		let lat = 0
@@ -386,15 +403,17 @@ export default class Storelocator {
 			radius = this.currentRadius
 		}
 
-		// Prevent fitBounds when bounds changed (move or zoom)
 		this.triggerRequest({
 			'lat': lat,
 			'lng': lng,
 			'radius': radius,
-			fitBounds: false
+			fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
 		})
 	}
 
+	/**
+	 * Offset the map when the desktop sidebar is enabled
+	 */
 	offsetMapWithAsideBar () {
 		let offsetMapWithAside = (this.mapAside.getBoundingClientRect().right / 2) * -1
 		this.map.panBy(offsetMapWithAside, 0)
@@ -428,6 +447,12 @@ export default class Storelocator {
 		})
 	}
 
+	/**
+	 * Function called on autocomplete changes
+	 * Trigger a request with the new user research
+	 * @param {*} lat Latitude of the research
+	 * @param {*} lng Longitude of the research
+	 */
 	autocompleteRequest (lat, lng) {
 		this.userPositionChecked = false
 
@@ -441,37 +466,39 @@ export default class Storelocator {
 		})
 	}
 
+	/**
+	 * Trigger a request to the web service to get all store results
+	 * according to the position (lat, lng)
+	 * @param {*} options Coordinate (lat, lng) and fitBounds
+	 */
 	triggerRequest (options) {
 		this.loading(true)
 
 		let {lat} = options
 		let {lng} = options
 		let {storeLimit = this.options.requests.storeLimit} = options
-
+		let {fitBounds = true} = options
 		let requestDatas = this.serializeForm({
 			lat: lat,
 			lng: lng,
 			storeLimit: storeLimit
 		})
-		let {fitBounds = true} = options
 
 		// Update search data stored
 		this.searchData.lat = lat
 		this.searchData.lng = lng
 		this.searchData.position = new window.google.maps.LatLng(lat, lng)
 
-		var myHeaders = new Headers()
-		myHeaders.append('Content-Type', 'application/json')
-
+		// Fecth configuration
 		let fetchConf = {
 			method: 'POST',
-			// headers: myHeaders,
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(requestDatas)
 		}
 
+		// Fecth store datas from the web service
 		fetch(this.options.urlWebservice, fetchConf)
 			.then(response => {
 				if (!response.ok) {
@@ -504,12 +531,10 @@ export default class Storelocator {
 	 * @param {String} lat Latitude
 	 * @param {String} lng Longitude
 	 * @param {Integer} storeLimit Limit of stores in the request
-	 * @param {Integer} currentRadius Radius of the request
-	 * @param {String} inputValue Value of the input form search
-	 * @param {Array} categories Value of selected filters
+	 * @return {Object} formData Datas required for the request (lat, lng, storeLimit, input, categories, radius)
 	 */
 	serializeForm ({lat, lng, storeLimit}) {
-		let formData = {}
+		let formDatas = {}
 		let categories = []
 
 		this.filtersSearch.forEach((filter, index) => {
@@ -519,25 +544,30 @@ export default class Storelocator {
 		})
 
 		if (categories.length) {
-			formData.categories = categories
+			formDatas.categories = categories
 		}
 
-		// Serialize params (input and filters value)
 		if (this.inputSearch.value !== '') {
-			formData.input = this.inputSearch.value
+			formDatas.input = this.inputSearch.value
 		}
 
 		if (lat && lng) {
-			formData.lat = lat
-			formData.lng = lng
+			formDatas.lat = lat
+			formDatas.lng = lng
 		}
 
-		formData.radius = this.currentRadius
-		formData.storesLimit = storeLimit
+		formDatas.radius = this.currentRadius
+		formDatas.storesLimit = storeLimit
 
-		return formData
+		return formDatas
 	}
 
+	/**
+	 * Parse store datas from the web service
+	 * Create all markers
+	 * Create all store results
+	 * @param {Object} options Store datas from the web service
+	 */
 	parseStores (options) {
 		let noResult = true
 		let {stores} = options
@@ -546,7 +576,7 @@ export default class Storelocator {
 			<p class="storelocator-sidebarIntro">
 				${stores.length} results sorted by distance correspond to your research
 			</p>
-			<ul>`
+			<ul class="storelocator-sidebarResultsList">`
 
 		// Destroy old markers before parse new stores
 		this.destroyMarkers()
@@ -579,7 +609,7 @@ export default class Storelocator {
 			this.boundsGlobal.extend(store.position)
 			this.createMarkers(store)
 
-			hmlListResult += templateSidebarItemResult({
+			hmlListResult += templateSidebarItemResult.call(this, {
 				store: store,
 				origin: origin
 			})
@@ -594,11 +624,11 @@ export default class Storelocator {
 					No results for your request.<br />
 					Please try a new search with differents choices.
 				</p>`
-			if (this.overlayGreen !== null) {
-				this.overlayGreen.setMap(null)
+			if (this.overlayLimit !== null) {
+				this.overlayLimit.setMap(null)
 			}
-			if (this.overlayRed !== null) {
-				this.overlayRed.setMap(null)
+			if (this.overlayGlobal !== null) {
+				this.overlayGlobal.setMap(null)
 			}
 		} else {
 			this.asideResults.innerHTML = hmlListResult
@@ -634,6 +664,11 @@ export default class Storelocator {
 		this.loading(false)
 	}
 
+	/**
+	 * Create a custom viewport (boundsWithLimit)
+	 * Display a minimal list of markers according to the maxMarkersInViewportLimit option
+	 * @param {Object} options Datas to create the custom viewport
+	 */
 	createViewportWithLimitMarker (options) {
 		let {stores} = options
 		let maxMarkersInViewport = this.options.updateMarkerOnBoundsChanged.maxMarkersInViewportLimit
@@ -657,11 +692,16 @@ export default class Storelocator {
 		}
 	}
 
+	/**
+	 * Create custom overlay on the map for the debug mode
+	 * overlayGlobal: list of all stores according to maxRadius option
+	 * overlayLimit: list of all stores according to the maxMarkersInViewportLimit option
+	 */
 	createOverlays () {
-		if (this.overlayRed !== null) {
-			this.overlayRed.setMap(null)
+		if (this.overlayGlobal !== null) {
+			this.overlayGlobal.setMap(null)
 		}
-		this.overlayRed = new window.google.maps.Rectangle({
+		this.overlayGlobal = new window.google.maps.Rectangle({
 			bounds: this.boundsGlobal,
 			strokeColor: null,
 			strokeOpacity: 0,
@@ -670,10 +710,10 @@ export default class Storelocator {
 			map: this.map
 		})
 
-		if (this.overlayGreen !== null) {
-			this.overlayGreen.setMap(null)
+		if (this.overlayLimit !== null) {
+			this.overlayLimit.setMap(null)
 		}
-		this.overlayGreen = new window.google.maps.Rectangle({
+		this.overlayLimit = new window.google.maps.Rectangle({
 			bounds: this.boundsWithLimit,
 			strokeColor: null,
 			strokeOpacity: 0,
@@ -683,6 +723,10 @@ export default class Storelocator {
 		})
 	}
 
+	/**
+	 * Open the Google Maps native InfoWindow
+	 * @param {Object} currentMarker Marker data display inside the infoWindow
+	 */
 	openInfoWindow (currentMarker) {
 		// Get lat/lng from searchData
 		let origin = this.searchData.position
@@ -711,6 +755,9 @@ export default class Storelocator {
 		this.infoWindow.open(this.map, currentMarker)
 	}
 
+	/**
+	 * Destroy all created Google Map markers
+	 */
 	destroyMarkers () {
 		// Destroy all maskers references in cluster is enabled
 		if (typeof MarkerClusterer !== 'undefined') {
@@ -720,7 +767,7 @@ export default class Storelocator {
 		}
 
 		// Loop backwards on markers and remove them
-		for (let i = this.length - 1; i >= 0; i--) {
+		for (let i = this.markers.length - 1; i >= 0; i--) {
 			let currentMarker = this.markers[i]
 
 			// Remove listener from marker instance
@@ -733,8 +780,12 @@ export default class Storelocator {
 		this.markers = []
 	}
 
+	/**
+	 * Create a Google Maps markers
+	 * @param {Object} data Marker datas
+	 */
 	createMarkers (data) {
-		// Build marker
+		let markerStyle = this.markerStyles[data.category]
 		let options = {
 			position: data.position,
 			map: this.map,
@@ -744,7 +795,7 @@ export default class Storelocator {
 				fontFamily: 'Roboto, Arial, sans-serif',
 				fontSize: '13px',
 				fontWeight: '500',
-				color: '#fff'
+				color: markerStyle.colorText
 			}
 		}
 
@@ -767,46 +818,53 @@ export default class Storelocator {
 		})
 	}
 
-	// Detect store categorie and appropriate SVG icon
+	/**
+	 * Get marker color by category, from options
+	 * @return {Object} Formatted object with category name into key and marker styles datas
+	 */
+	getColorByMarkerCategory () {
+		let styles = {}
+		this.options.map.markers.styles.forEach((marker) => {
+			styles[marker.category] = {
+				colorBackground: marker.colorBackground,
+				colorText: marker.colorText
+			}
+		})
+		return styles
+	}
+
+	/**
+	 * Get SVG icon by category styles
+	 * @param {String} category Marker category
+	 * @return {Object} Icon datas to generate a Google Maps markers
+	 */
 	getIconMarkerByCategory (category) {
-		let stylesMarkers = this.options.map.markers.styles
-		let styleMarker = null
 		let offsetXLabel = (this.options.map.markers.width / 2) - 0.9
 		let offsetYLabel = (this.options.map.markers.height / 2) - 3
 
-		if (stylesMarkers.length) {
-			this.options.map.markers.styles.forEach((marker) => {
-				if (marker.category === category) {
-					styleMarker = marker
-				}
-			})
-
-			return {
-				url: this.generateSVG({
-					colorBackground: styleMarker.colorBackground,
-					colorBorder: styleMarker.colorBorder,
-					width: this.options.map.markers.width,
-					height: this.options.map.markers.height
-				}),
-				labelOrigin: new window.google.maps.Point(offsetXLabel, offsetYLabel)
-			}
-		} else {
-			return null
+		return {
+			url: this.generateSVG({
+				colorBackground: this.markerStyles[category].colorBackground,
+				width: this.options.map.markers.width,
+				height: this.options.map.markers.height
+			}),
+			labelOrigin: new window.google.maps.Point(offsetXLabel, offsetYLabel)
 		}
 	}
 
+	/**
+	 * Generate SVG from the associated template
+	 * @param {Object} Style datas to customize the SVG
+	 * @return {Object} Custom SVG to generate a Google Maps marker icons
+	 */
 	generateSVG (options) {
 		let customSVG = {
 			mimetype: 'data:image/svg+xml;base64,',
-			svg: `
-				<svg width="${options.width}px" height="${options.height}px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve">
-					<path fill="{{colorBorder}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/>
-					<path fill="{{colorBackground}}" class="st0" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/>
-				</svg>`
+			svg: templateMarkerSvg(options)
 		}
-
 		customSVG.scaledSize = new window.google.maps.Size(options.width, options.height)
-		return customSVG.mimetype + btoa(customSVG.svg.replace('{{colorBorder}}', options.colorBorder).replace('{{colorBackground}}', options.colorBackground))
+
+		return customSVG.mimetype + btoa(customSVG.svg.replace(new RegExp('{{colorBackground}}', 'g'), options.colorBackground))
 	}
 
 	/**
@@ -827,6 +885,9 @@ export default class Storelocator {
 		return window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches
 	}
 
+	/**
+	 * Check if browser is an old Internet Explorer
+	 */
 	isBrowserIE () {
 		return !!((document.documentMode && document.documentMode >= 9))
 	}

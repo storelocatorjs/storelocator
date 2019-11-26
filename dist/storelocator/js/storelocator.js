@@ -403,6 +403,8 @@ exports.default = void 0;
 
 var _sidebarItemResult = _interopRequireDefault(__webpack_require__(/*! ./templates/sidebar-item-result */ "./src/storelocator/js/templates/sidebar-item-result.js"));
 
+var _markerSvg = _interopRequireDefault(__webpack_require__(/*! ./templates/marker-svg */ "./src/storelocator/js/templates/marker-svg.js"));
+
 var _infoWindow = _interopRequireDefault(__webpack_require__(/*! ./templates/info-window */ "./src/storelocator/js/templates/info-window.js"));
 
 var _defaultOptions = _interopRequireDefault(__webpack_require__(/*! ./default-options */ "./src/storelocator/js/default-options.js"));
@@ -429,6 +431,7 @@ class Storelocator {
     this.isLoading = false;
     this.cacheSelectors();
     this.buildLoader();
+    this.markerStyles = this.getColorByMarkerCategory();
 
     window.googleMapLoaded = () => {
       if (this.options.geolocation.status) {
@@ -544,8 +547,8 @@ class Storelocator {
 
   initMap() {
     // Create global variables for Google Maps
-    this.overlayRed = null;
-    this.overlayGreen = null;
+    this.overlayGlobal = null;
+    this.overlayLimit = null;
     this.markers = [];
     this.currentInfoWindow = null;
     this.infoWindowOpened = false;
@@ -581,7 +584,6 @@ class Storelocator {
 
     if (typeof window.MarkerClusterer !== 'undefined') {
       if (this.options.cluster.status) {
-        // Documentation: https://googlemaps.github.io/js-marker-clusterer/docs/reference.html
         // Clone object before to prevent reference
         let cloneClusterOptions = this.extend(true, this.options.cluster.options);
         this.markerCluster = new window.MarkerClusterer(this.map, this.markers, cloneClusterOptions);
@@ -598,17 +600,22 @@ class Storelocator {
           this.boundsChanged();
         }
       });
-    }
+    } // Called the user callback if available
+
 
     if (typeof this.onReady === 'function') {
       this.onReady(this.map);
     }
   }
+  /**
+   * Initialize the user geolocation
+   */
+
 
   initGeolocation() {
-    // If navigator support geolocation, aks user
+    // Check the browser support
     if (navigator.geolocation) {
-      // Enable geolocation on map load
+      // Start geolocation on page load
       if (this.options.geolocation.startOnLoad) {
         if (window.location.protocol === 'https:') {
           this.checkUserPosition();
@@ -694,6 +701,11 @@ class Storelocator {
       }
     }
   }
+  /**
+   * Check user position with Google Maps geolocation API
+   * Get the user current position if available
+   */
+
 
   checkUserPosition() {
     navigator.geolocation.getCurrentPosition(position => {
@@ -731,9 +743,13 @@ class Storelocator {
       this.loading(false);
     });
   }
+  /**
+   * Function called on user map moved event
+   */
+
 
   boundsChanged() {
-    if (this.length) {
+    if (this.markers.length) {
       clearTimeout(this.boundsChangeTimer);
       this.boundsChangeTimer = setTimeout(() => {
         let listMarkerIndexInViewport = [];
@@ -747,7 +763,7 @@ class Storelocator {
           this.refreshMapOnBoundsChanged({
             updatePosition: true
           });
-        } else if (listMarkerIndexInViewport.length === this.length) {
+        } else if (listMarkerIndexInViewport.length === this.markers.length) {
           // If user see already all markers, zoom is too small, increase it until maxRadius
           if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
             this.refreshMapOnBoundsChanged({
@@ -758,6 +774,12 @@ class Storelocator {
       }, 600);
     }
   }
+  /**
+   * Refresh the map on user map moved
+   * Trigger a request with the new map position
+   * @param {Object} options Options to refresh the map
+   */
+
 
   refreshMapOnBoundsChanged(options) {
     let radius = this.options.requests.searchRadius;
@@ -776,16 +798,20 @@ class Storelocator {
 
       this.currentRadius = this.currentRadius + this.options.updateMarkerOnBoundsChanged.stepRadius;
       radius = this.currentRadius;
-    } // Prevent fitBounds when bounds changed (move or zoom)
-
+    }
 
     this.triggerRequest({
       'lat': lat,
       'lng': lng,
       'radius': radius,
-      fitBounds: false
+      fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
+
     });
   }
+  /**
+   * Offset the map when the desktop sidebar is enabled
+   */
+
 
   offsetMapWithAsideBar() {
     let offsetMapWithAside = this.mapAside.getBoundingClientRect().right / 2 * -1;
@@ -818,6 +844,13 @@ class Storelocator {
       }
     });
   }
+  /**
+   * Function called on autocomplete changes
+   * Trigger a request with the new user research
+   * @param {*} lat Latitude of the research
+   * @param {*} lng Longitude of the research
+   */
+
 
   autocompleteRequest(lat, lng) {
     this.userPositionChecked = false; // Reset currentRadius on new search
@@ -829,6 +862,12 @@ class Storelocator {
       fitBounds: true
     });
   }
+  /**
+   * Trigger a request to the web service to get all store results
+   * according to the position (lat, lng)
+   * @param {*} options Coordinate (lat, lng) and fitBounds
+   */
+
 
   triggerRequest(options) {
     this.loading(true);
@@ -841,28 +880,27 @@ class Storelocator {
     let {
       storeLimit = this.options.requests.storeLimit
     } = options;
+    let {
+      fitBounds = true
+    } = options;
     let requestDatas = this.serializeForm({
       lat: lat,
       lng: lng,
       storeLimit: storeLimit
-    });
-    let {
-      fitBounds = true
-    } = options; // Update search data stored
+    }); // Update search data stored
 
     this.searchData.lat = lat;
     this.searchData.lng = lng;
-    this.searchData.position = new window.google.maps.LatLng(lat, lng);
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
+    this.searchData.position = new window.google.maps.LatLng(lat, lng); // Fecth configuration
+
     let fetchConf = {
       method: 'POST',
-      // headers: myHeaders,
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestDatas)
-    };
+    }; // Fecth store datas from the web service
+
     fetch(this.options.urlWebservice, fetchConf).then(response => {
       if (!response.ok) {
         throw Error(response.statusText);
@@ -891,9 +929,7 @@ class Storelocator {
    * @param {String} lat Latitude
    * @param {String} lng Longitude
    * @param {Integer} storeLimit Limit of stores in the request
-   * @param {Integer} currentRadius Radius of the request
-   * @param {String} inputValue Value of the input form search
-   * @param {Array} categories Value of selected filters
+   * @return {Object} formData Datas required for the request (lat, lng, storeLimit, input, categories, radius)
    */
 
 
@@ -902,7 +938,7 @@ class Storelocator {
     lng,
     storeLimit
   }) {
-    let formData = {};
+    let formDatas = {};
     let categories = [];
     this.filtersSearch.forEach((filter, index) => {
       if (filter.checked) {
@@ -911,23 +947,29 @@ class Storelocator {
     });
 
     if (categories.length) {
-      formData.categories = categories;
-    } // Serialize params (input and filters value)
-
+      formDatas.categories = categories;
+    }
 
     if (this.inputSearch.value !== '') {
-      formData.input = this.inputSearch.value;
+      formDatas.input = this.inputSearch.value;
     }
 
     if (lat && lng) {
-      formData.lat = lat;
-      formData.lng = lng;
+      formDatas.lat = lat;
+      formDatas.lng = lng;
     }
 
-    formData.radius = this.currentRadius;
-    formData.storesLimit = storeLimit;
-    return formData;
+    formDatas.radius = this.currentRadius;
+    formDatas.storesLimit = storeLimit;
+    return formDatas;
   }
+  /**
+   * Parse store datas from the web service
+   * Create all markers
+   * Create all store results
+   * @param {Object} options Store datas from the web service
+   */
+
 
   parseStores(options) {
     let noResult = true;
@@ -941,7 +983,7 @@ class Storelocator {
 			<p class="storelocator-sidebarIntro">
 				${stores.length} results sorted by distance correspond to your research
 			</p>
-			<ul>`; // Destroy old markers before parse new stores
+			<ul class="storelocator-sidebarResultsList">`; // Destroy old markers before parse new stores
 
     this.destroyMarkers(); // Reset infoWindow status
 
@@ -968,7 +1010,7 @@ class Storelocator {
       store.position = new window.google.maps.LatLng(store.lat, store.lng);
       this.boundsGlobal.extend(store.position);
       this.createMarkers(store);
-      hmlListResult += (0, _sidebarItemResult.default)({
+      hmlListResult += _sidebarItemResult.default.call(this, {
         store: store,
         origin: origin
       });
@@ -982,12 +1024,12 @@ class Storelocator {
 					Please try a new search with differents choices.
 				</p>`;
 
-      if (this.overlayGreen !== null) {
-        this.overlayGreen.setMap(null);
+      if (this.overlayLimit !== null) {
+        this.overlayLimit.setMap(null);
       }
 
-      if (this.overlayRed !== null) {
-        this.overlayRed.setMap(null);
+      if (this.overlayGlobal !== null) {
+        this.overlayGlobal.setMap(null);
       }
     } else {
       this.asideResults.innerHTML = hmlListResult; // Add all maskers to cluster if option is enabled
@@ -1021,6 +1063,12 @@ class Storelocator {
 
     this.loading(false);
   }
+  /**
+   * Create a custom viewport (boundsWithLimit)
+   * Display a minimal list of markers according to the maxMarkersInViewportLimit option
+   * @param {Object} options Datas to create the custom viewport
+   */
+
 
   createViewportWithLimitMarker(options) {
     let {
@@ -1045,13 +1093,19 @@ class Storelocator {
       this.createOverlays();
     }
   }
+  /**
+   * Create custom overlay on the map for the debug mode
+   * overlayGlobal: list of all stores according to maxRadius option
+   * overlayLimit: list of all stores according to the maxMarkersInViewportLimit option
+   */
+
 
   createOverlays() {
-    if (this.overlayRed !== null) {
-      this.overlayRed.setMap(null);
+    if (this.overlayGlobal !== null) {
+      this.overlayGlobal.setMap(null);
     }
 
-    this.overlayRed = new window.google.maps.Rectangle({
+    this.overlayGlobal = new window.google.maps.Rectangle({
       bounds: this.boundsGlobal,
       strokeColor: null,
       strokeOpacity: 0,
@@ -1060,11 +1114,11 @@ class Storelocator {
       map: this.map
     });
 
-    if (this.overlayGreen !== null) {
-      this.overlayGreen.setMap(null);
+    if (this.overlayLimit !== null) {
+      this.overlayLimit.setMap(null);
     }
 
-    this.overlayGreen = new window.google.maps.Rectangle({
+    this.overlayLimit = new window.google.maps.Rectangle({
       bounds: this.boundsWithLimit,
       strokeColor: null,
       strokeOpacity: 0,
@@ -1073,6 +1127,11 @@ class Storelocator {
       map: this.map
     });
   }
+  /**
+   * Open the Google Maps native InfoWindow
+   * @param {Object} currentMarker Marker data display inside the infoWindow
+   */
+
 
   openInfoWindow(currentMarker) {
     // Get lat/lng from searchData
@@ -1096,6 +1155,10 @@ class Storelocator {
 
     this.infoWindow.open(this.map, currentMarker);
   }
+  /**
+   * Destroy all created Google Map markers
+   */
+
 
   destroyMarkers() {
     // Destroy all maskers references in cluster is enabled
@@ -1106,7 +1169,7 @@ class Storelocator {
     } // Loop backwards on markers and remove them
 
 
-    for (let i = this.length - 1; i >= 0; i--) {
+    for (let i = this.markers.length - 1; i >= 0; i--) {
       let currentMarker = this.markers[i]; // Remove listener from marker instance
 
       window.google.maps.event.clearInstanceListeners(currentMarker); // Remove the marker
@@ -1116,9 +1179,14 @@ class Storelocator {
 
     this.markers = [];
   }
+  /**
+   * Create a Google Maps markers
+   * @param {Object} data Marker datas
+   */
+
 
   createMarkers(data) {
-    // Build marker
+    let markerStyle = this.markerStyles[data.category];
     let options = {
       position: data.position,
       map: this.map,
@@ -1128,7 +1196,7 @@ class Storelocator {
         fontFamily: 'Roboto, Arial, sans-serif',
         fontSize: '13px',
         fontWeight: '500',
-        color: '#fff'
+        color: markerStyle.colorText
       }
     }; // Disable SVG for IE, they don't works
 
@@ -1145,46 +1213,56 @@ class Storelocator {
       this.infoWindowOpened = true;
       this.openInfoWindow(marker);
     });
-  } // Detect store categorie and appropriate SVG icon
+  }
+  /**
+   * Get marker color by category, from options
+   * @return {Object} Formatted object with category name into key and marker styles datas
+   */
+
+
+  getColorByMarkerCategory() {
+    let styles = {};
+    this.options.map.markers.styles.forEach(marker => {
+      styles[marker.category] = {
+        colorBackground: marker.colorBackground,
+        colorText: marker.colorText
+      };
+    });
+    return styles;
+  }
+  /**
+   * Get SVG icon by category styles
+   * @param {String} category Marker category
+   * @return {Object} Icon datas to generate a Google Maps markers
+   */
 
 
   getIconMarkerByCategory(category) {
-    let stylesMarkers = this.options.map.markers.styles;
-    let styleMarker = null;
     let offsetXLabel = this.options.map.markers.width / 2 - 0.9;
     let offsetYLabel = this.options.map.markers.height / 2 - 3;
-
-    if (stylesMarkers.length) {
-      this.options.map.markers.styles.forEach(marker => {
-        if (marker.category === category) {
-          styleMarker = marker;
-        }
-      });
-      return {
-        url: this.generateSVG({
-          colorBackground: styleMarker.colorBackground,
-          colorBorder: styleMarker.colorBorder,
-          width: this.options.map.markers.width,
-          height: this.options.map.markers.height
-        }),
-        labelOrigin: new window.google.maps.Point(offsetXLabel, offsetYLabel)
-      };
-    } else {
-      return null;
-    }
+    return {
+      url: this.generateSVG({
+        colorBackground: this.markerStyles[category].colorBackground,
+        width: this.options.map.markers.width,
+        height: this.options.map.markers.height
+      }),
+      labelOrigin: new window.google.maps.Point(offsetXLabel, offsetYLabel)
+    };
   }
+  /**
+   * Generate SVG from the associated template
+   * @param {Object} Style datas to customize the SVG
+   * @return {Object} Custom SVG to generate a Google Maps marker icons
+   */
+
 
   generateSVG(options) {
     let customSVG = {
       mimetype: 'data:image/svg+xml;base64,',
-      svg: `
-				<svg width="${options.width}px" height="${options.height}px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve">
-					<path fill="{{colorBorder}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/>
-					<path fill="{{colorBackground}}" class="st0" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/>
-				</svg>`
+      svg: (0, _markerSvg.default)(options)
     };
     customSVG.scaledSize = new window.google.maps.Size(options.width, options.height);
-    return customSVG.mimetype + btoa(customSVG.svg.replace('{{colorBorder}}', options.colorBorder).replace('{{colorBackground}}', options.colorBackground));
+    return customSVG.mimetype + btoa(customSVG.svg.replace(new RegExp('{{colorBackground}}', 'g'), options.colorBackground));
   }
   /**
    * Log message
@@ -1206,6 +1284,10 @@ class Storelocator {
   isMobile() {
     return window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches;
   }
+  /**
+   * Check if browser is an old Internet Explorer
+   */
+
 
   isBrowserIE() {
     return !!(document.documentMode && document.documentMode >= 9);
@@ -1240,7 +1322,7 @@ function _default({
   store,
   origin
 }) {
-  return `<div class="wrapper-info-window">
+  return `<div class="storelocator-infoWIndow">
                 ${store.picture ? `<span class="store-picture">
                         <a href="${store.link}" title="Visit website" target="_blank">
                             <img src="${store.picture}" alt="${store.title}" />
@@ -1259,6 +1341,30 @@ function _default({
                     ${typeof store.link !== 'undefined' ? `<a href="${store.link}" title="Visit website" target="_blank" class="store-website">${store.link}</a>` : ``}
                 </div>
             </div>`;
+}
+
+/***/ }),
+
+/***/ "./src/storelocator/js/templates/marker-svg.js":
+/*!*****************************************************!*\
+  !*** ./src/storelocator/js/templates/marker-svg.js ***!
+  \*****************************************************/
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(options) {
+  return `<svg width="${options.width}px" height="${options.height}px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve">
+                <path fill="{{colorBackground}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/>
+                <path fill="{{colorBackground}}" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/>
+            </svg>`;
 }
 
 /***/ }),
@@ -1282,7 +1388,7 @@ function _default({
   store,
   origin
 }) {
-  return `<li class="category-${store.category}">
+  return `<li data-category="${store.category}" style="border-left-color: ${this.markerStyles[store.category].colorBackground}">
                 <div class="storelocator-detailStore">
                     ${store.title ? `<span class="storelocator-detailStoreTitle"><a href="" title="See on the map" class="store-center-marker-js" data-marker-index="${store.index}">${store.index + 1}. <span>${store.title}</span></a></span>` : ``}
                     <a href="http://www.google.fr/maps/dir/${origin}/${store.lat},${store.lng}" title="See the itinerary on Google Maps" target="_blank" class="storelocator-detailStoreDistance"><span>${store.distance.toFixed(2)}km</span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" class="storelocator-detailStoreIconRoute" viewBox="1772 1772 19.185 20" enable-background="new 1772 1772 19.185 20" xml:space="preserve"><path d="M1791.074,1775.318c0.074,0.073,0.11,0.159,0.11,0.257c0,0.096-0.036,0.182-0.11,0.257l-1.574,1.573c-0.209,0.21-0.464,0.313-0.761,0.313h-15.009c-0.192,0-0.361-0.069-0.502-0.213c-0.141-0.141-0.211-0.31-0.211-0.502v-2.859c0-0.192,0.07-0.36,0.211-0.502c0.141-0.141,0.31-0.211,0.502-0.211h6.434v-0.716c0-0.192,0.07-0.36,0.211-0.502c0.141-0.143,0.31-0.213,0.502-0.213h1.431c0.193,0,0.361,0.07,0.502,0.213c0.142,0.142,0.211,0.31,0.211,0.502v0.716h5.719c0.297,0,0.552,0.102,0.761,0.312L1791.074,1775.318z M1780.164,1785.58h2.856v5.716c0,0.196-0.069,0.361-0.211,0.505c-0.141,0.141-0.309,0.211-0.502,0.211h-1.431c-0.192,0-0.361-0.07-0.502-0.211c-0.141-0.144-0.211-0.309-0.211-0.505V1785.58zM1789.454,1780.577c0.193,0,0.361,0.07,0.502,0.211c0.142,0.142,0.212,0.31,0.212,0.502v2.859c0,0.192-0.07,0.361-0.212,0.504c-0.141,0.142-0.309,0.212-0.502,0.212h-15.009c-0.297,0-0.551-0.105-0.76-0.314l-1.574-1.572c-0.075-0.076-0.111-0.162-0.111-0.258c0-0.097,0.036-0.184,0.111-0.257l1.574-1.576c0.209-0.209,0.463-0.311,0.76-0.311h5.719v-2.146h2.856v2.146H1789.454z"/></svg></a>

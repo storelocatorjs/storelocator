@@ -11,6 +11,12 @@
         text-transform: capitalize;
         font-weight: 500;
         font-size: 16px;
+        display: block;
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
 
         span {
             display: inline;
@@ -37,31 +43,28 @@
         margin-left: 10px;
     }
 
-    span {
-        display: block;
-        font-weight: 400;
-
-        &:last-child {
-            padding-bottom: 0;
-        }
-    }
-
-    a {
-        text-decoration: none;
-        color: #000;
-    }
-
-    &-detailStoreZipcode,
     &-detailStoreCity {
         display: inline-block;
         vertical-align: top;
+        padding-bottom: 12px;
     }
 
-    &-detailStoreAddress,
-    &-detailStoreZipcode,
-    &-detailStoreCity,
-    &-detailStorePhone {
+    &-detailStoreAddress {
+        display: block;
         padding-bottom: 12px;
+    }
+
+    &-detailStoreZipcode {
+        padding-bottom: 12px;
+    }
+
+    &-detailStorePhone {
+        display: block;
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
     }
 }
 

@@ -10,11 +10,6 @@ body {
     position: relative;
     height: 100%;
     font-family: 'Roboto', arial, sans-serif;
-    color: rgb(33, 33, 33);
-
-    a {
-        color: rgb(33, 33, 33);
-    }
 }
 
 @media screen and (max-width: var(--breakpointModile)) {
