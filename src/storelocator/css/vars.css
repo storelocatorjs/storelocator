@@ -2,4 +2,7 @@
     --breakpointModile: 767px;
     --widthFormSearch: 350px;
     --heightFormSearch: 161px;
+    --colorFilters: rgba(0, 0, 0, 0.3);
 }
+
+@custom-media --media-tablet only screen and (min-width: 750px);

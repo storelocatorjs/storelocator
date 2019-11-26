@@ -1,8 +1,3 @@
-.storelocator,
-    .storelocator * {
-        box-sizing: border-box;
-    }
-
 
 
 @-webkit-keyframes loading {
@@ -61,7 +56,7 @@
             opacity: 1;
         }
 
-.storelocator-loader .loader-bar {
+.storelocator-loader .storelocator-loaderBar {
             content: '';
             display: inline-block;
             position: absolute;
@@ -71,19 +66,19 @@
             text-align: center;
         }
 
-.storelocator-loader .loader-bar:nth-child(1) {
+.storelocator-loader .storelocator-loaderBar:nth-child(1) {
                 background-color: #f60;
                 -webkit-animation: loading 3s linear infinite;
                         animation: loading 3s linear infinite;
             }
 
-.storelocator-loader .loader-bar:nth-child(2) {
+.storelocator-loader .storelocator-loaderBar:nth-child(2) {
                 background-color: #fc3;
                 -webkit-animation: loading 3s linear 1s infinite;
                         animation: loading 3s linear 1s infinite;
             }
 
-.storelocator-loader .loader-bar:nth-child(3) {
+.storelocator-loader .storelocator-loaderBar:nth-child(3) {
                 background-color: #ea4c89;
                 -webkit-animation: loading 3s linear 2s infinite;
                         animation: loading 3s linear 2s infinite;
@@ -93,82 +88,75 @@
         position: relative;
         font-size: 13px;
     }
-    .storelocator-detailStoreTitle {
+
+.storelocator-detailStoreTitle {
         margin-bottom: 10px;
         text-transform: capitalize;
         font-weight: 500;
         font-size: 16px;
         display: block;
     }
-    .storelocator-detailStoreTitle a {
+
+.storelocator-detailStoreTitle a {
             text-decoration: none;
             color: #000;
         }
-    .storelocator-detailStoreTitle span {
+
+.storelocator-detailStoreTitle span {
             display: inline;
         }
-    .storelocator-detailStoreDistance {
+
+.storelocator-detailStoreDistance {
         position: absolute;
         top: 50%;
         right: 0;
         -webkit-transform: translateY(-50%);
                 transform: translateY(-50%);
         color: #9a9a9a;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-decoration: none;
     }
-    .storelocator-detailStoreDistance span {
-            display: inline-block;
-            vertical-align: top;
-            margin-top: 2px;
-        }
-    .storelocator-detailStoreIconRoute {
+
+.storelocator-detailStoreIconRoute {
         fill: #9a9a9a;
         width: 20px;
         margin-left: 10px;
     }
-    .storelocator-detailStoreCity {
+
+.storelocator-detailStoreCity {
         display: inline-block;
         vertical-align: top;
         padding-bottom: 12px;
     }
-    .storelocator-detailStoreAddress {
+
+.storelocator-detailStoreAddress {
         display: block;
         padding-bottom: 12px;
     }
-    .storelocator-detailStoreZipcode {
+
+.storelocator-detailStoreZipcode {
         padding-bottom: 12px;
     }
-    .storelocator-detailStorePhone {
+
+.storelocator-detailStorePhone {
         display: block;
     }
-    .storelocator-detailStorePhone a {
+
+.storelocator-detailStorePhone a {
             text-decoration: none;
             color: #000;
         }
 
-@media screen and (max-width: var(--breakpointModile)) {
-        .storelocator-detailStore {
-            font-size: 14px;
-        }
-}
-
 .storelocator-formSearch {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 350px;
-        height: 161px;
+        position: relative;
+        width: 100%;
+        height: auto;
         padding: 20px;
-        z-index: 5;
-        border-radius: 5px 5px 0 0;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     }
 
-        .storelocator-formSearch .geoloc-adress {
-            font-size: 12px;
-            display: block;
-        }
-    .storelocator-inputSearch {
+.storelocator-inputSearch {
         width: 100%;
         height: 40px;
         padding-left: 10px;
@@ -178,15 +166,15 @@
         border: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     }
-    .storelocator-formFilters {
-        font-size: 0;
-    }
-    .storelocator-formFilters label {
+
+.storelocator-formFilters label {
             position: relative;
-            padding: 3px 5px 4px 37px;
+            padding: 5px 5px 6px 37px;
+            font-size: 14px;
             cursor: pointer;
         }
-    .storelocator-formFilters label::before {
+
+.storelocator-formFilters label::before {
                 content: '';
                 display: block;
                 width: 20px;
@@ -195,56 +183,47 @@
                 position: absolute;
                 top: 0;
                 left: 0;
+                border: 1px solid rgba(0, 0, 0, 0.3);
                 border-radius: 3px;
+                border-width: 2px;
             }
-    .storelocator-formFilters label::after {
+
+.storelocator-formFilters label::after {
                 content: '';
                 display: block;
                 opacity: 0;
+                position: absolute;
                 width: 14px;
                 height: 14px;
-                position: absolute;
-                top: 4px;
-                left: 4px;
+                top: 5px;
+                left: 5px;
                 border-radius: 3px;
                 transition: opacity 200ms ease-out;
+                background-color: rgba(0, 0, 0, 0.3);
             }
-    .storelocator-formFilters label.category-1::before {
-                    border: 1px solid #f60;
-                }
-    .storelocator-formFilters label.category-1::after {
-                    background-color: #f60;
-                }
-    .storelocator-formFilters label.category-2::before {
-                    border: 1px solid #fc3;
-                }
-    .storelocator-formFilters label.category-2::after {
-                    background-color: #fc3;
-                }
-    .storelocator-formFilters label.category-3::before {
-                    border: 1px solid #ea4c89;
-                }
-    .storelocator-formFilters label.category-3::after {
-                    background-color: #ea4c89;
-                }
-    .storelocator-formFilters input[type=checkbox] {
+
+.storelocator-formFilters input[type=checkbox] {
             position: absolute;
-            top: 0;
-            left: 0;
             opacity: 0;
+            top: 4px;
+            left: 4px;
         }
-    .storelocator-formFilters input[type=checkbox]:checked + label::after {
+
+.storelocator-formFilters input[type=checkbox]:checked + label::after {
                 opacity: 1;
             }
-    .storelocator-formFiltersRow {
+
+.storelocator-formFiltersRow {
         display: flex;
         align-items: center;
         margin-top: 15px;
     }
-    .storelocator-formFiltersRow:first-child {
+
+.storelocator-formFiltersRow:first-child {
             margin-top: 0;
         }
-    .storelocator-formCheckbox {
+
+.storelocator-formCheckbox {
         font-size: 13px;
         position: relative;
         display: block;
@@ -252,45 +231,17 @@
         padding: 4px 0;
     }
 
-@media screen and (max-width: var(--breakpointModile)) {
+@media only screen and (min-width: 750px) {
         .storelocator-formSearch {
-            box-shadow: none;
-            position: relative;
-            top: auto;
-            left: auto;
-            width: 100%;
-            height: auto;
-        }
-            .storelocator-formFilters label {
-                padding-top: 5px;
-                padding-bottom: 6px;
-                font-size: 14px;
-            }
-
-                .storelocator-formFilters label::before {
-                    width: 24px;
-                    height: 24px;
-                    border-width: 2px !important;
-                }
-
-                .storelocator-formFilters label::after {
-                    width: 16px;
-                    height: 16px;
-                    top: 6px;
-                    left: 6px;
-                }
-
-            .storelocator-formFilters .storelocator-formCheckbox {
-                padding: 5px 0 6px;
-            }
-
-            .storelocator-formFilters input[type=checkbox] {
-                top: 4px;
-                left: 4px;
-            }
-
-        .storelocator-inputSearch {
-            height: 43px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 350px;
+            height: 161px;
+            z-index: 5;
+            border-radius: 5px 5px 0 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
         }
 }
 
@@ -298,37 +249,33 @@
         padding: 20px 0 20px 20px;
     }
 
-        .storelocator-infoWIndow .store-picture {
+.storelocator-infoWIndow .storelocator-pictureStore {
             margin-bottom: 20px;
             display: block;
             max-width: 250px;
         }
 
-        .storelocator-infoWIndow .store-picture a {
+.storelocator-infoWIndow .storelocator-pictureStore a {
                 display: block;
                 width: 100%;
                 height: auto;
             }
 
-        .storelocator-infoWIndow .store-picture img {
+.storelocator-infoWIndow .storelocator-pictureStore img {
                 display: block;
                 width: 100%;
                 height: auto;
             }
 
-        .storelocator-infoWIndow-detailStore {
+.storelocator-infoWIndow .storelocator-detailStore {
             max-width: 250px;
         }
 
-        .storelocator-infoWIndow-detailStore .store-website:hover {
-                text-decoration: underline;
-            }
-
-        .storelocator-infoWIndow-detailStoreTitle {
+.storelocator-infoWIndow .storelocator-detailStoreTitle {
             padding-right: 90px;
         }
 
-        .storelocator-infoWIndow-detailStoreDistance {
+.storelocator-infoWIndow .storelocator-detailStoreDistance {
             top: 1px;
             -webkit-transform: none;
                     transform: none;
@@ -342,93 +289,77 @@
         position: absolute;
         bottom: 0;
     }
-    .storelocator-nav {
-        display: none;
+
+.storelocator-nav {
         height: 40px;
         position: relative;
         z-index: 10;
     }
-    .storelocator-nav ul {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            height: 100%;
-        }
-    .storelocator-nav a {
-            text-decoration: none;
-            display: block;
-            padding: 11px 5px 0;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            color: #c9c6c6;
-        }
-    .storelocator-nav a.active {
-                color: #000;
-            }
-    .storelocator-nav li {
-            width: 50%;
-            height: 100%;
-        }
-    .storelocator-nav li .active .storelocator-navBorder {
-                width: 100%;
-            }
-    .storelocator-nav li:first-child a .storelocator-navBorder {
-                        right: 0;
-                    }
-    .storelocator-nav li:nth-child(2) a .storelocator-navBorder {
-                        left: 0;
-                    }
 
-@media screen and (max-width: var(--breakpointModile)) {
+.storelocator-navList {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+.storelocator-navListItem {
+        width: 50%;
+        height: 100%;
+        list-style-type: none;
+    }
+
+.storelocator-navButton {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        color: #c9c6c6;
+        border: 0;
+        -webkit-appearance: none;
+        font-size: 16px;
+        font-family: inherit;
+        cursor: pointer;
+    }
+
+.storelocator-navButton.active {
+            color: #000;
+        }
+
+@media only screen and (min-width: 750px) {
         .storelocator .storelocator-nav {
-            display: block;
+            display: none;
         }
 }
 
 .storelocator-sidebar {
-        position: absolute;
-        top: calc(161px + 20px);
-        left: 20px;
-        width: 350px;
-        height: calc(100% - 161px - 40px);
-        z-index: 5;
-        border-radius: 0 0 5px 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+        position: relative;
     }
-    .storelocator-sidebarResults {
+
+.storelocator-sidebarResults {
         overflow: auto;
         height: 100%;
         border-top: 1px solid #e7e7e7;
     }
-    .storelocator-sidebarResults > ul > li {
-            display: block;
-            border-left-style: solid;
-            border-left-width: 5px;
-            padding: 20px;
-            border-top: 1px solid #e7e7e7;
 
-            /* &[data-category="1"] {
-                border-left-color: #f60;
-            }
+.storelocator-sidebarResultsListItem {
+        display: block;
+        padding: 20px;
+        border-top: 1px solid #e7e7e7;
+    }
 
-            &[data-category="2"] {
-                border-left-color: #fc3;
-            }
-
-            &[data-category="3"] {
-                border-left-color: #ea4c89;
-            } */
+.storelocator-sidebarResultsListItem:first-child {
+            border-top: none;
         }
-    .storelocator-sidebarResults > ul > li:first-child {
-                border-top: none;
-            }
-    .storelocator-sidebarResultsList {
+
+.storelocator-sidebarResultsList {
         padding: 0;
         margin: 0;
     }
-    .storelocator-sidebarNoResults {
+
+.storelocator-sidebarNoResults {
         margin: 0;
         padding: 20px;
         font-size: 13px;
@@ -436,7 +367,8 @@
         color: #c9c6c6;
         font-style: italic;
     }
-    .storelocator-sidebarIntro {
+
+.storelocator-sidebarIntro {
         font-size: 13px;
         line-height: 20px;
         font-style: italic;
@@ -445,46 +377,41 @@
         margin: 0;
     }
 
-@media screen and (max-width: var(--breakpointModile)) {
+@media only screen and (min-width: 750px) {
         .storelocator-sidebar {
-            box-shadow: none;
-            position: relative;
-            top: auto;
-            left: auto;
-            width: 100%;
-            height: auto;
+            position: absolute;
+            top: calc(161px + 20px);
+            left: 20px;
+            width: 350px;
+            height: calc(100% - 161px - 40px);
+            z-index: 5;
+            border-radius: 0 0 5px 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
         }
-
-            .storelocator-sidebar-sidebar {
-                display: none;
-            }
-
-                .storelocator-sidebar-sidebar.active {
-                    display: block;
-                }
-
-            .storelocator-sidebar-sidebarResults {
-                border: none;
-            }
-
-            .storelocator-sidebar-sidebarIntro {
-                font-size: 14px;
-            }
 }
 
-.storelocator #storelocator-googleMaps {
+.storelocator-googleMaps {
+        position: relative;
+        height: 0;
+        padding-top: 100%;
+        display: none;
         overflow: hidden;
     }
 
-        .storelocator #storelocator-googleMaps,
-        .storelocator #storelocator-googleMaps #google-map {
+.storelocator-googleMaps.active {
+            display: block;
+        }
+
+.storelocator-googleMaps #storelocator-googleMapsCanvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
         }
-    .storelocator-geolocButton {
+
+.storelocator-geolocButton {
         position: absolute;
         right: 15px;
         bottom: 115px;
@@ -495,7 +422,8 @@
         cursor: pointer;
         border-radius: 8px;
     }
-    .storelocator-geolocButton::before {
+
+.storelocator-geolocButton::before {
             content: '';
             background-image: url(//maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png);
             background-size: 180px 18px;
@@ -518,19 +446,14 @@
         margin-left: 5px;
     }
 
-@media screen and (max-width: var(--breakpointModile)) {
-        .storelocator #storelocator-googleMaps {
-            position: relative;
-            top: auto;
-            left: auto;
-            height: 0;
-            padding-top: 100%;
-            display: none;
+@media only screen and (min-width: 750px) {
+        .storelocator-googleMaps {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
-
-            .storelocator #storelocator-googleMaps.active {
-                display: block;
-            }
 }
 
 html,
@@ -545,7 +468,12 @@ body {
     font-family: 'Roboto', arial, sans-serif;
 }
 
-@media screen and (max-width: var(--breakpointModile)) {
+.storelocator,
+    .storelocator * {
+        box-sizing: border-box;
+    }
+
+@media screen and (max-width: 750px) {
     html,
     body {
         height: auto;

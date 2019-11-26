@@ -1,5 +1,5 @@
 export default function ({store, origin}) {
-	return `<li data-category="${store.category}" style="border-left-color: ${this.markerStyles[store.category].colorBackground}">
+	return `<li class="storelocator-sidebarResultsListItem" data-category="${store.category}">
                 <div class="storelocator-detailStore">
                     ${store.title
                         ? `<span class="storelocator-detailStoreTitle"><a href="" title="See on the map" class="store-center-marker-js" data-marker-index="${store.index}">${store.index + 1}. <span>${store.title}</span></a></span>`

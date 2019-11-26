@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <title>Storelocator</title>
 		<link rel="stylesheet" href="../../dist/storelocator/css/storelocator.css" />
+		<link rel="stylesheet" href="../assets/custom-style.css" />
         </head>
     <body>
         <div class="storelocator">
@@ -30,21 +31,17 @@
                 </div>
             </form>
             <nav class="storelocator-nav">
-                <ul>
-                    <li>
-                        <a href="" title="Show map" class="switch-view-js active view-map">
-                            Show map<span class="storelocator-navBorder"></span>
-                        </a>
+                <ul class="storelocator-navList">
+                    <li class="storelocator-navListItem">
+                        <button class="storelocator-navButton active" data-switch-view data-target="map">Map</button>
                     </li>
-                    <li>
-                        <a href="" title="Show list" class="switch-view-js view-results">
-                            Show list<span class="storelocator-navBorder"></span>
-                        </a>
+                    <li class="storelocator-navListItem">
+                        <button class="storelocator-navButton" data-switch-view data-target="list">List</button>
                     </li>
                 </ul>
             </nav>
-            <div id="storelocator-googleMaps" class="active">
-                <div id="google-map"></div>
+            <div class="storelocator-googleMaps active">
+                <div id="storelocator-googleMapsCanvas"></div>
                 <button class="storelocator-geolocButton"></button>
             </div>
             <div class="storelocator-sidebar">
@@ -59,7 +56,6 @@
                 apiKey: 'AIzaSyDPSz_DJFoavj9mkeUd9U0xuxXefvpcys8',
                 urlWebservice: 'http://localhost:3000',
                 debug: true,
-                breakpointMobile: '767px',
 
                 cluster: {
                     status: true,

@@ -2,7 +2,6 @@ export default {
 	apiKey: '', // {String} mandatory parameter
 	urlWebservice: '', // {String}
 	debug: false, // {Bool}
-	breakpointMobile: '767px', // {String}
 
 	cluster: {
 		status: true, // {Bool}

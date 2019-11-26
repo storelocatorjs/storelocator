@@ -4,7 +4,7 @@
     &-infoWIndow {
         padding: 20px 0 20px 20px;
 
-        .store-picture {
+        .storelocator-pictureStore {
             margin-bottom: 20px;
             display: block;
             max-width: 250px;
@@ -22,19 +22,15 @@
             }
         }
 
-        &-detailStore {
+        .storelocator-detailStore {
             max-width: 250px;
-
-            .store-website:hover {
-                text-decoration: underline;
-            }
         }
 
-        &-detailStoreTitle {
+        .storelocator-detailStoreTitle {
             padding-right: 90px;
         }
 
-        &-detailStoreDistance {
+        .storelocator-detailStoreDistance {
             top: 1px;
             transform: none;
         }

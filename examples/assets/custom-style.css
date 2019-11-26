@@ -1,0 +1,37 @@
+/* Override form filters style */
+.storelocator-formFilters label.category-1::before {
+    border: 2px solid #f60;
+}
+
+.storelocator-formFilters label.category-1::after {
+    background-color: #f60;
+}
+
+.storelocator-formFilters label.category-2::before {
+    border: 2px solid #fc3;
+}
+
+.storelocator-formFilters label.category-2::after {
+    background-color: #fc3;
+}
+
+.storelocator-formFilters label.category-3::before {
+    border: 2px solid #ea4c89;
+}
+
+.storelocator-formFilters label.category-3::after {
+    background-color: #ea4c89;
+}
+
+/* Override result list item style */
+.storelocator-sidebarResultsListItem[data-category="1"] {
+    border-left: 5px solid #f60;
+}
+
+.storelocator-sidebarResultsListItem[data-category="2"] {
+    border-left: 5px solid #fc3;
+}
+
+.storelocator-sidebarResultsListItem[data-category="3"] {
+    border-left: 5px solid #ea4c89;
+}

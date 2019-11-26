@@ -68,9 +68,9 @@ export default class Storelocator {
 	buildLoader () {
 		this.loader = this.containerStorelocator.querySelector(this.options.selectors.loader)
 		this.loader.innerHTML = `
-			<div class="loader-bar"></div>
-			<div class="loader-bar"></div>
-			<div class="loader-bar"></div>`
+			<div class="storelocator-loaderBar"></div>
+			<div class="storelocator-loaderBar"></div>
+			<div class="storelocator-loaderBar"></div>`
 	}
 
 	/**
@@ -93,7 +93,7 @@ export default class Storelocator {
 		this.asideResults.addEventListener('click', this.onClickSidebarResultItem.bind(this))
 
 		// Event listeners on sidebar navigation items
-		let buttons = [...this.containerStorelocator.querySelectorAll('.switch-view-js')]
+		let buttons = [...this.containerStorelocator.querySelectorAll('[data-switch-view]')]
 		buttons.forEach(button => {
 			button.addEventListener('click', this.onClickSidebarNav.bind(this))
 		})
@@ -180,11 +180,7 @@ export default class Storelocator {
 		cloneMapOptions.center = new window.google.maps.LatLng(cloneMapOptions.center[0], cloneMapOptions.center[1])
 
 		// Init Google Maps API
-		this.map = new window.google.maps.Map(this.containerStorelocator.querySelector('#google-map'), cloneMapOptions)
-
-		if (!this.isMobile()) {
-			this.offsetMapWithAsideBar()
-		}
+		this.map = new window.google.maps.Map(this.containerStorelocator.querySelector('#storelocator-googleMapsCanvas'), cloneMapOptions)
 
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
@@ -246,14 +242,14 @@ export default class Storelocator {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarNav (e) {
-		let mapView = this.containerStorelocator.querySelector('#storelocator-googleMaps')
+		let mapView = this.containerStorelocator.querySelector('.storelocator-googleMaps')
 
 		e.preventDefault()
 
-		this.containerStorelocator.querySelector('.switch-view-js.active').classList.remove('active')
+		this.containerStorelocator.querySelector('[data-switch-view].active').classList.remove('active')
 		e.target.classList.add('active')
 
-		if (e.target.classList.contains('view-map')) {
+		if (e.target.getAttribute('data-target') === 'map') {
 			mapView.classList.add('active')
 			this.mapAside.classList.remove('active')
 			window.google.maps.event.trigger(this.map, 'resize')
@@ -294,13 +290,8 @@ export default class Storelocator {
 			this.map.panTo(currentMarker.getPosition())
 			this.map.setZoom(16)
 			this.openInfoWindow(currentMarker)
-
-			if (this.isMobile()) {
-				this.containerStorelocator.querySelector('.switch-view-js.view-map').click()
-				window.google.maps.event.trigger(this.map, 'resize')
-			} else {
-				this.offsetMapWithAsideBar()
-			}
+			this.containerStorelocator.querySelector('[data-switch-view][data-target="map"]').click()
+			window.google.maps.event.trigger(this.map, 'resize')
 		}
 	}
 
@@ -357,7 +348,7 @@ export default class Storelocator {
 			this.boundsChangeTimer = setTimeout(() => {
 				let listMarkerIndexInViewport = []
 
-				this.forEach((marker, index) => {
+				this.markers.forEach((marker, index) => {
 					if (marker.getVisible() && this.map.getBounds().contains(marker.getPosition())) {
 						listMarkerIndexInViewport.push(index)
 					}
@@ -409,14 +400,6 @@ export default class Storelocator {
 			'radius': radius,
 			fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
 		})
-	}
-
-	/**
-	 * Offset the map when the desktop sidebar is enabled
-	 */
-	offsetMapWithAsideBar () {
-		let offsetMapWithAside = (this.mapAside.getBoundingClientRect().right / 2) * -1
-		this.map.panBy(offsetMapWithAside, 0)
 	}
 
 	/**
@@ -652,13 +635,6 @@ export default class Storelocator {
 					this.map.fitBounds(this.boundsGlobal)
 				}
 			}
-
-			// Offset the map on desktop only, when the fitBounds is requested
-			if (fitBounds) {
-				if (!this.isMobile()) {
-					this.offsetMapWithAsideBar()
-				}
-			}
 		}
 
 		this.loading(false)
@@ -876,13 +852,6 @@ export default class Storelocator {
 		if (this.options.debug) {
 			console[method](message)
 		}
-	}
-
-	/**
-	 * Check if breakpoint mobile is enabled
-	 */
-	isMobile () {
-		return window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches
 	}
 
 	/**

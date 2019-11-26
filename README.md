@@ -77,8 +77,8 @@ Purchase a Storelocator.js Commercial License at [https://store-locator.bitbucke
     </div>
   </form>
 
-  <div id="storelocator-googleMaps">
-    <div id="google-map"></div>
+  <div class="storelocator-googleMaps">
+    <div id="storelocator-googleMapsCanvas"></div>
     <button class="storelocator-geolocButton"></button>
   </div>
 

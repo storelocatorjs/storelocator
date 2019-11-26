@@ -2,7 +2,6 @@
 import storelocatorjs from './js/storelocator.js'
 
 // Import CSS
-import './css/reset.css'
 import './css/vars.css'
 import './css/loader.css'
 import './css/detail-store.css'

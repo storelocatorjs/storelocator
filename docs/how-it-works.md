@@ -33,8 +33,8 @@ Category IDs in highlight lines must correspond to identifiers in the [JSON file
     </div>
   </form>
 
-  <div id="storelocator-googleMaps">
-    <div id="google-map"></div>
+  <div class="storelocator-googleMaps">
+    <div id="storelocator-googleMapsCanvas"></div>
     <button class="storelocator-geolocButton"></button>
   </div>
 

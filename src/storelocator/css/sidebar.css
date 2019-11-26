@@ -2,44 +2,22 @@
 
 .storelocator {
     &-sidebar {
-        position: absolute;
-        top: calc(var(--heightFormSearch) + 20px);
-        left: 20px;
-        width: var(--widthFormSearch);
-        height: calc(100% - var(--heightFormSearch) - 40px);
-        z-index: 5;
-        border-radius: 0 0 5px 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+        position: relative;
     }
 
     &-sidebarResults {
         overflow: auto;
         height: 100%;
         border-top: 1px solid #e7e7e7;
+    }
 
-        & > ul > li {
-            display: block;
-            border-left-style: solid;
-            border-left-width: 5px;
-            padding: 20px;
-            border-top: 1px solid #e7e7e7;
+    &-sidebarResultsListItem {
+        display: block;
+        padding: 20px;
+        border-top: 1px solid #e7e7e7;
 
-            &:first-child {
-                border-top: none;
-            }
-
-            /* &[data-category="1"] {
-                border-left-color: #f60;
-            }
-
-            &[data-category="2"] {
-                border-left-color: #fc3;
-            }
-
-            &[data-category="3"] {
-                border-left-color: #ea4c89;
-            } */
+        &:first-child {
+            border-top: none;
         }
     }
 
@@ -67,31 +45,18 @@
     }
 }
 
-@media screen and (max-width: var(--breakpointModile)) {
+@media (--media-tablet) {
     .storelocator {
         &-sidebar {
-            box-shadow: none;
-            position: relative;
-            top: auto;
-            left: auto;
-            width: 100%;
-            height: auto;
-
-            &-sidebar {
-                display: none;
-
-                &.active {
-                    display: block;
-                }
-            }
-
-            &-sidebarResults {
-                border: none;
-            }
-
-            &-sidebarIntro {
-                font-size: 14px;
-            }
+            position: absolute;
+            top: calc(var(--heightFormSearch) + 20px);
+            left: 20px;
+            width: var(--widthFormSearch);
+            height: calc(100% - var(--heightFormSearch) - 40px);
+            z-index: 5;
+            border-radius: 0 0 5px 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
         }
     }
 }

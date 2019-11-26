@@ -10,9 +10,14 @@ body {
     position: relative;
     height: 100%;
     font-family: 'Roboto', arial, sans-serif;
+
+    &,
+    * {
+        box-sizing: border-box;
+    }
 }
 
-@media screen and (max-width: var(--breakpointModile)) {
+@media (--media-tablet) {
     html,
     body {
         height: auto;

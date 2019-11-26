@@ -9,9 +9,6 @@ The Storelocator is responsive desktop, tablet and mobile. The default mobile br
 ![Storelocator on tablet](images/ipad.png)![Storelocator on mobile](images/iphone.png)
 </center>
 
-!!! info "Info"
-    The map is automatically shifted on desktop, by the width of the list of results on the left with the `offsetMapWithAsideBar` function.
-
 ### Callback function
 
 The second parameter of the class constructor `Storelocator` is a callback function, called when the module is ready. Instance of Google Maps is available with `map` parameter.<br />

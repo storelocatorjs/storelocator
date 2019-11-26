@@ -11,63 +11,48 @@
     }
 
     &-nav {
-        display: none;
         height: 40px;
         position: relative;
         z-index: 10;
+    }
 
-        ul {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            height: 100%;
-        }
+    &-navList {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
 
-        a {
-            text-decoration: none;
-            display: block;
-            padding: 11px 5px 0;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            color: #c9c6c6;
+    &-navListItem {
+        width: 50%;
+        height: 100%;
+        list-style-type: none;
+    }
 
-            &.active {
-                color: #000;
-            }
-        }
+    &-navButton {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        color: #c9c6c6;
+        border: 0;
+        -webkit-appearance: none;
+        font-size: 16px;
+        font-family: inherit;
+        cursor: pointer;
 
-        li {
-            width: 50%;
-            height: 100%;
-
-            .active .storelocator-navBorder {
-                width: 100%;
-            }
-
-            &:first-child {
-                a {
-                    .storelocator-navBorder {
-                        right: 0;
-                    }
-                }
-            }
-
-            &:nth-child(2) {
-                a {
-                    .storelocator-navBorder {
-                        left: 0;
-                    }
-                }
-            }
+        &.active {
+            color: #000;
         }
     }
 }
 
-@media screen and (max-width: var(--breakpointModile)) {
+@media (--media-tablet) {
     .storelocator {
         .storelocator-nav {
-            display: block;
+            display: none;
         }
     }
 }
