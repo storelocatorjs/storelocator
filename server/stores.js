@@ -4,27 +4,20 @@ const Stores = class Stores {
 	}
 
 	filter () {
-		return this.filterStoreByGeoPosition({
-			stores:
-				this.options.categories.length === 0
-					? this.options.database
-					: this.filterStoreByCategory(this.options.categories),
-			lat: this.options.lat,
-			lng: this.options.lng,
-			radius: this.options.radius,
-			limit: this.options.limit
-		})
+		let stores
+		if (this.options.categories.length === 0) {
+			stores = this.options.database
+		} else {
+			stores = this.filterStoreByCategory(this.options.categories)
+		}
+		return this.options.database
 	}
 
 	filterStoreByCategory (categories) {
 		let storesFiltered = []
 
 		// Search in all stores, with filter
-		for (
-			let i = 0, lengthStores = this.options.database.length;
-			i < lengthStores;
-			i++
-		) {
+		for (let i = 0, lengthStores = this.options.database.length; i < lengthStores; i++) {
 			let currentStore = this.options.database[i]
 			if (categories.indexOf(currentStore.category) !== -1) {
 				storesFiltered.push(currentStore)
@@ -34,20 +27,26 @@ const Stores = class Stores {
 		return storesFiltered
 	}
 
-	filterStoreByGeoPosition ({ stores, lat, lng, radius, limit }) {
+	filterStoreByGeoPosition ({
+		stores,
+		lat,
+		lng,
+		radius,
+		limit
+	}) {
 		let listStores = []
 		let currentStore
 		let storesByDistance
 
 		for (let i = 0, lengthStores = stores.length; i < lengthStores; i++) {
 			currentStore = stores[i]
-			storesByDistance = this.getDistanceBetweenCoordinate(
-				lat,
-				lng,
-				currentStore.lat,
-				currentStore.lng,
-				'K'
-			)
+			storesByDistance = this.getDistanceBetweenCoordinate({
+				lat1: lat,
+				lng1: lng,
+				lat2: currentStore.lat,
+				lng2: currentStore.lng,
+				unit: 'K'
+			})
 			currentStore.distance = storesByDistance
 			listStores.push(currentStore)
 		}
@@ -99,13 +98,13 @@ const Stores = class Stores {
 	// Official Web site: http://www.geodatasource.com
 	//
 	// GeoDataSource.com (C) All Rights Reserved 2015
-	getDistanceBetweenCoordinate (lat1, lng1, lat2, lng2, unit) {
+	getDistanceBetweenCoordinate ({lat1, lng1, lat2, lng2, unit}) {
 		let theta = lng1 - lng2
 		let dist =
 			Math.sin(this.deg2rad(lat1)) * Math.sin(this.deg2rad(lat2)) +
 			Math.cos(this.deg2rad(lat1)) *
-				Math.cos(this.deg2rad(lat2)) *
-				Math.cos(this.deg2rad(theta))
+			Math.cos(this.deg2rad(lat2)) *
+			Math.cos(this.deg2rad(theta))
 		let miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
 		unit = unit.toUpperCase()
 

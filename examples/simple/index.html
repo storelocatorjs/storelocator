@@ -13,17 +13,17 @@
                 <div class="storelocator-formFilters">
                     <div class="storelocator-formFiltersRow">
                         <div class="storelocator-formCheckbox">
-                            <input type="checkbox" name="category-1" id="category-1" class="filter-map-js" checked="checked" value="1" />
+                            <input type="checkbox" name="category-1" id="category-1" data-filter-map checked="checked" value="1" />
                             <label for="category-1" class="category-1">Catégorie 1</label>
                         </div>
                         <div class="storelocator-formCheckbox">
-                            <input type="checkbox" name="category-2" id="category-2" class="filter-map-js" checked="checked" value="2" />
+                            <input type="checkbox" name="category-2" id="category-2" data-filter-map checked="checked" value="2" />
                             <label for="category-2" class="category-2">Catégorie 2</label>
                         </div>
                     </div>
                     <div class="storelocator-formFiltersRow">
                         <div class="storelocator-formCheckbox">
-                            <input type="checkbox" name="category-3" id="category-3" class="filter-map-js" checked="checked" value="3" />
+                            <input type="checkbox" name="category-3" id="category-3" data-filter-map checked="checked" value="3" />
                             <label for="category-3" class="category-3">Catégorie 3</label>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
         <script>
             var options = {
                 apiKey: 'AIzaSyDPSz_DJFoavj9mkeUd9U0xuxXefvpcys8',
-                urlWebservice: 'https://127.0.0.1/stores',
+                urlWebservice: 'http://localhost:3000',
                 debug: false,
                 breakpointMobile: '767px',
 
@@ -139,7 +139,7 @@
                     'mapAside': '.storelocator-sidebar',
                     'formSearch': '.storelocator-formSearch',
                     'inputSearch': '.storelocator-inputSearch',
-                    'filterSearch': '.filter-map-js',
+                    'filtersSearch': '[data-filter-map]',
                     'asideResults': '.storelocator-sidebarResults'
                 }
             };

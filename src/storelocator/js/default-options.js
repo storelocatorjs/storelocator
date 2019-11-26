@@ -65,7 +65,7 @@ export default {
 		mapAside: '.storelocator-sidebar', // {String}
 		formSearch: '.storelocator-formSearch', // {String}
 		inputSearch: '.storelocator-inputSearch', // {String}
-		filtersSearch: '.filter-map-js', // {String}
+		filtersSearch: '[data-filter-map]', // {String}
 		asideResults: '.storelocator-sidebarResults' // {String}
 	}
 }

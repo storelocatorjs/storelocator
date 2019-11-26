@@ -367,89 +367,13 @@ var _default = {
     // {String}
     inputSearch: '.storelocator-inputSearch',
     // {String}
-    filtersSearch: '.filter-map-js',
+    filtersSearch: '[data-filter-map]',
     // {String}
     asideResults: '.storelocator-sidebarResults' // {String}
 
   }
 };
 exports.default = _default;
-
-/***/ }),
-
-/***/ "./src/storelocator/js/markers.js":
-/*!****************************************!*\
-  !*** ./src/storelocator/js/markers.js ***!
-  \****************************************/
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-class Markers {
-  constructor() {
-    this.markers = [];
-  }
-
-  destroyMarkers() {
-    // Destroy all maskers references in cluster is enabled
-    if (typeof MarkerClusterer !== 'undefined') {
-      if (this.options.cluster.status) {
-        this.markerCluster.clearMarkers();
-      }
-    } // Loop backwards on markers and remove them
-
-
-    for (let i = this.markers.length - 1; i >= 0; i--) {
-      let currentMarker = this.markers[i]; // Remove listener from marker instance
-
-      window.google.maps.event.clearInstanceListeners(currentMarker); // Remove the marker
-
-      currentMarker.setMap(null);
-    }
-
-    this.markers = [];
-  }
-
-  createMarkers(data) {
-    // Build marker
-    let options = {
-      position: data.position,
-      map: this.map,
-      optimized: true,
-      label: {
-        text: (data.index + 1).toString(),
-        fontFamily: 'Roboto, Arial, sans-serif',
-        fontSize: '13px',
-        fontWeight: '500',
-        color: '#fff'
-      }
-    }; // Disable SVG for IE, they don't works
-
-    if (!this.isBrowserIE) {
-      options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory(data.category) : '';
-    }
-
-    let marker = new window.google.maps.Marker(options); // Push marker data in marker
-
-    marker.store = data;
-    this.markers.push(marker); // Click on marker to show infoWindow
-
-    window.google.maps.event.addListener(marker, 'click', () => {
-      this.infoWindowOpened = true;
-      this.openInfoWindow(marker);
-    });
-  }
-
-}
-
-exports.default = Markers;
 
 /***/ }),
 
@@ -464,7 +388,7 @@ exports.default = Markers;
 /**
 * @license Commercial
 * @name Storelocator
-* @version 1.0.0
+* @version 2.0.0
 * @author: Joris DANIEL <joris.daniel@gmail.com>
 * @description: Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a PHP webservice with Ajax
 * {@link https://store-locator.bitbucket.io}
@@ -483,11 +407,19 @@ var _infoWindow = _interopRequireDefault(__webpack_require__(/*! ./templates/inf
 
 var _defaultOptions = _interopRequireDefault(__webpack_require__(/*! ./default-options */ "./src/storelocator/js/default-options.js"));
 
-var _markers = _interopRequireDefault(__webpack_require__(/*! ./markers */ "./src/storelocator/js/markers.js"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * storelocatorjs
+ * @module storelocatorjs
+ */
 class Storelocator {
+  /**
+   * Instanciate the constructor
+   * @constructor
+   * @param {Object} options Storelocator options
+   * @param {Function} onReady Callback function executed when the storelocator is ready
+   */
   constructor({
     options,
     onReady
@@ -495,93 +427,106 @@ class Storelocator {
     this.options = Object.assign({}, _defaultOptions.default, options);
     this.onReady = onReady;
     this.isLoading = false;
-    this.isBrowserIE = !!(document.documentMode && document.documentMode >= 9);
-    this.isMobile = window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches;
     this.cacheSelectors();
-    this.initLoader();
-    this.detectTouchDevice();
-    this.initNavMobile();
-    this.clickOnMarkerList();
+    this.buildLoader();
 
-    this.win.googleMapLoaded = () => {
+    window.googleMapLoaded = () => {
       if (this.options.geolocation.status) {
         this.initGeolocation();
       }
 
       this.initMap();
-      this.initFilterEvent();
+      this.addGoogleMapsEvents();
       this.initAutocomplete();
     };
 
     this.loadAPI(this.options.apiKey);
-    this.resize();
+    this.addEvents();
   }
+  /**
+   * Cache DOM selectors
+   */
+
 
   cacheSelectors() {
-    this.win = window;
-    this.doc = document;
-    this.containerStorelocator = this.doc.querySelector(this.options.selectors.container);
+    this.containerStorelocator = document.querySelector(this.options.selectors.container);
     this.asideResults = this.containerStorelocator.querySelector(this.options.selectors.asideResults);
     this.formSearch = this.containerStorelocator.querySelector(this.options.selectors.formSearch);
     this.inputSearch = this.containerStorelocator.querySelector(this.options.selectors.inputSearch);
-    this.filtersSearch = this.containerStorelocator.querySelectorAll(this.options.selectors.filtersSearch);
+    this.filtersSearch = [...this.containerStorelocator.querySelectorAll(this.options.selectors.filtersSearch)];
     this.mapAside = this.containerStorelocator.querySelector(this.options.selectors.mapAside);
     this.mapGeoloc = this.containerStorelocator.querySelector(this.options.selectors.mapGeoloc);
   }
+  /**
+   * Build the loader
+   */
 
-  initLoader() {
+
+  buildLoader() {
     this.loader = this.containerStorelocator.querySelector(this.options.selectors.loader);
-    this.loader.innerHTML = '<div class="loader-bar"></div><div class="loader-bar"></div><div class="loader-bar"></div>';
+    this.loader.innerHTML = `
+			<div class="loader-bar"></div>
+			<div class="loader-bar"></div>
+			<div class="loader-bar"></div>`;
   }
+  /**
+   * Load the Youtube API
+   * @param {String} apiKey Youtube API key
+   */
 
-  detectTouchDevice() {
-    // Detect touch devices
-    if ('ontouchstart' in window || window.DocumentTouch && document instanceof window.DocumentTouch) {
-      document.querySelector('html').classList.add('touch');
-    } else {
-      document.querySelector('html').classList.add('no-touch');
-    }
-  }
 
   loadAPI(apiKey) {
-    let tag = this.doc.createElement('script');
-    tag.async = true;
-    tag.defer = true;
-    tag.type = 'text/javascript';
-    tag.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&callback=window.googleMapLoaded&libraries=places';
-    this.doc.getElementsByTagName('body')[0].appendChild(tag);
+    let script = document.createElement('script');
+    script.async = true;
+    script.type = 'text/javascript';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=window.googleMapLoaded&libraries=places`;
+    document.getElementsByTagName('body')[0].appendChild(script);
   }
+  /**
+   * Create event listeners
+   */
 
-  initNavMobile() {
-    let buttons = this.containerStorelocator.querySelectorAll('.switch-view-js');
-    let mapView = this.containerStorelocator.querySelector('#storelocator-googleMaps');
-    [].forEach.call(buttons, button => {
-      button.addEventListener('click', e => {
+
+  addEvents() {
+    // Event listener on sidebar result items
+    this.asideResults.addEventListener('click', this.onClickSidebarResultItem.bind(this)); // Event listeners on sidebar navigation items
+
+    let buttons = [...this.containerStorelocator.querySelectorAll('.switch-view-js')];
+    buttons.forEach(button => {
+      button.addEventListener('click', this.onClickSidebarNav.bind(this));
+    }); // Event listener on search form
+    // Prevent native form submit, managed by autocomplete
+
+    this.formSearch.addEventListener('submit', e => {
+      e.preventDefault();
+    }); // Event listener on search form filters
+
+    this.filtersSearch.forEach(filter => {
+      filter.addEventListener('change', this.onChangeSearchFormFilter.bind(this));
+    });
+    this.mapGeoloc.addEventListener('click', this.onClickGeolocationButton.bind(this));
+  }
+  /**
+   * Create Google Maps event listeners
+   */
+
+
+  addGoogleMapsEvents() {
+    // Event listener on search form input
+    window.google.maps.event.addDomListener(this.inputSearch, 'keydown', function (e) {
+      if (e.keyCode === 13) {
         e.preventDefault();
-        this.containerStorelocator.querySelector('.switch-view-js.active').classList.remove('active');
-        e.target.classList.add('active');
-
-        if (e.target.classList.contains('view-map')) {
-          mapView.classList.add('active');
-          this.mapAside.classList.remove('active');
-          window.google.maps.event.trigger(this.map, 'resize');
-        } else {
-          this.mapAside.classList.add('active');
-          mapView.classList.remove('active');
-        }
-      });
+      }
     });
   }
+  /**
+   * Update the loader status
+   * @param {Boolean} state Status of the loader
+   */
 
-  resize() {
-    // Check breakpoint resolution for mobile mediaqueries
-    this.win.addEventListener('resize', () => {
-      this.isMobile = window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches;
-    });
-  }
 
-  loading(status) {
-    if (status) {
+  loading(state) {
+    if (state) {
       this.loader.classList.add('active');
       this.isLoading = true;
     } else {
@@ -592,15 +537,19 @@ class Storelocator {
       }, 1050);
     }
   }
+  /**
+   * Initialize the Google Maps
+   */
+
 
   initMap() {
     // Create global variables for Google Maps
     this.overlayRed = null;
     this.overlayGreen = null;
+    this.markers = [];
     this.currentInfoWindow = null;
     this.infoWindowOpened = false;
     this.boundsChangeTimer = null;
-    this.Markers = new _markers.default();
     this.serviceDistanceMatrix = new window.google.maps.DistanceMatrixService();
     this.boundsGlobal = new window.google.maps.LatLngBounds();
     this.currentRadius = this.options.requests.searchRadius;
@@ -613,7 +562,8 @@ class Storelocator {
     this.geocoder = new window.google.maps.Geocoder();
     this.searchData = {
       position: null
-    };
+    }; // Set default geolocation datas
+
     this.geolocationData = {
       userPositionChecked: false,
       marker: null,
@@ -625,7 +575,7 @@ class Storelocator {
 
     this.map = new window.google.maps.Map(this.containerStorelocator.querySelector('#google-map'), cloneMapOptions);
 
-    if (!this.isMobile) {
+    if (!this.isMobile()) {
       this.offsetMapWithAsideBar();
     }
 
@@ -634,7 +584,7 @@ class Storelocator {
         // Documentation: https://googlemaps.github.io/js-marker-clusterer/docs/reference.html
         // Clone object before to prevent reference
         let cloneClusterOptions = this.extend(true, this.options.cluster.options);
-        this.markerCluster = new window.MarkerClusterer(this.map, this.Markers.markers, cloneClusterOptions);
+        this.markerCluster = new window.MarkerClusterer(this.map, this.markers, cloneClusterOptions);
       }
     } else {
       this.log('warn', 'Storelocator :: Cluster option is enabled, you need to load MarkerClusterer.js in your vendor before use it.');
@@ -658,18 +608,89 @@ class Storelocator {
   initGeolocation() {
     // If navigator support geolocation, aks user
     if (navigator.geolocation) {
-      this.mapGeoloc.addEventListener('click', e => {
-        e.preventDefault();
-        this.loading(true);
-        this.checkUserPosition();
-      }); // Enable geolocation on map load
-
+      // Enable geolocation on map load
       if (this.options.geolocation.startOnLoad) {
         if (window.location.protocol === 'https:') {
           this.checkUserPosition();
         } else {
           this.log('warn', 'Storelocator :: Geolocation no longer work on insecure origins, use HTTPS.');
         }
+      }
+    }
+  }
+  /**
+   * On click on geolocation button
+   * @param {Object} e Event listener datas
+   */
+
+
+  onClickGeolocationButton(e) {
+    e.preventDefault();
+
+    if (navigator.geolocation) {
+      this.loading(true);
+      this.checkUserPosition();
+    }
+  }
+  /**
+   * Click on sidebar navigation item
+   * @param {Object} e Event listener datas
+   */
+
+
+  onClickSidebarNav(e) {
+    let mapView = this.containerStorelocator.querySelector('#storelocator-googleMaps');
+    e.preventDefault();
+    this.containerStorelocator.querySelector('.switch-view-js.active').classList.remove('active');
+    e.target.classList.add('active');
+
+    if (e.target.classList.contains('view-map')) {
+      mapView.classList.add('active');
+      this.mapAside.classList.remove('active');
+      window.google.maps.event.trigger(this.map, 'resize');
+    } else {
+      this.mapAside.classList.add('active');
+      mapView.classList.remove('active');
+    }
+  }
+  /**
+   * On change on search form filters
+   * @param {Object} e Event listener datas
+   */
+
+
+  onChangeSearchFormFilter(e) {
+    // Not filters if there is not search value
+    if (this.inputSearch.value === '' && !this.geolocationData.userPositionChecked) {
+      return false;
+    }
+
+    this.triggerRequest({
+      'lat': this.searchData.lat,
+      'lng': this.searchData.lng,
+      fitBounds: true
+    });
+  }
+  /**
+   * On click on sidebar result item
+   * @param {Object} e Event listener datas
+   */
+
+
+  onClickSidebarResultItem(e) {
+    if (e.target && e.target.parentNode.classList.contains('store-center-marker-js')) {
+      e.preventDefault();
+      let currentLink = e.target.parentNode;
+      let currentMarker = this.markers[currentLink.getAttribute('data-marker-index')];
+      this.map.panTo(currentMarker.getPosition());
+      this.map.setZoom(16);
+      this.openInfoWindow(currentMarker);
+
+      if (this.isMobile()) {
+        this.containerStorelocator.querySelector('.switch-view-js.view-map').click();
+        window.google.maps.event.trigger(this.map, 'resize');
+      } else {
+        this.offsetMapWithAsideBar();
       }
     }
   }
@@ -685,7 +706,7 @@ class Storelocator {
         map: this.map
       }; // Disable SVG for IE, they don't works
 
-      if (!this.isBrowserIE) {
+      if (!this.isBrowserIE()) {
         options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory('userPosition').url : '';
       }
 
@@ -712,11 +733,11 @@ class Storelocator {
   }
 
   boundsChanged() {
-    if (this.Markers.markers.length) {
+    if (this.length) {
       clearTimeout(this.boundsChangeTimer);
       this.boundsChangeTimer = setTimeout(() => {
         let listMarkerIndexInViewport = [];
-        this.Markers.markers.forEach((marker, index) => {
+        this.forEach((marker, index) => {
           if (marker.getVisible() && this.map.getBounds().contains(marker.getPosition())) {
             listMarkerIndexInViewport.push(index);
           }
@@ -726,7 +747,7 @@ class Storelocator {
           this.refreshMapOnBoundsChanged({
             updatePosition: true
           });
-        } else if (listMarkerIndexInViewport.length === this.Markers.markers.length) {
+        } else if (listMarkerIndexInViewport.length === this.length) {
           // If user see already all markers, zoom is too small, increase it until maxRadius
           if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
             this.refreshMapOnBoundsChanged({
@@ -769,20 +790,15 @@ class Storelocator {
   offsetMapWithAsideBar() {
     let offsetMapWithAside = this.mapAside.getBoundingClientRect().right / 2 * -1;
     this.map.panBy(offsetMapWithAside, 0);
-  } // More information here : https://developers.google.com/maps/documentation/javascript/places-autocomplete
+  }
+  /**
+   * Initialize Google Maps Autocomplete
+   * @documentation https://developers.google.com/maps/documentation/javascript/places-autocomplete
+   */
 
 
   initAutocomplete() {
     let autocomplete = new window.google.maps.places.Autocomplete(this.inputSearch, {});
-    window.google.maps.event.addDomListener(this.inputSearch, 'keydown', function (e) {
-      if (e.keyCode === 13) {
-        e.preventDefault();
-      }
-    }); // Prevent native form submit, autocomplete manage
-
-    this.formSearch.addEventListener('submit', e => {
-      e.preventDefault();
-    });
     this.inputSearch.focus();
     autocomplete.bindTo('bounds', this.map);
     autocomplete.addListener('place_changed', () => {
@@ -790,20 +806,20 @@ class Storelocator {
       let place = autocomplete.getPlace();
 
       if (place.geometry) {
-        this.autocompleteAjax(place.geometry.location.lat(), place.geometry.location.lng());
+        this.autocompleteRequest(place.geometry.location.lat(), place.geometry.location.lng());
       } else {
         this.geocoder.geocode({
           'address': place.name
         }, (results, status) => {
           if (status === window.google.maps.GeocoderStatus.OK) {
-            this.autocompleteAjax(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+            this.autocompleteRequest(results[0].geometry.location.lat(), results[0].geometry.location.lng());
           }
         });
       }
     });
   }
 
-  autocompleteAjax(lat, lng) {
+  autocompleteRequest(lat, lng) {
     this.userPositionChecked = false; // Reset currentRadius on new search
 
     this.currentRadius = this.options.requests.searchRadius;
@@ -812,23 +828,6 @@ class Storelocator {
       'lng': lng,
       fitBounds: true
     });
-  }
-
-  initFilterEvent() {
-    for (let i = 0, lengthFilter = this.filtersSearch.length; i < lengthFilter; i++) {
-      this.filtersSearch[i].addEventListener('change', () => {
-        // Not filters if there is not search value
-        if (this.inputSearch.value === '' && !this.geolocationData.userPositionChecked) {
-          return false;
-        }
-
-        this.triggerRequest({
-          'lat': this.searchData.lat,
-          'lng': this.searchData.lng,
-          fitBounds: true
-        });
-      });
-    }
   }
 
   triggerRequest(options) {
@@ -842,81 +841,87 @@ class Storelocator {
     let {
       storeLimit = this.options.requests.storeLimit
     } = options;
-    let dataAjax = this.serializeForm(lat, lng, storeLimit);
+    let requestDatas = this.serializeForm({
+      lat: lat,
+      lng: lng,
+      storeLimit: storeLimit
+    });
     let {
       fitBounds = true
     } = options; // Update search data stored
 
     this.searchData.lat = lat;
     this.searchData.lng = lng;
-    this.searchData.position = new window.google.maps.LatLng(lat, lng); // let fetchConf = {
-    // 	method: 'POST',
-    // 	body: JSON.stringify(dataAjax)
-    // }
-    // fetch(this.options.urlWebservice, fetchConf)
-    // 	.then(response => {
-    // 		if (!response.ok) {
-    // 			throw Error(response.statusText)
-    // 		}
-    // 		return response
-    // 	})
-    // 	.then(res => res.json())
-    // 	.then(jsonResponse => {
-    // 		console.log(jsonResponse)
-    // 	})
-    // 	.catch(error => {
-    // 		throw new Error('error', error)
-    // 	})
-
-    this.ajax({
-      url: this.options.urlWebservice,
-      type: 'POST',
-      data: dataAjax,
-      success: request => {
-        let data = JSON.parse(request.responseText);
-
-        if (data !== null) {
-          this.parseStores({
-            stores: data,
-            fitBounds: fitBounds
-          });
-        } else {
-          this.log('warn', 'Storelocator :: Error ajax_get_stores.php, WS_stores has mandatory params (lat, lng)');
-        }
+    this.searchData.position = new window.google.maps.LatLng(lat, lng);
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    let fetchConf = {
+      method: 'POST',
+      // headers: myHeaders,
+      headers: {
+        'Accept': 'application/json'
       },
-      error: request => {
-        this.log('warn', 'Storelocator :: Connection error', request);
-        this.loading(false);
+      body: requestDatas
+    };
+    fetch(this.options.urlWebservice, fetchConf) // .then(response => {
+    // 	if (!response.ok) {
+    // 		throw Error(response.statusText)
+    // 	}
+    // 	return response
+    // })
+    .then(res => res.json()).then(jsonResponse => {
+      console.log(jsonResponse);
+      let data = jsonResponse;
+
+      if (data !== null) {
+        this.parseStores({
+          stores: data,
+          fitBounds: fitBounds
+        });
+      } else {
+        this.log('warn', 'Storelocator :: Error ajax_get_stores.php, WS_stores has mandatory params (lat, lng)');
       }
+    }).catch(error => {
+      this.loading(false);
+      console.warn(error);
+      throw new Error('Storelocator :: Connection error');
     });
   }
+  /**
+   * Serialize form datas
+   * @param {String} lat Latitude
+   * @param {String} lng Longitude
+   * @param {Integer} storeLimit Limit of stores in the request
+   * @param {Integer} currentRadius Radius of the request
+   * @param {String} inputValue Value of the input form search
+   * @param {Array} categories Value of selected filters
+   */
 
-  serializeForm(lat, lng, storeLimit) {
-    let dataAjax = '';
-    let categories = []; // Serialize params (input and filters value)
+
+  serializeForm({
+    lat,
+    lng,
+    storeLimit
+  }) {
+    let formData = new FormData();
+    this.filtersSearch.forEach(filter => {
+      if (filter.checked) {
+        formData.append('categories[]', filter.value);
+      }
+    }); // Serialize params (input and filters value)
 
     if (this.inputSearch.value !== '') {
-      dataAjax += 'input=' + this.inputSearch.value;
+      formData.append('input', this.inputSearch.value);
     }
-
-    for (let i = 0, {
-      length
-    } = this.filtersSearch; i < length; i++) {
-      let currentFilter = this.filtersSearch[i];
-
-      if (currentFilter.checked) {
-        categories.push(currentFilter.value);
-      }
-    }
-
-    dataAjax += (dataAjax !== '' ? '&' : '') + 'categories=' + JSON.stringify(categories);
 
     if (lat && lng) {
-      dataAjax += (dataAjax !== '' ? '&' : '') + 'lat=' + lat + '&lng=' + lng;
+      formData.append('lat', lat);
+      formData.append('lng', lng);
     }
 
-    dataAjax += '&radius=' + this.currentRadius + '&storesLimit=' + storeLimit;
-    return dataAjax;
+    formData.append('radius', this.currentRadius);
+    formData.append('storesLimit', storeLimit);
+    return formData;
   }
 
   parseStores(options) {
@@ -927,9 +932,13 @@ class Storelocator {
     let {
       fitBounds
     } = options;
-    let hmlListResult = `<p class="storelocator-sidebarIntro">${stores.length} results sorted by distance correspond to your research</p><ul>`; // Destroy old markers before parse new stores
+    let hmlListResult = `
+			<p class="storelocator-sidebarIntro">
+				${stores.length} results sorted by distance correspond to your research
+			</p>
+			<ul>`; // Destroy old markers before parse new stores
 
-    this.Markers.destroyMarkers(); // Reset infoWindow status
+    this.destroyMarkers(); // Reset infoWindow status
 
     this.infoWindowOpened = false; // Re-declare bounds on new research, it's important else zoom bug after one request
 
@@ -941,7 +950,7 @@ class Storelocator {
 
 
     if (this.geolocationData.userPositionChecked) {
-      this.Markers.markers.push(this.geolocationData.marker);
+      this.markers.push(this.geolocationData.marker);
       this.boundsGlobal.extend(this.geolocationData.position);
     } // Get lat/lng from searchData
 
@@ -953,7 +962,7 @@ class Storelocator {
       store.index = index;
       store.position = new window.google.maps.LatLng(store.lat, store.lng);
       this.boundsGlobal.extend(store.position);
-      this.Markers.createMarkers(store);
+      this.createMarkers(store);
       hmlListResult += (0, _sidebarItemResult.default)({
         store: store,
         origin: origin
@@ -962,7 +971,11 @@ class Storelocator {
     hmlListResult += `</ul>`; // If no result, show error message and center map on current country
 
     if (noResult) {
-      this.asideResults.innerHTML = '<p class="storelocator-sidebarNoResults">No results for your request.<br />Please try a new search with differents choices.</p>';
+      this.asideResults.innerHTML = `
+				<p class="storelocator-sidebarNoResults">
+					No results for your request.<br />
+					Please try a new search with differents choices.
+				</p>`;
 
       if (this.overlayGreen !== null) {
         this.overlayGreen.setMap(null);
@@ -976,7 +989,7 @@ class Storelocator {
 
       if (typeof MarkerClusterer !== 'undefined') {
         if (this.options.cluster.status) {
-          this.markerCluster.addMarkers(this.Markers.markers);
+          this.markerCluster.addMarkers(this.markers);
         }
       } // Create custom bounds with limit viewport, no fitBounds the boundsGlobal
 
@@ -995,33 +1008,13 @@ class Storelocator {
 
 
       if (fitBounds) {
-        if (!this.isMobile) {
+        if (!this.isMobile()) {
           this.offsetMapWithAsideBar();
         }
       }
     }
 
     this.loading(false);
-  }
-
-  clickOnMarkerList() {
-    this.asideResults.addEventListener('click', e => {
-      if (e.target && e.target.parentNode.classList.contains('store-center-marker-js')) {
-        e.preventDefault();
-        let currentLink = e.target.parentNode;
-        let currentMarker = this.Markers.markers[currentLink.getAttribute('data-marker-index')];
-        this.map.panTo(currentMarker.getPosition());
-        this.map.setZoom(16);
-        this.openInfoWindow(currentMarker);
-
-        if (this.isMobile) {
-          this.containerStorelocator.querySelector('.switch-view-js.view-map').click();
-          window.google.maps.event.trigger(this.map, 'resize');
-        } else {
-          this.offsetMapWithAsideBar();
-        }
-      }
-    });
   }
 
   createViewportWithLimitMarker(options) {
@@ -1097,6 +1090,56 @@ class Storelocator {
     this.currentInfoWindow = this.infoWindow; // Open infoWindow
 
     this.infoWindow.open(this.map, currentMarker);
+  }
+
+  destroyMarkers() {
+    // Destroy all maskers references in cluster is enabled
+    if (typeof MarkerClusterer !== 'undefined') {
+      if (this.options.cluster.status) {
+        this.markerCluster.clearMarkers();
+      }
+    } // Loop backwards on markers and remove them
+
+
+    for (let i = this.length - 1; i >= 0; i--) {
+      let currentMarker = this.markers[i]; // Remove listener from marker instance
+
+      window.google.maps.event.clearInstanceListeners(currentMarker); // Remove the marker
+
+      currentMarker.setMap(null);
+    }
+
+    this.markers = [];
+  }
+
+  createMarkers(data) {
+    // Build marker
+    let options = {
+      position: data.position,
+      map: this.map,
+      optimized: true,
+      label: {
+        text: (data.index + 1).toString(),
+        fontFamily: 'Roboto, Arial, sans-serif',
+        fontSize: '13px',
+        fontWeight: '500',
+        color: '#fff'
+      }
+    }; // Disable SVG for IE, they don't works
+
+    if (!this.isBrowserIE()) {
+      options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory(data.category) : '';
+    }
+
+    let marker = new window.google.maps.Marker(options); // Push marker data in marker
+
+    marker.store = data;
+    this.markers.push(marker); // Click on marker to show infoWindow
+
+    window.google.maps.event.addListener(marker, 'click', () => {
+      this.infoWindowOpened = true;
+      this.openInfoWindow(marker);
+    });
   } // Detect store categorie and appropriate SVG icon
 
 
@@ -1129,40 +1172,20 @@ class Storelocator {
   generateSVG(options) {
     let customSVG = {
       mimetype: 'data:image/svg+xml;base64,',
-      svg: '<svg width="' + options.width + 'px" height="' + options.height + 'px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve"><path fill="{{colorBorder}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/><path fill="{{colorBackground}}" class="st0" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/></svg>'
+      svg: `
+				<svg width="${options.width}px" height="${options.height}px" version="1.1" id="marker-gmap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="31.5 5.5 70.6 97.9" style="enable-background:new 31.5 5.5 70.6 97.9;" preserveAspectRatio="xMidYMin slice" xml:space="preserve">
+					<path fill="{{colorBorder}}" d="M64.7,102.2c0.1,0.2,0.2,0.3,0.3,0.4c0.4,0.5,1,0.8,1.6,0.8c0.7,0,1.3-0.1,1.8-0.8c0.1-0.1,0.3-0.3,0.3-0.5c7.3-10.9,14.5-21.8,21.5-32.7c4.5-7,9.7-13.8,11.1-22.1c1.7-9.9-0.7-20.1-6.7-28.1C82.7,3.3,59.2,0.9,44,13.7c-7.3,6.1-11.8,15-12.4,24.5c-0.8,10,3,17.6,8.2,25.8C47.8,76.8,56.2,89.5,64.7,102.2z"/>
+					<path fill="{{colorBackground}}" class="st0" d="M97.1,47.2c-1.5,7.3-6.6,13.8-10.7,20c-6.4,10.1-12.9,20-19.6,29.9c-5.7-8.3-11.2-16.6-16.6-25c-3.7-5.7-7.5-11.4-10.8-17.3c-5.2-9.2-4.6-21.2,0.9-30.2C50.7,7.1,75.6,4.6,89.4,19.4C96.3,26.8,99.1,37.4,97.1,47.2z"/>
+				</svg>`
     };
     customSVG.scaledSize = new window.google.maps.Size(options.width, options.height);
     return customSVG.mimetype + btoa(customSVG.svg.replace('{{colorBorder}}', options.colorBorder).replace('{{colorBackground}}', options.colorBackground));
   }
-
-  ajax(options) {
-    let request = new XMLHttpRequest();
-    let typeRequest = options.type;
-    let sendData = typeRequest === 'POST' ? options.data : '';
-    request.open(typeRequest, options.url);
-
-    if (typeRequest === 'POST') {
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    }
-
-    request.onload = function () {
-      if (request.status >= 200 && request.status < 400) {
-        // Success!
-        options.success(request);
-      } else {
-        // We reached our target server, but it returned an error
-        options.error(request);
-      }
-    };
-
-    request.onerror = function () {
-      // There was a connection error of some sort
-      options.error(request);
-    };
-
-    request.send(sendData);
-  }
-  /* eslint-disable no-console */
+  /**
+   * Log message
+   * @param {Function} method Method of global console object
+   * @param {String} message Message to post
+   */
 
 
   log(method, message) {
@@ -1170,8 +1193,18 @@ class Storelocator {
       console[method](message);
     }
   }
-  /* eslint-enable no-console */
+  /**
+   * Check if breakpoint mobile is enabled
+   */
 
+
+  isMobile() {
+    return window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches;
+  }
+
+  isBrowserIE() {
+    return !!(document.documentMode && document.documentMode >= 9);
+  }
 
 }
 

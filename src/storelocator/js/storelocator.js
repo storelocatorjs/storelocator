@@ -13,7 +13,6 @@
 import templateSidebarItemResult from './templates/sidebar-item-result'
 import templateInfoWindow from './templates/info-window'
 import defaultOptions from './default-options'
-import { serializeForm, log, isMobile, isBrowserIE } from './utils'
 
 /**
  * storelocatorjs
@@ -33,7 +32,6 @@ export default class Storelocator {
 
 		this.cacheSelectors()
 		this.buildLoader()
-		this.initNavMobile()
 
 		window.googleMapLoaded = () => {
 			if (this.options.geolocation.status) {
@@ -41,6 +39,7 @@ export default class Storelocator {
 			}
 
 			this.initMap()
+			this.addGoogleMapsEvents()
 			this.initAutocomplete()
 		}
 
@@ -97,13 +96,6 @@ export default class Storelocator {
 			button.addEventListener('click', this.onClickSidebarNav.bind(this))
 		})
 
-		// Event listener on search form input
-		window.google.maps.event.addDomListener(this.inputSearch, 'keydown', function (e) {
-			if (e.keyCode === 13) {
-				e.preventDefault()
-			}
-		})
-
 		// Event listener on search form
 		// Prevent native form submit, managed by autocomplete
 		this.formSearch.addEventListener('submit', (e) => {
@@ -116,6 +108,18 @@ export default class Storelocator {
 		})
 
 		this.mapGeoloc.addEventListener('click', this.onClickGeolocationButton.bind(this))
+	}
+
+	/**
+	 * Create Google Maps event listeners
+	 */
+	addGoogleMapsEvents () {
+		// Event listener on search form input
+		window.google.maps.event.addDomListener(this.inputSearch, 'keydown', function (e) {
+			if (e.keyCode === 13) {
+				e.preventDefault()
+			}
+		})
 	}
 
 	/**
@@ -176,7 +180,7 @@ export default class Storelocator {
 		// Init Google Maps API
 		this.map = new window.google.maps.Map(this.containerStorelocator.querySelector('#google-map'), cloneMapOptions)
 
-		if (!isMobile()) {
+		if (!this.isMobile()) {
 			this.offsetMapWithAsideBar()
 		}
 
@@ -188,7 +192,7 @@ export default class Storelocator {
 				this.markerCluster = new window.MarkerClusterer(this.map, this.markers, cloneClusterOptions)
 			}
 		} else {
-			log('warn', 'Storelocator :: Cluster option is enabled, you need to load MarkerClusterer.js in your vendor before use it.')
+			this.log('warn', 'Storelocator :: Cluster option is enabled, you need to load MarkerClusterer.js in your vendor before use it.')
 		}
 
 		// Detect zoom changed and bounds changed to refresh marker on the map
@@ -214,7 +218,7 @@ export default class Storelocator {
 				if (window.location.protocol === 'https:') {
 					this.checkUserPosition()
 				} else {
-					log('warn', 'Storelocator :: Geolocation no longer work on insecure origins, use HTTPS.')
+					this.log('warn', 'Storelocator :: Geolocation no longer work on insecure origins, use HTTPS.')
 				}
 			}
 		}
@@ -286,7 +290,7 @@ export default class Storelocator {
 			this.map.setZoom(16)
 			this.openInfoWindow(currentMarker)
 
-			if (isMobile()) {
+			if (this.isMobile()) {
 				this.containerStorelocator.querySelector('.switch-view-js.view-map').click()
 				window.google.maps.event.trigger(this.map, 'resize')
 			} else {
@@ -308,7 +312,7 @@ export default class Storelocator {
 			}
 
 			// Disable SVG for IE, they don't works
-			if (!isBrowserIE()) {
+			if (!this.isBrowserIE()) {
 				options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory('userPosition').url : ''
 			}
 
@@ -322,7 +326,7 @@ export default class Storelocator {
 			if (this.inputSearch.value !== '') {
 				this.inputSearch.value = ''
 			}
-			log('log', 'Storelocator :: geolocation success : ' + lat + ',' + lng)
+			this.log('log', 'Storelocator :: geolocation success : ' + lat + ',' + lng)
 
 			this.triggerRequest({
 				'lat': lat,
@@ -330,7 +334,7 @@ export default class Storelocator {
 				fitBounds: true
 			})
 		}, response => {
-			log('warn', 'Storelocator :: geolocation-error', response)
+			this.log('warn', 'Storelocator :: geolocation-error', response)
 			this.loading(false)
 		})
 	}
@@ -442,22 +446,12 @@ export default class Storelocator {
 
 		let {lat} = options
 		let {lng} = options
-		let categories = []
 		let {storeLimit = this.options.requests.storeLimit} = options
 
-		this.filtersSearch.forEach(filter => {
-			if (filter.checked) {
-				categories.push(filter.value)
-			}
-		})
-
-		let dataAjax = serializeForm({
+		let requestDatas = this.serializeForm({
 			lat: lat,
 			lng: lng,
-			storeLimit: storeLimit,
-			currentRadius: this.currentRadius,
-			inputValue: this.inputSearch.value,
-			categories: categories
+			storeLimit: storeLimit
 		})
 		let {fitBounds = true} = options
 
@@ -466,32 +460,29 @@ export default class Storelocator {
 		this.searchData.lng = lng
 		this.searchData.position = new window.google.maps.LatLng(lat, lng)
 
-		// let fetchConf = {
-		// 	method: 'POST',
-		// 	body: JSON.stringify(dataAjax)
-		// }
+		var myHeaders = new Headers()
+		myHeaders.append('Content-Type', 'application/json')
 
-		// fetch(this.options.urlWebservice, fetchConf)
-		// 	.then(response => {
-		// 		if (!response.ok) {
-		// 			throw Error(response.statusText)
-		// 		}
-		// 		return response
-		// 	})
-		// 	.then(res => res.json())
-		// 	.then(jsonResponse => {
-		// 		console.log(jsonResponse)
-		// 	})
-		// 	.catch(error => {
-		// 		throw new Error('error', error)
-		// 	})
+		let fetchConf = {
+			method: 'POST',
+			// headers: myHeaders,
+			headers: {
+				'Accept': 'application/json'
+			},
+			body: requestDatas
+		}
 
-		this.ajax({
-			url: this.options.urlWebservice,
-			type: 'POST',
-			data: dataAjax,
-			success: (request) => {
-				let data = JSON.parse(request.responseText)
+		fetch(this.options.urlWebservice, fetchConf)
+			// .then(response => {
+			// 	if (!response.ok) {
+			// 		throw Error(response.statusText)
+			// 	}
+			// 	return response
+			// })
+			.then(res => res.json())
+			.then(jsonResponse => {
+				console.log(jsonResponse)
+				let data = jsonResponse
 
 				if (data !== null) {
 					this.parseStores({
@@ -499,14 +490,48 @@ export default class Storelocator {
 						fitBounds: fitBounds
 					})
 				} else {
-					log('warn', 'Storelocator :: Error ajax_get_stores.php, WS_stores has mandatory params (lat, lng)')
+					this.log('warn', 'Storelocator :: Error ajax_get_stores.php, WS_stores has mandatory params (lat, lng)')
 				}
-			},
-			error: (request) => {
-				log('warn', 'Storelocator :: Connection error', request)
+			})
+			.catch(error => {
 				this.loading(false)
+				console.warn(error)
+				throw new Error('Storelocator :: Connection error')
+			})
+	}
+
+	/**
+	 * Serialize form datas
+	 * @param {String} lat Latitude
+	 * @param {String} lng Longitude
+	 * @param {Integer} storeLimit Limit of stores in the request
+	 * @param {Integer} currentRadius Radius of the request
+	 * @param {String} inputValue Value of the input form search
+	 * @param {Array} categories Value of selected filters
+	 */
+	serializeForm ({lat, lng, storeLimit}) {
+		let formData = new FormData()
+
+		this.filtersSearch.forEach(filter => {
+			if (filter.checked) {
+				formData.append('categories[]', filter.value)
 			}
 		})
+
+		// Serialize params (input and filters value)
+		if (this.inputSearch.value !== '') {
+			formData.append('input', this.inputSearch.value)
+		}
+
+		if (lat && lng) {
+			formData.append('lat', lat)
+			formData.append('lng', lng)
+		}
+
+		formData.append('radius', this.currentRadius)
+		formData.append('storesLimit', storeLimit)
+
+		return formData
 	}
 
 	parseStores (options) {
@@ -534,7 +559,7 @@ export default class Storelocator {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
-			this.push(this.geolocationData.marker)
+			this.markers.push(this.geolocationData.marker)
 			this.boundsGlobal.extend(this.geolocationData.position)
 		}
 
@@ -596,7 +621,7 @@ export default class Storelocator {
 
 			// Offset the map on desktop only, when the fitBounds is requested
 			if (fitBounds) {
-				if (!isMobile()) {
+				if (!this.isMobile()) {
 					this.offsetMapWithAsideBar()
 				}
 			}
@@ -720,7 +745,7 @@ export default class Storelocator {
 		}
 
 		// Disable SVG for IE, they don't works
-		if (!isBrowserIE()) {
+		if (!this.isBrowserIE()) {
 			options.icon = this.options.map.markers.styles.length ? this.getIconMarkerByCategory(data.category) : ''
 		}
 
@@ -729,7 +754,7 @@ export default class Storelocator {
 		// Push marker data in marker
 		marker.store = data
 
-		this.push(marker)
+		this.markers.push(marker)
 
 		// Click on marker to show infoWindow
 		window.google.maps.event.addListener(marker, 'click', () => {
@@ -780,29 +805,25 @@ export default class Storelocator {
 		return customSVG.mimetype + btoa(customSVG.svg.replace('{{colorBorder}}', options.colorBorder).replace('{{colorBackground}}', options.colorBackground))
 	}
 
-	ajax (options) {
-		let request = new XMLHttpRequest()
-		let typeRequest = options.type
-		let sendData = typeRequest === 'POST' ? options.data : ''
+	/**
+	 * Log message
+	 * @param {Function} method Method of global console object
+	 * @param {String} message Message to post
+	 */
+	log (method, message) {
+		if (this.options.debug) {
+			console[method](message)
+		}
+	}
 
-		request.open(typeRequest, options.url)
+	/**
+	 * Check if breakpoint mobile is enabled
+	 */
+	isMobile () {
+		return window.matchMedia('(max-width: ' + this.options.breakpointMobile + ')').matches
+	}
 
-		if (typeRequest === 'POST') {
-			request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-		}
-		request.onload = function () {
-			if (request.status >= 200 && request.status < 400) {
-				// Success!
-				options.success(request)
-			} else {
-				// We reached our target server, but it returned an error
-				options.error(request)
-			}
-		}
-		request.onerror = function () {
-			// There was a connection error of some sort
-			options.error(request)
-		}
-		request.send(sendData)
+	isBrowserIE () {
+		return !!((document.documentMode && document.documentMode >= 9))
 	}
 }
