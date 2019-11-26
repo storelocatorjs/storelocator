@@ -90,22 +90,19 @@
             }
 
 .storelocator-detailStore {
-    position: relative;
-    font-size: 13px;
-}
-
-    .storelocator-detailStore-detailStoreTitle {
+        position: relative;
+        font-size: 13px;
+    }
+    .storelocator-detailStoreTitle {
         margin-bottom: 10px;
         text-transform: capitalize;
         font-weight: 500;
         font-size: 16px;
     }
-
-    .storelocator-detailStore-detailStoreTitle span {
+    .storelocator-detailStoreTitle span {
             display: inline;
         }
-
-    .storelocator-detailStore-detailStoreDistance {
+    .storelocator-detailStoreDistance {
         position: absolute;
         top: 50%;
         right: 0;
@@ -113,43 +110,36 @@
                 transform: translateY(-50%);
         color: #9a9a9a;
     }
-
-    .storelocator-detailStore-detailStoreDistance span {
+    .storelocator-detailStoreDistance span {
             display: inline-block;
             vertical-align: top;
             margin-top: 2px;
         }
-
-    .storelocator-detailStore-detailStoreDistance-detailStoreIconRoute {
-            fill: #9a9a9a;
-            width: 20px;
-            margin-left: 10px;
-        }
-
-    .storelocator-detailStore span {
+    .storelocator-detailStoreIconRoute {
+        fill: #9a9a9a;
+        width: 20px;
+        margin-left: 10px;
+    }
+    .storelocator span {
         display: block;
         font-weight: 400;
     }
-
-    .storelocator-detailStore span:last-child {
+    .storelocator span:last-child {
             padding-bottom: 0;
         }
-
-    .storelocator-detailStore a {
+    .storelocator a {
         text-decoration: none;
         color: #000;
     }
-
-    .storelocator-detailStore-detailStoreZipcode,
-    .storelocator-detailStore-detailStoreCity {
+    .storelocator-detailStoreZipcode,
+    .storelocator-detailStoreCity {
         display: inline-block;
         vertical-align: top;
     }
-
-    .storelocator-detailStore-detailStoreAddress,
-    .storelocator-detailStore-detailStoreZipcode,
-    .storelocator-detailStore-detailStoreCity,
-    .storelocator-detailStore-detailStorePhone {
+    .storelocator-detailStoreAddress,
+    .storelocator-detailStoreZipcode,
+    .storelocator-detailStoreCity,
+    .storelocator-detailStorePhone {
         padding-bottom: 12px;
     }
 

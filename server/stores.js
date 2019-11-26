@@ -10,7 +10,13 @@ const Stores = class Stores {
 		} else {
 			stores = this.filterStoreByCategory(this.options.categories)
 		}
-		return this.options.database
+		return this.filterStoreByGeoPosition({
+			stores: stores,
+			lat: this.options.lat,
+			lng: this.options.lng,
+			radius: this.options.radius,
+			limit: this.options.limit
+		})
 	}
 
 	filterStoreByCategory (categories) {

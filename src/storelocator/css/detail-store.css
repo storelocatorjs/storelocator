@@ -1,8 +1,10 @@
 @import "./vars";
 
-.storelocator-detailStore {
-    position: relative;
-    font-size: 13px;
+.storelocator {
+    &-detailStore {
+        position: relative;
+        font-size: 13px;
+    }
 
     &-detailStoreTitle {
         margin-bottom: 10px;
@@ -27,12 +29,12 @@
             vertical-align: top;
             margin-top: 2px;
         }
+    }
 
-        &-detailStoreIconRoute {
-            fill: #9a9a9a;
-            width: 20px;
-            margin-left: 10px;
-        }
+    &-detailStoreIconRoute {
+        fill: #9a9a9a;
+        width: 20px;
+        margin-left: 10px;
     }
 
     span {

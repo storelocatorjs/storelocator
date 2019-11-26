@@ -859,18 +859,17 @@ class Storelocator {
       method: 'POST',
       // headers: myHeaders,
       headers: {
-        'Accept': 'application/json'
+        'Content-Type': 'application/json'
       },
-      body: requestDatas
+      body: JSON.stringify(requestDatas)
     };
-    fetch(this.options.urlWebservice, fetchConf) // .then(response => {
-    // 	if (!response.ok) {
-    // 		throw Error(response.statusText)
-    // 	}
-    // 	return response
-    // })
-    .then(res => res.json()).then(jsonResponse => {
-      console.log(jsonResponse);
+    fetch(this.options.urlWebservice, fetchConf).then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+
+      return response;
+    }).then(res => res.json()).then(jsonResponse => {
       let data = jsonResponse;
 
       if (data !== null) {
@@ -903,24 +902,30 @@ class Storelocator {
     lng,
     storeLimit
   }) {
-    let formData = new FormData();
-    this.filtersSearch.forEach(filter => {
+    let formData = {};
+    let categories = [];
+    this.filtersSearch.forEach((filter, index) => {
       if (filter.checked) {
-        formData.append('categories[]', filter.value);
+        categories.push(filter.value);
       }
-    }); // Serialize params (input and filters value)
+    });
+
+    if (categories.length) {
+      formData.categories = categories;
+    } // Serialize params (input and filters value)
+
 
     if (this.inputSearch.value !== '') {
-      formData.append('input', this.inputSearch.value);
+      formData.input = this.inputSearch.value;
     }
 
     if (lat && lng) {
-      formData.append('lat', lat);
-      formData.append('lng', lng);
+      formData.lat = lat;
+      formData.lng = lng;
     }
 
-    formData.append('radius', this.currentRadius);
-    formData.append('storesLimit', storeLimit);
+    formData.radius = this.currentRadius;
+    formData.storesLimit = storeLimit;
     return formData;
   }
 
