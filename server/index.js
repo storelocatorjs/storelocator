@@ -1,4 +1,4 @@
-const storesDB = require('./datas/stores.json')
+const storesDB = require('./datas/stores-full.json')
 const Stores = require('./stores.js')
 const express = require('express')
 const app = express()
@@ -19,7 +19,7 @@ app.post('/', (request, response) => {
 	// Get request parameters
 	const lat = request.body['lat'] || null
 	const lng = request.body['lng'] || null
-	const categories = request.body['categories'] || null
+	const categories = request.body['categories'] || []
 	const radius = request.body['radius'] || null
 	const limit = request.body['storesLimit'] || null
 	let results = null

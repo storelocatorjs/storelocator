@@ -27,9 +27,10 @@ export default class Storelocator {
 	 * @param {Function} onReady Callback function executed when the storelocator is ready
 	 */
 	constructor ({options, onReady}) {
-		this.options = Object.assign({}, defaultOptions, options)
+		this.options = this.extend(true, defaultOptions, options)
 		this.onReady = onReady
 		this.isLoading = false
+		this.mapHasRequest = false
 
 		this.cacheSelectors()
 		this.buildLoader()
@@ -175,12 +176,13 @@ export default class Storelocator {
 		}
 
 		// Clone object before to prevent reference
-		let cloneMapOptions = Object.assign({}, this.options.map.options)
+		let mapOptions = this.extend(true, {}, this.options.map.options)
 
-		cloneMapOptions.center = new window.google.maps.LatLng(cloneMapOptions.center[0], cloneMapOptions.center[1])
+		mapOptions.center = new window.google.maps.LatLng(mapOptions.center[0], mapOptions.center[1])
 
-		// Init Google Maps API
-		this.map = new window.google.maps.Map(this.containerStorelocator.querySelector('#storelocator-googleMapsCanvas'), cloneMapOptions)
+		// Init Google Maps API with options
+		const googleMapsCanvas = this.containerStorelocator.querySelector('#storelocator-googleMapsCanvas')
+		this.map = new window.google.maps.Map(googleMapsCanvas, mapOptions)
 
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
@@ -261,13 +263,11 @@ export default class Storelocator {
 	 */
 	onChangeSearchFormFilter (e) {
 		// Not filters if there is not search value
-		if (this.inputSearch.value === '' && !this.geolocationData.userPositionChecked) {
-			return false
-		}
+		if (!this.mapHasRequest) return false
 
 		this.triggerRequest({
-			'lat': this.searchData.lat,
-			'lng': this.searchData.lng,
+			lat: this.searchData.lat,
+			lng: this.searchData.lng,
 			fitBounds: true
 		})
 	}
@@ -324,9 +324,8 @@ export default class Storelocator {
 			}
 
 			this.triggerRequest({
-				'lat': lat,
-				'lng': lng,
-				fitBounds: true
+				lat: lat,
+				lng: lng
 			})
 		}, response => {
 			this.loading(false)
@@ -370,28 +369,25 @@ export default class Storelocator {
 	 * Trigger a request with the new map position
 	 * @param {Object} options Options to refresh the map
 	 */
-	refreshMapOnBoundsChanged (options) {
-		let radius = this.options.requests.searchRadius
+	refreshMapOnBoundsChanged ({ updatePosition, increaseRadius }) {
 		let lat = 0
 		let lng = 0
 
 		// If user move on the map and discover area without stores, update markers, with map center position
-		if (options.updatePosition) {
+		if (updatePosition) {
 			lat = this.map.getCenter().lat()
 			lng = this.map.getCenter().lng()
-		} else if (options.increaseRadius) {
+		} else if (increaseRadius) {
 			// Get lat/lng from searchData
 			({lat, lng} = this.searchData)
 
 			// Increase currentRadius
 			this.currentRadius = this.currentRadius + this.options.updateMarkerOnBoundsChanged.stepRadius
-			radius = this.currentRadius
 		}
 
 		this.triggerRequest({
-			'lat': lat,
-			'lng': lng,
-			'radius': radius,
+			lat: lat,
+			lng: lng,
 			fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
 		})
 	}
@@ -411,13 +407,19 @@ export default class Storelocator {
 			let place = autocomplete.getPlace()
 
 			if (place.geometry) {
-				this.autocompleteRequest(place.geometry.location.lat(), place.geometry.location.lng())
+				this.autocompleteRequest({
+					lat: place.geometry.location.lat(),
+					lng: place.geometry.location.lng()
+				})
 			} else {
 				this.geocoder.geocode({
 					'address': place.name
 				}, (results, status) => {
 					if (status === window.google.maps.GeocoderStatus.OK) {
-						this.autocompleteRequest(results[0].geometry.location.lat(), results[0].geometry.location.lng())
+						this.autocompleteRequest({
+							lat: results[0].geometry.location.lat(),
+							lng: results[0].geometry.location.lng()
+						})
 					}
 				})
 			}
@@ -427,10 +429,10 @@ export default class Storelocator {
 	/**
 	 * Function called on autocomplete changes
 	 * Trigger a request with the new user research
-	 * @param {*} lat Latitude of the research
-	 * @param {*} lng Longitude of the research
+	 * @param {String} lat Latitude of the research
+	 * @param {String} lng Longitude of the research
 	 */
-	autocompleteRequest (lat, lng) {
+	autocompleteRequest ({lat, lng}) {
 		this.userPositionChecked = false
 
 		// Reset currentRadius on new search
@@ -438,27 +440,24 @@ export default class Storelocator {
 
 		this.triggerRequest({
 			'lat': lat,
-			'lng': lng,
-			fitBounds: true
+			'lng': lng
 		})
 	}
 
 	/**
 	 * Trigger a request to the web service to get all store results
 	 * according to the position (lat, lng)
-	 * @param {*} options Coordinate (lat, lng) and fitBounds
+	 * @param {String} lat Latitude of the research
+	 * @param {String} lng Longitude of the research
+	 * @param {Boolean} fitBounds Fit bounds on the map
 	 */
-	triggerRequest (options) {
+	triggerRequest ({lat, lng, fitBounds = true}) {
+		this.mapHasRequest = true
 		this.loading(true)
 
-		let {lat} = options
-		let {lng} = options
-		let {storeLimit = this.options.requests.storeLimit} = options
-		let {fitBounds = true} = options
 		let requestDatas = this.serializeForm({
 			lat: lat,
-			lng: lng,
-			storeLimit: storeLimit
+			lng: lng
 		})
 
 		// Update search data stored
@@ -479,7 +478,8 @@ export default class Storelocator {
 		fetch(this.options.urlWebservice, fetchConf)
 			.then(response => {
 				if (!response.ok) {
-					throw Error(response.statusText)
+					// throw Error(response.statusText)
+					console.warn(response)
 				}
 				return response
 			})
@@ -505,26 +505,19 @@ export default class Storelocator {
 	 * Serialize form datas
 	 * @param {String} lat Latitude
 	 * @param {String} lng Longitude
-	 * @param {Integer} storeLimit Limit of stores in the request
 	 * @return {Object} formData Datas required for the request (lat, lng, storeLimit, input, categories, radius)
 	 */
-	serializeForm ({lat, lng, storeLimit}) {
+	serializeForm ({lat = false, lng = false}) {
 		let formDatas = {}
 		let categories = []
 
+		// Get all selected categories
 		this.filtersSearch.forEach((filter, index) => {
 			if (filter.checked) {
 				categories.push(filter.value)
 			}
 		})
-
-		if (categories.length) {
-			formDatas.categories = categories
-		}
-
-		if (this.inputSearch.value !== '') {
-			formDatas.input = this.inputSearch.value
-		}
+		formDatas.categories = categories
 
 		if (lat && lng) {
 			formDatas.lat = lat
@@ -532,7 +525,7 @@ export default class Storelocator {
 		}
 
 		formDatas.radius = this.currentRadius
-		formDatas.storesLimit = storeLimit
+		formDatas.storesLimit = this.options.requests.storeLimit
 
 		return formDatas
 	}
@@ -760,10 +753,10 @@ export default class Storelocator {
 			optimized: true,
 			label: {
 				text: (data.index + 1).toString(),
-				fontFamily: 'Roboto, Arial, sans-serif',
+				fontFamily: 'inherit',
 				fontSize: '13px',
 				fontWeight: '500',
-				color: markerStyle.colorText
+				color: markerStyle ? markerStyle.colorText : '#000'
 			}
 		}
 
@@ -809,10 +802,10 @@ export default class Storelocator {
 	getIconMarkerByCategory (category) {
 		let offsetXLabel = (this.options.map.markers.width / 2) - 0.9
 		let offsetYLabel = (this.options.map.markers.height / 2) - 3
-
+		let colorBackground = this.markerStyles[category] ? this.markerStyles[category].colorBackground : '#E5454C'
 		return {
 			url: this.generateSVG({
-				colorBackground: this.markerStyles[category].colorBackground,
+				colorBackground: colorBackground,
 				width: this.options.map.markers.width,
 				height: this.options.map.markers.height
 			}),
@@ -840,5 +833,36 @@ export default class Storelocator {
 	 */
 	isBrowserIE () {
 		return !!((document.documentMode && document.documentMode >= 9))
+	}
+
+	/**
+	 * Extends multiple object into one
+	 * @param {Boolean} deep Enable extend for deep object properties
+	 * @param {Array} objects List of objects to merged
+	 * @return {Object} Objects merged into one
+	 */
+	extend (deep = false, ...objects) {
+		let extended = {}
+
+		// Merge the object into the extended object
+		let merge = obj => {
+			for (let prop in obj) {
+				if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+					// If deep merge and property is an object, merge properties
+					if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
+						extended[prop] = this.extend(true, extended[prop], obj[prop])
+					} else {
+						extended[prop] = obj[prop]
+					}
+				}
+			}
+		}
+
+		// Loop through each object and conduct a merge
+		objects.forEach(object => {
+			merge(object)
+		})
+
+		return extended
 	}
 }

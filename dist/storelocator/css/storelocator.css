@@ -163,9 +163,12 @@
         height: 40px;
         padding-left: 10px;
         font-size: 15px;
-        margin-bottom: 20px;
         border: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+    }
+
+.storelocator-formFilters {
+        margin-top: 20px;
     }
 
 .storelocator-formFilters label {
@@ -233,11 +236,7 @@
 
 @media only screen and (min-width: 750px) {
         .storelocator-formSearch {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 350px;
-            height: 161px;
+            height: auto;
             z-index: 5;
             border-radius: 5px 5px 0 0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
@@ -326,9 +325,19 @@
 
 .storelocator-sidebar {
         position: relative;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 1;
+        background: #fff;
     }
 
+.storelocator-sidebar.active .storelocator-sidebarResults {
+                display: block;
+            }
+
 .storelocator-sidebarResults {
+        display: none;
         overflow: auto;
         height: 100%;
         border-top: 1px solid #e7e7e7;
@@ -370,14 +379,19 @@
 @media only screen and (min-width: 750px) {
         .storelocator-sidebar {
             position: absolute;
-            top: calc(161px + 20px);
+            top: 20px;
             left: 20px;
             width: 350px;
-            height: calc(100% - 161px - 40px);
+            height: auto;
+            max-height: calc(100% - calc(20px * 2));
             z-index: 5;
             border-radius: 0 0 5px 5px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
+        }
+
+        .storelocator-sidebarResults {
+            display: block;
         }
 }
 
@@ -387,6 +401,7 @@
         padding-top: 100%;
         display: none;
         overflow: hidden;
+        width: 100%;
     }
 
 .storelocator-googleMaps.active {

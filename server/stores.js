@@ -28,7 +28,7 @@ const Stores = class Stores {
 	 */
 	filter () {
 		// Check if the request is filtered by category
-		let stores = this.categories.length === 0 ? this.options.database : this.filterStoreByCategory(this.categories)
+		let stores = this.categories.length === 0 ? this.database : this.filterStoreByCategory(this.categories)
 
 		// Filter store by geoposition
 		return this.filterStoreByGeoPosition(stores)
@@ -43,8 +43,8 @@ const Stores = class Stores {
 		let storesFiltered = []
 
 		// Loop on all stores, with filter
-		for (let i = 0, lengthStores = this.options.database.length; i < lengthStores; i++) {
-			let currentStore = this.options.database[i]
+		for (let i = 0, lengthStores = this.database.length; i < lengthStores; i++) {
+			let currentStore = this.database[i]
 			if (categories.indexOf(currentStore.category) !== -1) {
 				storesFiltered.push(currentStore)
 			}

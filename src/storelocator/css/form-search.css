@@ -14,12 +14,13 @@
         height: 40px;
         padding-left: 10px;
         font-size: 15px;
-        margin-bottom: 20px;
         border: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     }
 
     &-formFilters {
+        margin-top: 20px;
+
         label {
             position: relative;
             padding: 5px 5px 6px 37px;
@@ -88,11 +89,7 @@
 @media (--media-tablet) {
     .storelocator {
         &-formSearch {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: var(--widthFormSearch);
-            height: var(--heightFormSearch);
+            height: auto;
             z-index: 5;
             border-radius: 5px 5px 0 0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
