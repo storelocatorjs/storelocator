@@ -3,8 +3,6 @@ description: Project includes CSS, Javascript and PHP files. The installation is
 
 ## Installation
 
-Google Maps API V3 is automatically loaded by the module, no need to import it.
-
 ### NPM
 
 Install Storelocatorjs with npm:
@@ -37,65 +35,157 @@ Includes files manually in your project:
 </script>
 ```
 
-### Google Maps API key
+## Load Google Maps API
+
+Google Maps API is automatically loaded by storelocator. The map is instanciate when the API is ready.
+
+## API key
 
 Create an API key to use Google Maps API on the <a href="https://developers.google.com/maps/documentation/javascript/get-api-key?hl=Fr" target="_blank" title="Google Console API">Google Console API</a>.
 
-### Virtual host
+## Node.js server
 
-Create the following virtual host and replace the variable `{directoryPath}` by the directory path of your project.
+All requests to filter stores by geoposition are send to a web service. The project need a Node.js server to run the Node application located in the `./server` folder.
 
-``` hl_lines="2 4"
-<VirtualHost *:80>
-    DocumentRoot {directoryPath}
-    ServerName storelocator.local
-    <Directory  "{directoryPath}">
-        Options +Indexes
-    </Directory>
-</VirtualHost>
+## JSON structure
+
+The storelocatorjs project includes a JSON example in the folder `./server/datas/stores.json`.
+Datas are stored in an array of object for better performance.<br />
+
+!!! warning "Mandatory JSON structure"
+    __It is important to respect the format of the keys in the JSON file.__
+
+In case of filters usage, the category value in the highlight line must correspond to the filter `value` attributes in the HTML.
+
+```json hl_lines="3"
+[{
+    "address": "34 Avenue de la Perrière",
+    "category": "1",
+    "city": "Lorient",
+    "id": 1,
+    "lat": 47.7342023,
+    "lng": -3.3670051,
+    "phone": "0297594071",
+    "title": "Le crabe Marteau",
+    "zipcode": "56100"
+}]
 ```
-Add host on your local OS `127.0.0.1 storelocator.local`<br />
-_(On Windows, files is located to `C:\windows\System32\drivers\etc\`)_
 
-### CSS
+```html
+<input type="checkbox" id="cat-1" data-filter value="1" />
+```
 
-CSS files are available in the `./css` folder, import it directly in your project. The Storelocator styles includes a small reset CSS from <a href="https://meyerweb.com/eric/tools/css/reset/" target="_blank" title="Reset CSS">Eric Meyer</a>.
+## JSON fields
 
-!!! tip "SASS"
-    CSS file is also available with SASS.
+List of available fields in the JSON. Mandatory fields are `lat` and `lng`.
 
-### Javascripts
+#### `lat`
 
-The Storelocator Javascripts files are available in the `./js` folder, import it directly in your project.
+`mandatory - float`
 
-Instanciate the Storelocator constructor and set your options. There is only two mandatory options to start the Storelocator. The second parameter is a callback function with Google Maps instance, called when module is ready.<br />
+The latitude of the store.
 
 ```javascript
-var options = {
-    apiKey: '',
-    urlWebservice: ''
-};
-var myStorelocator = new Storelocator(options, function(map){
-    //Module is ready
-});
+[{
+    "lat": ""
+}]
 ```
 
-!!! tip "First, create your API key!"
-    Google Maps API V3 is automatically loaded by the module, no need to import it.<br />Before to use the Javascript API, you need to create an API key: <a href="https://developers.google.com/maps/documentation/javascript/get-api-key?hl=Fr" target="_blank" title="Google Console API">Create API key on the Google Console API</a>
+#### `lng`
 
-### Images
+`mandatory - string`
 
-The project includes a `/images` folder that includes store sample images and a custom cluster image.
+The longitude of the store.
 
-### PHP <small>(Compatible Wordpress & Drupal)</small>
+```javascript
+[{
+    "lng": ""
+}]
+```
 
-The project includes `/inc` folder with two PHP scripts.
+#### `address`
 
-* `ajax_get_stores.php` - File called by the AJAX request
-* `WS_Stores.php` - PHP class to filter stores by categories and distance
+`string`
 
-If you use a CMS like <strong>Wordpress</strong> or <strong>Drupal</strong>, scripts are also compatible.<br />
-To configure access to `ajax_get_stores.php`, use the Storelocator `urlWebservice` option in Javascript.
+The address of the store.
+
+```javascript
+[{
+    "address": ""
+}]
+```
+
+#### `category`
+
+`string`
+
+The category of the store.
+
+```javascript
+[{
+    "category": ""
+}]
+```
+
+#### `city`
+
+`string`
+
+The city of the store.
+
+```javascript
+[{
+    "city": ""
+}]
+```
+
+#### `id`
+
+`integer`
+
+The id of the store.
+
+```javascript
+[{
+    "id": ""
+}]
+```
+
+#### `phone`
+
+`string`
+
+The phone of the store.
+
+```javascript
+[{
+    "phone": ""
+}]
+```
+
+#### `title`
+
+`string`
+
+The title of the store.
+
+```javascript
+[{
+    "title": ""
+}]
+```
+
+#### `zipcode`
+
+`string`
+
+The zipcode of the store.
+
+```javascript
+[{
+    "zipcode": ""
+}]
+```
 
 <script>
   ((window.gitter = {}).chat = {}).options = {

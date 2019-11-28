@@ -1,4 +1,4 @@
-const storesDB = require('./datas/stores-full.json')
+const storesDB = require('./datas/stores.json')
 const Stores = require('./stores.js')
 const express = require('express')
 const app = express()
@@ -21,7 +21,7 @@ app.post('/', (request, response) => {
 	const lng = request.body['lng'] || null
 	const categories = request.body['categories'] || []
 	const radius = request.body['radius'] || null
-	const limit = request.body['storesLimit'] || null
+	const limit = request.body['limit'] || null
 	let results = null
 
 	// Filter stores if parameters are valid

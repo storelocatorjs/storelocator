@@ -1,6 +1,6 @@
 # Storelocatorjs <small>with Google Maps</small>
 
-Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.
+Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
 
 <center style="image-rendering: -webkit-optimize-contrast;">
 ![Storelocator on desktop](images/desktop.jpg)
@@ -16,7 +16,7 @@ If you like the project, like it on Github 😃<br /><br />
 
 The project is fully compatible with the most popular web browsers. More information about the HTML5 video support on <a href="https://caniuse.com/#feat=video" target="_blank" title="Video element - Can I use">Can I Use</a>. HTML and CSS files are W3C valid.
 
-## License
+## Licenses
 
 ### Commercial license
 

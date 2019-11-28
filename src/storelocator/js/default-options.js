@@ -1,71 +1,65 @@
 export default {
-	apiKey: '', // {String} mandatory parameter
-	urlWebservice: '', // {String}
-	debug: false, // {Bool}
-
+	apiKey: '',
+	urlWebservice: '',
 	cluster: {
-		status: true, // {Bool}
 		options: {
-			gridSize: 50, // {Int}
-			maxZoom: 13, // {Int}
+			averageCenter: true,
+			gridSize: 50,
 			imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-			zoomOnClick: true, // {Bool}
-			averageCenter: true, // {Bool}
-			minimumClusterSize: 2, // {Int}
-			styles: [] // {Array}
-		}
-	},
-
-	geolocation: {
-		status: true, // {Bool}
-		startOnLoad: false // {Bool}
-	},
-
-	updateMarkerOnBoundsChanged: {
-		status: true, // {Bool}
-		maxMarkersInViewportLimit: 30, // {Int}
-		stepRadius: 50, // {Int} in kilometers
-		maxRadius: 150 // {Int} in kilometers
-	},
-
-	requests: {
-		searchRadius: 50, // {Int} in kilometers
-		storeLimit: 20 // {Int}
-	},
-
-	map: {
-		options: {
-			center: [46.227638, 2.213749], // {Array} latitude and longitude
-			mapTypeId: 'roadmap', // {String}
-			zoom: 6, // {Int}
-			scrollwheel: true, // {Bool}
-			disableDefaultUI: false, // {Bool}
-			mapTypeControl: false, // {Bool}
-			streetViewControl: false, // {Bool}
-			scaleControl: false, // {Bool}
-			fullscreenControl: true, // {Bool}
-			styles: [] // {Array}
+			maxZoom: 13,
+			minimumClusterSize: 2,
+			styles: [],
+			zoomOnClick: true
 		},
+		status: true
+	},
+	debug: false,
+	geolocation: {
+		startOnLoad: false,
+		status: true
+	},
+	map: {
 		markers: {
-			width: 30, // {Int} in pixel
-			height: 40, // {Int} in pixel
+			width: 30,
+			height: 40,
 			styles: [{
-				category: 'userPosition', // {String}
-				colorBackground: '#4285f4', // {String}
-				colorBorder: '#4285f4' // {String}
+				category: 'userPosition',
+				colorBackground: '#4285f4',
+				colorBorder: '#4285f4'
 			}]
+		},
+		options: {
+			center: [46.227638, 2.213749],
+			disableDefaultUI: false,
+			fullscreenControl: true,
+			mapTypeControl: false,
+			mapTypeId: 'roadmap',
+			scaleControl: false,
+			scrollwheel: true,
+			streetViewControl: false,
+			styles: [],
+			zoom: 6
 		}
 	},
-
+	requests: {
+		searchRadius: 50,
+		storeLimit: 20
+	},
 	selectors: {
-		container: '.storelocator', // {String}
-		loader: '.storelocator-loader', // {String}
-		geolocButton: '.storelocator-geolocButton', // {String}
-		sidebar: '.storelocator-sidebar', // {String}
-		nav: '.storelocator-nav', // {String}
-		formSearch: '.storelocator-formSearch', // {String}
-		inputSearch: '.storelocator-inputSearch', // {String}
-		searchFilters: '[data-filter]', // {String}
-		sidebarResults: '.storelocator-sidebarResults' // {String}
+		container: '.storelocator',
+		formSearch: '.storelocator-formSearch',
+		geolocButton: '.storelocator-geolocButton',
+		inputSearch: '.storelocator-inputSearch',
+		loader: '.storelocator-loader',
+		nav: '.storelocator-nav',
+		searchFilters: '[data-filter]',
+		sidebar: '.storelocator-sidebar',
+		sidebarResults: '.storelocator-sidebarResults'
+	},
+	updateMarkerOnBoundsChanged: {
+		maxMarkersInViewportLimit: 30,
+		maxRadius: 150,
+		status: true,
+		stepRadius: 50
 	}
 }

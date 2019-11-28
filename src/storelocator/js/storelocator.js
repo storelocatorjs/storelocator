@@ -526,7 +526,7 @@ export default class Storelocator {
 		}
 
 		formDatas.radius = this.currentRadius
-		formDatas.storesLimit = this.options.requests.storeLimit
+		formDatas.limit = this.options.requests.storeLimit
 
 		return formDatas
 	}

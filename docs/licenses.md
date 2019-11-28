@@ -3,7 +3,15 @@ description: Informations about commercial License to use the Storelocator.js. T
 
 # Storelocator Licenses
 
-Storelocator is only available with License and has two kinds of licenses: Commercial and OEM.
+Storelocatorjs has three kinds of licenses: open-source, commercial, and OEM.
+
+## Open source license
+
+The open source license is designed for you to use Storelocatorjs to build open source and personal projects. The Storelocatorjs open source license is [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html). The GPLv3 has many terms, but the most important is how [it is sticky when you distribute your work publicly](https://www.gnu.org/licenses/gpl-3.0.html#section5). From the [GPL FAQ](https://www.gnu.org/licenses/gpl-faq.html#GPLRequireSourcePostedPublic):
+
+If you release the modified version to the public in some way, the GPL requires you to make the modified source code available to the program's users, under the GPL.
+
+Releasing your project that uses Storelocatorjs under the GPLv3, in turn, requires your project to be licensed under the GPLv3. If you are okay with this, feel free to use Storelocatorjs under the GPLv3, without purchasing a commercial license.
 
 ## Commercial license
 

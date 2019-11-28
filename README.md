@@ -60,18 +60,18 @@ Purchase a Storelocator.js Commercial License at [https://yoriiis.github.io/stor
     <div class="storelocator-formFilters">
       <div class="storelocator-formFiltersRow">
           <div class="storelocator-formCheckbox">
-              <input type="checkbox" name="category-1" id="category-1" class="filter-map-js" checked="checked" value="1" />
-          <label for="category-1" class="category-1">Restaurant</label>
+              <input type="checkbox" id="cat-1" class="filter-map-js" checked="checked" value="1" />
+          <label for="cat-1" class="category-1">Restaurant</label>
         </div>
         <div class="storelocator-formCheckbox">
-            <input type="checkbox" name="category-2" id="category-2" class="filter-map-js" checked="checked" value="2" />
-          <label for="category-2" class="category-2">Bar</label>
+            <input type="checkbox" id="cat-2" class="filter-map-js" checked="checked" value="2" />
+          <label for="cat-2" class="category-2">Bar</label>
         </div>
       </div>
       <div class="storelocator-formFiltersRow">
         <div class="storelocator-formCheckbox">
-          <input type="checkbox" name="category-3" id="category-3" class="filter-map-js" checked="checked" value="3" />
-          <label for="category-3" class="category-3">Concept store</label>
+          <input type="checkbox" id="cat-3" class="filter-map-js" checked="checked" value="3" />
+          <label for="cat-3" class="category-3">Concept store</label>
         </div>
       </div>
     </div>

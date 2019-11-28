@@ -3,74 +3,17 @@ description: The Storelocator is responsive and includes many features such as a
 
 ### Responsive design
 
-The Storelocator is responsive desktop, tablet and mobile. The default mobile breakpoint in CSS is 767px (under tablet portrait resolution). This breakpoint is linked to Storelocator option `breakpointMobile`, change both at the same time.<br /><br />
+The Storelocator is responsive mobile first and can be customized with just a few CSS rules.
 
 <center class="wrapper-screenshot-touch">
 ![Storelocator on tablet](images/ipad.png)![Storelocator on mobile](images/iphone.png)
 </center>
 
-### Callback function
-
-The second parameter of the class constructor `Storelocator` is a callback function, called when the module is ready. Instance of Google Maps is available with `map` parameter.<br />
-
-To manually trigger a request with parameter on init, use `this.triggerRequest` function. Here is an example below:
-
-```javascript
-var options = {
-    apiKey: '',
-    urlWebservice: ''
-};
-var myStorelocator = new Storelocator(options, function(map){
-
-    this.triggerRequest({
-        'lat': 48.8589507,
-        'lng': 2.2770202,
-        fitBounds: true
-    });
-
-});
-```
-
 ### Maps options
 
-You can customized the map with object configuration in `map.options`.
+The map can be customized with a configuration object in the `map.options.styles` property. Use for example <a href="https://snazzymaps.com/" title="Snazzy Maps" target="_blank">Snazzy Maps</a> tools to generate a JSON configuration, and paste it in the constructor key `map.options.styles`.
 
-The array of options can be edit to suit your needs. Here is an example below, please read the <a href="https://developers.google.com/maps/documentation/javascript/tutorial" target="_blank" title="Documentation">documentation here</a> for more informations.
-
-```json
-{
-    "center": [46.227638, 2.213749],
-    "mapTypeId": "roadmap",
-    "zoom": 6,
-    "scrollwheel": true,
-    "disableDefaultUI": false,
-    "mapTypeControl": false,
-    "streetViewControl": false,
-    "scaleControl": false,
-    "fullscreenControl": true,
-    "styles": []
-}
-```
-
-??? info "Data types"
-    * `center` - {Array} latitude and longitude
-    * `mapTypeId` - {String}
-    * `zoom` - {Int}
-    * `scrollwheel` - {Bool}
-    * `disableDefaultUI` - {Bool}
-    * `mapTypeControl` - {Bool}
-    * `streetViewControl` - {Bool}
-    * `scaleControl` - {Bool}
-    * `fullscreenControl` - {Bool}
-    * `styles` - {Array}
-
-Array `center` is automatically transform by the Storelocator in the code below:
-
-```javascript
-new google.maps.LatLng(46.227638, 2.213749);
-```
-
-Object can contain `styles` key to customized the map style with your own style. Use for example <a href="https://snazzymaps.com/" title="Snazzy Maps" target="_blank">Snazzy Maps</a> tools to generate your JSON configuration, and paste it in the constructor options `maps.options.styles`. Here is an example below:
+Below, an example of configuration:
 
 ```json
 {
@@ -80,89 +23,22 @@ Object can contain `styles` key to customized the map style with your own style.
 
 ### Autocomplete
 
-Storelocator include by default Google Maps Autocomplete, `places` librairy is automatically loaded. No need submit button, autocomplete input automatically submit the form.
+Storelocator include by default [Google Maps Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete). The `places` librairy is automatically loaded.
 
 ### Geolocation
 
-Storelocator integrate its own geolocation button `.storelocator-geolocButton`, you can easily change the CSS.
+Storelocator integrate its own geolocation button `.storelocator-geolocButton` to trigger a geolocation request.
 
 !!! warning
-    Geolocation need SSL certificat with https on Google Chrome and somes others recents browsers.<br />More information <a href="https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only" title="HTML5 Geolocation API">here</a>.
-
+    Geolocation need SSL certificat with `https` on Google Chrome and somes others recents browsers.<br />More information <a href="https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only" title="HTML5 Geolocation API">here</a>.
 
 ### Filters
 
-You can add as many categories as you want on your markers, identified them by a unique ID ("0", "1", etc.) in a string. Markers can only have one category, but you can edit the Storelocator to suit your needs if you want. By default all results are automatically dispatch by category and show in the list results in ascending distance.
+The storelocator can be used with or without filters. Filters let you filter store by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key `categories` as string format.
 
-On the demo, markers have 3 categories and filters are linked to these categories with value attribute. Inputs radio have changed event to refresh markers and list results automatically.
+### Fetch requests
 
-Module accept marker categories in JSON with unique identifier ("0", "1", ...) in string.
-
-### PHP class and webservice
-
-Storelocator project includes two PHP files in the folder `/inc`:
-
-* `inc/ajax_get_stores.php` - Webservice called by AJAX requests
-* `inc/WS_Stores.php` - PHP class to filter stores by categories and distance
-
-If necessary, edit the `inc/ajax_get_stores.php` file to suit your needs.
-
-List of parameters sent by the AJAX requests to `inc/ajax_get_stores.php`:
-
-* `input` - {String} - Value of the autocomplete input
-* `categories` - {Array} (optional) - List of selected categories
-* `lat` - {Float} - Latitude of the research
-* `lng` - {Float} - Longitude of the research
-* `radius` - {Int} (optional) - Radius of the research
-* `storesLimit` - {Int} (optional) - Limit of stores returned by the webservice
-
-The PHP class filters stores with somes parameters:
-
-* Coordinates (lat, lng) are mandatory parameters
-* Categories of stores. If there are no selected categories, the webservice return no results
-* Search radius to configure the radius of research
-* Store limit to configure the maximum of stores returned
-
-!!! success "Too many stores ?"
-    Storelocator is compatible with big JSON datas, which contains many stores, no worry about this.
-
-### AJAX research
-
-All AJAX requests are by default sent to the file `inc/ajax_get_stores.php` who works with the class `inc/WS_Stores.php` which return a JSON. To edit the path, use the `urlWebservice` option.
-
-### JSON structure
-
-Storelocator project includes a JSON example in the folder `/datas/stores.json`.
-The stores JSON file is an array of object (for better performance), which contains all datas of stores.<br />
-Category IDs in highlight line must correspond to the value attributes in the [HTML structure](how-it-works/#structure).
-
-!!! warning "Structure"
-    __It is important to respect the format of the keys in the JSON file.__
-
-```json hl_lines="3"
-[{
-    "category": "1",
-    "id": 1,
-    "title": "Le crabe Marteau",
-    "address": "34 Avenue de la Perrière",
-    "city": "Lorient",
-    "zipcode": "56100",
-    "phone": "0297594071",
-    "lat": 47.7342023,
-    "lng": -3.3670051
-}]
-```
-
-??? info "Data types"
-    * `category` - {String}
-    * `id` - {Int || String}
-    * `title` - {String}
-    * `address` - {String}
-    * `city` - {String}
-    * `zipcode` - {String}
-    * `phone` - {String}
-    * `lat` - {Float}
-    * `lng` - {Float}
+All search requests use the fetch API to communicate with the Node.js server. Datas are transmitted by JSON format.
 
 ### Markers
 
