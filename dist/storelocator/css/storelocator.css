@@ -164,6 +164,7 @@
         padding-left: 10px;
         font-size: 15px;
         border: none;
+        outline: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     }
 
@@ -298,24 +299,30 @@
         width: 50%;
         height: 100%;
         list-style-type: none;
+        border-bottom: 1px solid #b9b8b8;
     }
+
+.storelocator-navListItem.active {
+            border-bottom: 2px solid #000;
+        }
+
+.storelocator-navListItem.active .storelocator-navButton{
+                color: #000;
+            }
 
 .storelocator-navButton {
         display: block;
         width: 100%;
         height: 100%;
         position: relative;
-        color: #c9c6c6;
+        color: #b9b8b8;
         border: 0;
         -webkit-appearance: none;
         font-size: 16px;
         font-family: inherit;
         cursor: pointer;
+        outline: none;
     }
-
-.storelocator-navButton.active {
-            color: #000;
-        }
 
 @media only screen and (min-width: 750px) {
         .storelocator .storelocator-nav {
@@ -323,11 +330,17 @@
         }
 }
 
+.storelocator-sidebarResults {
+        display: none;
+        overflow: auto;
+        height: 100%;
+        border-top: 1px solid #e7e7e7;
+    }
+
 .storelocator-sidebar {
         position: relative;
         display: flex;
         flex-direction: column;
-        position: relative;
         z-index: 1;
         background: #fff;
     }
@@ -335,13 +348,6 @@
 .storelocator-sidebar.active .storelocator-sidebarResults {
                 display: block;
             }
-
-.storelocator-sidebarResults {
-        display: none;
-        overflow: auto;
-        height: 100%;
-        border-top: 1px solid #e7e7e7;
-    }
 
 .storelocator-sidebarResultsListItem {
         display: block;
@@ -363,7 +369,7 @@
         padding: 20px;
         font-size: 13px;
         line-height: 20px;
-        color: #c9c6c6;
+        color: #b9b8b8;
         font-style: italic;
     }
 
@@ -372,7 +378,7 @@
         line-height: 20px;
         font-style: italic;
         padding: 10px 20px;
-        color: #c9c6c6;
+        color: #b9b8b8;
         margin: 0;
     }
 

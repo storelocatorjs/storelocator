@@ -1,7 +1,7 @@
 /* Override default theme */
 
-/* Head Download page : licence blocs */
-.md-container .licence-list {
+/* Head Download page : License blocs */
+.md-container .License-list {
     display: flex;
     align-items: center;
     list-style-type: none;
@@ -10,12 +10,12 @@
     margin-bottom: 60px;
 }
 
-.md-container .licence-list li {
+.md-container .License-list li {
     width: calc(33.33% - 13px);
     margin: 0 auto;
 }
 
-.md-container .licence-list a {
+.md-container .License-list a {
     border-width: 2px;
     border-style: solid;
     display: block;
@@ -24,41 +24,41 @@
     padding-top: 15px;
 }
 
-.md-container .licence-list span {
+.md-container .License-list span {
     padding: 0 10px;
     display: block;
 }
 
-.md-container .licence-list .licence-button__project {
+.md-container .License-list .License-button__project {
     padding-bottom: 3px;
 }
 
-.md-container .licence-list .licence-button__title {
+.md-container .License-list .License-button__title {
     font-weight: bold;
     font-size: 24px;
 }
 
-.md-container .licence-list .licence-button__license {
+.md-container .License-list .License-button__license {
     padding-bottom: 7px;
 }
 
-.md-container .licence-list .licence-button__for {
+.md-container .License-list .License-button__for {
     font-style: italic;
 }
 
-.md-container .licence-list .licence-button__price {
+.md-container .License-list .License-button__price {
     background-color: #03a9f4;
     padding: 15px 10px;
     margin-top: 15px;
 }
 
-.md-container .licence-list .licence-button__price__euro {
+.md-container .License-list .License-button__price__euro {
     display: inline-block;
     color: #fff;
     padding: 0;
 }
 
-.md-container .licence-list .licence-button__price__value {
+.md-container .License-list .License-button__price__value {
     display: inline-block;
     color: #fff;
     padding: 0;
@@ -78,19 +78,19 @@
 }
 
 @media screen and (max-width: 750px) {
-    /* Download page : licence blocs */
-    .md-container .licence-list {
+    /* Download page : License blocs */
+    .md-container .License-list {
         display: block;
     }
 
-    .md-container .licence-list li {
+    .md-container .License-list li {
         display: block;
         width: 100%;
         margin-left: 0;
         margin-top: 20px;
     }
 
-    .md-container .licence-list li:first-child {
+    .md-container .License-list li:first-child {
         margin-top: 0;
     }
 }

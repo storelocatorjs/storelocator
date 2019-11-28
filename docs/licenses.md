@@ -1,9 +1,9 @@
-title: Licences - Storelocator.js
-description: Informations about commercial licence to use the Storelocator.js. There are two available licences which can be used by a developer, a team or an organization
+title: Licenses - Storelocator.js
+description: Informations about commercial License to use the Storelocator.js. There are two available Licenses which can be used by a developer, a team or an organization
 
-# Storelocator licences
+# Storelocator Licenses
 
-Storelocator is only available with licence and has two kinds of licenses: Commercial and OEM.
+Storelocator is only available with License and has two kinds of licenses: Commercial and OEM.
 
 ## Commercial license
 

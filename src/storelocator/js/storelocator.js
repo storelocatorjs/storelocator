@@ -4,8 +4,8 @@
 * @version 2.0.0
 * @author: Joris DANIEL <joris.daniel@gmail.com>
 * @description: Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a Node.js webservice with Fetch API
-* {@link https://store-locator.bitbucket.io}
-* @copyright 2018 Joris DANIEL <https://store-locator.bitbucket.io>
+* {@link https://yoriiis.github.io/storelocator.js}
+* @copyright 2018 Joris DANIEL <https://yoriiis.github.io/storelocator.js>
 **/
 
 'use strict'
@@ -55,12 +55,13 @@ export default class Storelocator {
 	 */
 	cacheSelectors () {
 		this.containerStorelocator = document.querySelector(this.options.selectors.container)
-		this.asideResults = this.containerStorelocator.querySelector(this.options.selectors.asideResults)
 		this.formSearch = this.containerStorelocator.querySelector(this.options.selectors.formSearch)
 		this.inputSearch = this.containerStorelocator.querySelector(this.options.selectors.inputSearch)
-		this.filtersSearch = [...this.containerStorelocator.querySelectorAll(this.options.selectors.filtersSearch)]
-		this.mapAside = this.containerStorelocator.querySelector(this.options.selectors.mapAside)
-		this.mapGeoloc = this.containerStorelocator.querySelector(this.options.selectors.mapGeoloc)
+		this.searchFilters = [...this.containerStorelocator.querySelectorAll(this.options.selectors.searchFilters)]
+		this.nav = this.containerStorelocator.querySelector(this.options.selectors.nav)
+		this.sidebar = this.containerStorelocator.querySelector(this.options.selectors.sidebar)
+		this.sidebarResults = this.containerStorelocator.querySelector(this.options.selectors.sidebarResults)
+		this.geolocButton = this.containerStorelocator.querySelector(this.options.selectors.geolocButton)
 	}
 
 	/**
@@ -91,10 +92,10 @@ export default class Storelocator {
 	 */
 	addEvents () {
 		// Event listener on sidebar result items
-		this.asideResults.addEventListener('click', this.onClickSidebarResultItem.bind(this))
+		this.sidebarResults.addEventListener('click', this.onClickSidebarResultItem.bind(this))
 
 		// Event listeners on sidebar navigation items
-		let buttons = [...this.containerStorelocator.querySelectorAll('[data-switch-view]')]
+		let buttons = [...this.nav.querySelectorAll('[data-switch-view]')]
 		buttons.forEach(button => {
 			button.addEventListener('click', this.onClickSidebarNav.bind(this))
 		})
@@ -106,11 +107,11 @@ export default class Storelocator {
 		})
 
 		// Event listener on search form filters
-		this.filtersSearch.forEach(filter => {
+		this.searchFilters.forEach(filter => {
 			filter.addEventListener('change', this.onChangeSearchFormFilter.bind(this))
 		})
 
-		this.mapGeoloc.addEventListener('click', this.onClickGeolocationButton.bind(this))
+		this.geolocButton.addEventListener('click', this.onClickGeolocationButton.bind(this))
 	}
 
 	/**
@@ -244,15 +245,15 @@ export default class Storelocator {
 
 		e.preventDefault()
 
-		this.containerStorelocator.querySelector('[data-switch-view].active').classList.remove('active')
-		e.target.classList.add('active')
+		this.nav.querySelector('.active').classList.remove('active')
+		e.target.parentNode.classList.add('active')
 
 		if (e.target.getAttribute('data-target') === 'map') {
 			mapView.classList.add('active')
-			this.mapAside.classList.remove('active')
+			this.sidebar.classList.remove('active')
 			window.google.maps.event.trigger(this.map, 'resize')
 		} else {
-			this.mapAside.classList.add('active')
+			this.sidebar.classList.add('active')
 			mapView.classList.remove('active')
 		}
 	}
@@ -512,7 +513,7 @@ export default class Storelocator {
 		let categories = []
 
 		// Get all selected categories
-		this.filtersSearch.forEach((filter, index) => {
+		this.searchFilters.forEach((filter, index) => {
 			if (filter.checked) {
 				categories.push(filter.value)
 			}
@@ -587,7 +588,7 @@ export default class Storelocator {
 
 		// If no result, show error message and center map on current country
 		if (noResult) {
-			this.asideResults.innerHTML = `
+			this.sidebarResults.innerHTML = `
 				<p class="storelocator-sidebarNoResults">
 					No results for your request.<br />
 					Please try a new search with differents choices.
@@ -599,7 +600,7 @@ export default class Storelocator {
 				this.overlayGlobal.setMap(null)
 			}
 		} else {
-			this.asideResults.innerHTML = hmlListResult
+			this.sidebarResults.innerHTML = hmlListResult
 
 			// Add all maskers to cluster if option is enabled
 			if (typeof MarkerClusterer !== 'undefined') {

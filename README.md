@@ -4,47 +4,47 @@
 
 ## Easily build a storelocator in Javascript
 
-See [https://store-locator.bitbucket.io](https://store-locator.bitbucket.io) for complete docs and demos.<br />
+See [https://yoriiis.github.io/storelocator.js](https://yoriiis.github.io/storelocator.js) for complete docs and demos.<br />
 
 Storelocator is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with Gzip, it has no dependency with any framework or library and is write in **Javascript native**.
 
 <center style="image-rendering: -webkit-optimize-contrast;">
-<img src="https://store-locator.bitbucket.io/img/desktop.jpg" alt="Storelocator on desktop" />
+<img src="https://yoriiis.github.io/storelocator.js/img/desktop.jpg" alt="Storelocator on desktop" />
 </center>
 
 Storelocator is **responsive** desktop, tablet and mobile, and is autonomous with a full PHP webservice which includes ajax requests includes. List of included features:
 
-* [Responsive design](https://store-locator.bitbucket.io/features/#responsive-design)
-* [Map with options](https://store-locator.bitbucket.io/features/#maps-options)
-* [Search with autocomplete](https://store-locator.bitbucket.io/features/#autocomplete)
-* [Browser geolocation](https://store-locator.bitbucket.io/features/#geolocation)
-* [Filters by category](https://store-locator.bitbucket.io/features/#filters)
-* [PHP class and webservice](https://store-locator.bitbucket.io/features/#php-class-and-webservice)
-* [AJAX research](https://store-locator.bitbucket.io/features/#ajax-research)
-* [JSON structure](https://store-locator.bitbucket.io/features/#json-structure)
-* [Markers](https://store-locator.bitbucket.io/features/#markers)
-* [Clusters](https://store-locator.bitbucket.io/features/#clusters)
-* [SVG for markers style](https://store-locator.bitbucket.io/features/#markers)
-* [Update markers on bounds changed](https://store-locator.bitbucket.io/features/#markers-update-on-bounds-changed)
-* [List of results](https://store-locator.bitbucket.io/features/#results)
-* [Native info window popin](https://store-locator.bitbucket.io/features/#infowindow)
-* [Loader](https://store-locator.bitbucket.io/features/#loader)
+* [Responsive design](https://yoriiis.github.io/storelocator.js/features/#responsive-design)
+* [Map with options](https://yoriiis.github.io/storelocator.js/features/#maps-options)
+* [Search with autocomplete](https://yoriiis.github.io/storelocator.js/features/#autocomplete)
+* [Browser geolocation](https://yoriiis.github.io/storelocator.js/features/#geolocation)
+* [Filters by category](https://yoriiis.github.io/storelocator.js/features/#filters)
+* [PHP class and webservice](https://yoriiis.github.io/storelocator.js/features/#php-class-and-webservice)
+* [AJAX research](https://yoriiis.github.io/storelocator.js/features/#ajax-research)
+* [JSON structure](https://yoriiis.github.io/storelocator.js/features/#json-structure)
+* [Markers](https://yoriiis.github.io/storelocator.js/features/#markers)
+* [Clusters](https://yoriiis.github.io/storelocator.js/features/#clusters)
+* [SVG for markers style](https://yoriiis.github.io/storelocator.js/features/#markers)
+* [Update markers on bounds changed](https://yoriiis.github.io/storelocator.js/features/#markers-update-on-bounds-changed)
+* [List of results](https://yoriiis.github.io/storelocator.js/features/#results)
+* [Native info window popin](https://yoriiis.github.io/storelocator.js/features/#infowindow)
+* [Loader](https://yoriiis.github.io/storelocator.js/features/#loader)
 
 This module is fully writen in Javascript native. No need to import an additional librairy like jQuery or Handlebars. #YouMightNotNeedJquery<br />
 
 Storelocator project is compatible with CMS like <strong>Wordpress</strong> and <strong>Drupal</strong>.<br />
-It can also be used independently, as in the [demo](https://store-locator.bitbucket.io/demo).
+It can also be used independently, as in the [demo](https://yoriiis.github.io/storelocator.js/demo).
 
 ## Download
 
-Download Storelocator.js on [https://store-locator.bitbucket.io/download](https://store-locator.bitbucket.io/download)
+Download Storelocator.js on [https://yoriiis.github.io/storelocator.js/download](https://yoriiis.github.io/storelocator.js/download)
 
-## Licences
+## Licenses
 
 ### Commercial licenses
 
 If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license. With this option, your source code is kept proprietary.<br />
-Purchase a Storelocator.js Commercial License at [https://store-locator.bitbucket.io](https://store-locator.bitbucket.io).
+Purchase a Storelocator.js Commercial License at [https://yoriiis.github.io/storelocator.js](https://yoriiis.github.io/storelocator.js).
 
 ## How it works
 
@@ -176,12 +176,12 @@ var options = {
     selectors: {
         container: '.container-storelocator', // {String}
         loader: '.storelocator-loader', // {String}
-        mapGeoloc: '.storelocator-geolocButton', // {String}
-        mapAside: '.storelocator-sidebar', // {String}
+        geolocButton: '.storelocator-geolocButton', // {String}
+        sidebar: '.storelocator-sidebar', // {String}
         formSearch: '.storelocator-formSearch', // {String}
         inputSearch: '.storelocator-inputSearch', // {String}
-        filtersSearch: '.filter-map-js', // {String}
-        asideResults: '.storelocator-sidebarResults' // {String}
+        searchFilters: '.filter-map-js', // {String}
+        sidebar: '.storelocator-sidebarResults' // {String}
     }
 };
 

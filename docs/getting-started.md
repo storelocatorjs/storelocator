@@ -1,20 +1,47 @@
-title: Getting started - Storelocator.js
+title: Getting started - Storelocatorjs
 description: Project includes CSS, Javascript and PHP files. The installation is fast and the Storelocator is easily customizable. Google Maps API is automatically loaded
 
-The project includes Javascript files for the frontend and PHP files for the backend. Use a web server with PHP and a vhost. All Javascripts and CSS files are available minified and unminified version.
-
-### Google Maps API
-
-#### Loading the API
+## Installation
 
 Google Maps API V3 is automatically loaded by the module, no need to import it.
 
-#### Create an API key
+### NPM
 
-Before to use the Javascript API, you need to create an API key with the following link:<br />
-<a href="https://developers.google.com/maps/documentation/javascript/get-api-key?hl=Fr" target="_blank" title="Google Console API">Google Console API</a>
+Install Storelocatorjs with npm:
 
-### Vhost
+```shell
+npm install storelocatorjs
+```
+
+```javascript
+import storelocatorjs from 'storelocatorjs';
+import 'storelocatorjs.css';
+
+new storelocatorjs({
+    selector: '#player'
+});
+```
+
+### Manual import
+
+Includes files manually in your project:
+
+```html
+<link rel="stylesheet" href="storelocator.css" />
+<script src="storelocator.js"></script>
+
+<script>
+    new storelocatorjs({
+        selector: '#player'
+    });
+</script>
+```
+
+### Google Maps API key
+
+Create an API key to use Google Maps API on the <a href="https://developers.google.com/maps/documentation/javascript/get-api-key?hl=Fr" target="_blank" title="Google Console API">Google Console API</a>.
+
+### Virtual host
 
 Create the following virtual host and replace the variable `{directoryPath}` by the directory path of your project.
 

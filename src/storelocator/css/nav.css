@@ -20,6 +20,15 @@
         width: 50%;
         height: 100%;
         list-style-type: none;
+        border-bottom: 1px solid var(--grey);
+
+        &.active {
+            border-bottom: 2px solid #000;
+
+            .storelocator-navButton{
+                color: #000;
+            }
+        }
     }
 
     &-navButton {
@@ -27,16 +36,13 @@
         width: 100%;
         height: 100%;
         position: relative;
-        color: var(--colorMobileNav);
+        color: var(--grey);
         border: 0;
         -webkit-appearance: none;
         font-size: 16px;
         font-family: inherit;
         cursor: pointer;
-
-        &.active {
-            color: #000;
-        }
+        outline: none;
     }
 }
 

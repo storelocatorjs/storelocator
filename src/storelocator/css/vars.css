@@ -9,8 +9,8 @@
     --colorLoader1: #f60;
     --colorLoader2: #fc3;
     --colorLoader3: #ea4c89;
-    --colorMobileNav: #c9c6c6;
-    --grey: #c9c6c6;
+    --colorMobileNav: #b9b8b8;
+    --grey: #b9b8b8;
 }
 
 @custom-media --media-tablet only screen and (min-width: 750px);

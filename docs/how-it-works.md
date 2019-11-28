@@ -174,12 +174,12 @@ var options = {
     selectors: {
         container: '.container-storelocator', // {String}
         loader: '.storelocator-loader', // {String}
-        mapGeoloc: '.storelocator-geolocButton', // {String}
-        mapAside: '.storelocator-sidebar', // {String}
+        geolocButton: '.storelocator-geolocButton', // {String}
+        sidebar: '.storelocator-sidebar', // {String}
         formSearch: '.storelocator-formSearch', // {String}
         inputSearch: 'storelocator-inputSearch', // {String}
-        filtersSearch: '.filter-map-js', // {String}
-        asideResults: '.storelocator-sidebarResults' // {String}
+        searchFilters: '.filter-map-js', // {String}
+        sidebar: '.storelocator-sidebarResults' // {String}
     }
 };
 

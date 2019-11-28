@@ -60,11 +60,12 @@ export default {
 	selectors: {
 		container: '.storelocator', // {String}
 		loader: '.storelocator-loader', // {String}
-		mapGeoloc: '.storelocator-geolocButton', // {String}
-		mapAside: '.storelocator-sidebar', // {String}
+		geolocButton: '.storelocator-geolocButton', // {String}
+		sidebar: '.storelocator-sidebar', // {String}
+		nav: '.storelocator-nav', // {String}
 		formSearch: '.storelocator-formSearch', // {String}
 		inputSearch: '.storelocator-inputSearch', // {String}
-		filtersSearch: '[data-filter-map]', // {String}
-		asideResults: '.storelocator-sidebarResults' // {String}
+		searchFilters: '[data-filter]', // {String}
+		sidebarResults: '.storelocator-sidebarResults' // {String}
 	}
 }
