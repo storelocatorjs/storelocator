@@ -21,18 +21,18 @@ The project is fully compatible with the most popular web browsers. More informa
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License at https://yoriiis.github.io/storelocator.js.
+Purchase a Storelocatorjs Commercial License at [yoriiis.github.io/storelocator.js](https://yoriiis.github.io/storelocator.js).
 
 ### Open source license
 
-If you are creating an open source application under a license compatible with the GNU GPL license v3, you may use Storelocatorjs under the terms of the GPLv3.
+If you are creating an open source application under a license compatible with the [GNU GPL license v3](https://www.gnu.org/licenses/gpl-3.0.html), you may use Storelocatorjs under the terms of the GPLv3.
+
+[Read more about Storelocatorjs's license](https://yoriiis.github.io/storelocator.js/license.html)
 
 ## Contributor
 
 Created with ♥ by [@yoriiis](http://github.com/yoriiis)
-
-!!! note "Contributor"
-    Many thanks to Cyril CAMBOURNAC for its contribution.
+Many thanks to Cyril CAMBOURNAC for its contribution.
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 

@@ -52,17 +52,17 @@ The storelocator can have filters matches with store categories. Add the `<form>
                 <div class="storelocator-formFiltersRow">
                     <div class="storelocator-formCheckbox">
                         <input type="checkbox" id="cat-1" data-filter checked="checked" value="1" />
-                        <label for="cat-1" class="category-1">Catégorie 1</label>
+                        <label for="cat-1" class="category-1">Categorie 1</label>
                     </div>
                     <div class="storelocator-formCheckbox">
                         <input type="checkbox" id="cat-2" data-filter checked="checked" value="2" />
-                        <label for="cat-2" class="category-2">Catégorie 2</label>
+                        <label for="cat-2" class="category-2">Categorie 2</label>
                     </div>
                 </div>
                 <div class="storelocator-formFiltersRow">
                     <div class="storelocator-formCheckbox">
                         <input type="checkbox" id="cat-3" data-filter value="3" />
-                        <label for="cat-3" class="category-3">Catégorie 3</label>
+                        <label for="cat-3" class="category-3">Categorie 3</label>
                     </div>
                 </div>
             </div>
