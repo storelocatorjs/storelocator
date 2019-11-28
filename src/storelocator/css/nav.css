@@ -16,21 +16,6 @@
         padding: 0;
     }
 
-    &-navListItem {
-        width: 50%;
-        height: 100%;
-        list-style-type: none;
-        border-bottom: 1px solid var(--grey);
-
-        &.active {
-            border-bottom: 2px solid #000;
-
-            .storelocator-navButton{
-                color: #000;
-            }
-        }
-    }
-
     &-navButton {
         display: block;
         width: 100%;
@@ -43,6 +28,21 @@
         font-family: inherit;
         cursor: pointer;
         outline: none;
+    }
+
+    &-navListItem {
+        width: 50%;
+        height: 100%;
+        list-style-type: none;
+        border-bottom: 1px solid var(--grey);
+
+        &.active {
+            border-bottom: 2px solid #000;
+
+            .storelocator-navButton {
+                color: #000;
+            }
+        }
     }
 }
 

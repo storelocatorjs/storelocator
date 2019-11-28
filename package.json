@@ -16,7 +16,7 @@
 		"build:mkdocs:only": "mkdocs build",
 		"create:demo": "cp -rv ./dist/. ./site/dist/",
 		"start": "rm -rf ./dist/ && webpack --mode=development",
-		"test:eslint": "eslint -c ./.eslintrc.js ./src/",
+		"test:eslint": "eslint -c ./.eslintrc.js ./src/ ./server/",
 		"test:stylelint": "stylelint './src/**/*.css' './docs/theme/assets/stylesheets/**/*.css' --config ./stylelint.config.js"
 	},
 	"devDependencies": {
