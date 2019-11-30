@@ -266,7 +266,7 @@ var _default = {
       styles: [],
       zoomOnClick: true
     },
-    status: true
+    status: false
   },
   debug: false,
   geolocation: {

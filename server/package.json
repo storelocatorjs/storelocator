@@ -1,11 +1,17 @@
 {
-	"name": "server",
+	"name": "storelocatorjs-server",
+	"version": "1.0.0",
+	"homepage": "https://yoriiis.github.io/storelocatorjs",
+	"bugs": "https://github.com/yoriiis/storelocatorjs/issues",
+	"repository": "https://github.com/yoriiis/storelocatorjs.git",
+	"author": "Yoriiis aka Joris Daniel (joris.daniel@gmail.com)",
+	"main": "src/index.js",
 	"scripts": {
-		"start": "nodemon index.js"
+		"start": "nodemon ./src/index.js"
 	},
 	"devDependencies": {
-		"body-parser": "^1.19.0",
-		"cors": "^2.8.5",
+		"body-parser": "1.19.0",
+		"cors": "2.8.5",
 		"express": "4.17.1",
 		"nodemon": "2.0.1"
 	},

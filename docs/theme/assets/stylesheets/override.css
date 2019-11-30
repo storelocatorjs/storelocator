@@ -34,7 +34,7 @@
 .md-typeset [id] .headerlink:focus,
 .md-typeset [id]:target .headerlink,
 .md-typeset [id]:hover .headerlink:hover {
-	color: #ff7f15;
+	color: #546e7a;
 }
 
 /* Research */
@@ -127,7 +127,7 @@
 
 .md-content .license-listItemPrice {
 	display: block;
-	background-color: #ff7f15;
+	background-color: #546e7a;
 	padding: 15px 10px;
 	margin-top: 15px;
 }

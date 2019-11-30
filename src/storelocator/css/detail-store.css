@@ -51,6 +51,7 @@
     &-detailStoreAddress {
         display: block;
         padding-bottom: 12px;
+        padding-right: 90px;
     }
 
     &-detailStoreZipcode {
