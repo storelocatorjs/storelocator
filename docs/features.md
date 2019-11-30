@@ -9,7 +9,7 @@ The Storelocator is responsive mobile first and can be customized with just a fe
 ![Storelocator on tablet](images/ipad.png)![Storelocator on mobile](images/iphone.png)
 </center>
 
-### Maps options
+### Maps styles
 
 The map can be customized with a configuration object in the `map.options.styles` property. Use for example <a href="https://snazzymaps.com/" title="Snazzy Maps" target="_blank">Snazzy Maps</a> tools to generate a JSON configuration, and paste it in the constructor key `map.options.styles`.
 
@@ -30,17 +30,13 @@ Storelocator include by default [Google Maps Autocomplete](https://developers.go
 Storelocator integrate its own geolocation button `.storelocator-geolocButton` to trigger a geolocation request.
 
 !!! warning
-    Geolocation need SSL certificat with `https` on Google Chrome and somes others recents browsers.<br />More information <a href="https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only" title="HTML5 Geolocation API">here</a>.
+    Geolocation need SSL certificat with `https` on Google Chrome and somes others recents browsers. Documentation is available on [Google Developers](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only).
 
 ### Filters
 
-The storelocator can be used with or without filters. Filters let you filter store by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key `categories` as string format.
+The storelocator can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key `categories` as string format.
 
-### Fetch requests
-
-All search requests use the fetch API to communicate with the Node.js server. Datas are transmitted by JSON format.
-
-### Markers
+### Marker styles
 
 Marker have a default style, the same as on Google Maps. Storelocator has an option to easily customized the style of the marker with a SVG.
 
@@ -55,176 +51,122 @@ To use this feature, fill the option `map.markers` as below:
             "styles": [{
                 "category": "userPosition",
                 "colorBackground": "#4285f4",
-                "colorBorder": "#4285f4"
+                "colorText": "#fff"
             }, {
                 "category": "1",
                 "colorBackground": "#ec4233",
-                "colorBorder": "#ec4233"
+                "colorText": "#fff"
             },{
                 "category": "2",
                 "colorBackground": "#009925",
-                "colorBorder": "#009925"
+                "colorText": "#fff"
             },{
                 "category": "3",
                 "colorBackground": "#eeb211",
-                "colorBorder": "#eeb211"
+                "colorText": "#fff"
             }]
         }
     }
 }
 ```
 
-??? info "Data types"
-    * `width` - {Int}
-    * `height` - {Int}
-    * `category` - {String}
-    * `colorBackground` - {String}
-    * `colorBorder` - {String}
-
 You can change the marker dimensions (width and height) in pixel by passing an integer.
 
-`map.markers.style` contains object, each objects correspond to a marker category, with 4 parameters:
+`map.markers.style` contains object, each objects correspond to a marker category, with 3 parameters:
 
-!!! tip "Category reserved"
-    The marker category __`userPosition`__ allow you to customized the marker style of the user geolocation. Do not change the category of this marker.<br /><br />
+!!! tip "Geolocation marker"
+    The marker category __`userPosition`__ allow you to customized the marker style of the user geolocation. Do not change the category name of this marker.<br /><br />
 
 !!! bug "Marker SVG on IE"
     Internet Explorer doesn't accept custom SVG for markers. Default markers are use on this browser.
 
 ### Clusters
 
-!!! warning "Load the librairy"
-    With cluster option enabled, you need to load `./js/libs/markerclusterer.js` separately in your vendors.<br />The library is included in the package.
-
-Cluster options are available, please read the <a href="https://googlemaps.github.io/js-marker-clusterer/docs/reference.html" target="_blank" title="Documentation">documentation here</a>.
-
-The default image is provided by <a href="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png" title="Cluster image" target="_blank">Google</a>. See the example below:
-
-```json hl_lines="7"
-{
-    "cluster": {
-        "status": true,
-        "options": {
-            "gridSize": 50,
-            "maxZoom": 13,
-            "imagePath": "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-            "zoomOnClick": true,
-            "averageCenter": true,
-            "minimumClusterSize": 2
-        }
-    }
-}
-```
-
-??? info "Data types"
-    * `imagePath` - {String}
-<br />
-
-Default image can be changed, fill the option `cluster.options.styles` as below, to easily customized the style of the cluster with a PNG image (included in the project):
-
-```json hl_lines="10 11 12 13 14 15"
-{
-    "cluster": {
-        "status": true,
-        "options": {
-            "gridSize": 50,
-            "maxZoom": 13,
-            "zoomOnClick": true,
-            "averageCenter": true,
-            "minimumClusterSize": 2,
-            "styles": [{
-                "url": "/images/cluster.png",
-                "textColor": "#000",
-                "width": 60,
-                "height": 60
-            }]
-        }
-    }
-}
-```
-
-??? info "Data types"
-    * `url` - {String}
-    * `textColor` - {String}
-    * `width` - {Int}
-    * `height` - {Int}
-
-
-### Markers update on bounds changed
-
-The map can be refreshed when user moves or the zoom changes. To use this feature, enable options `updateMarkerOnBoundsChanged.status`. Default parameters are optimized but you can easily change them.<br />The functionality is automatically disabled when marker info Window is opened, to prevent marker removed.
-
-!!! tip "Debug overlay"
-    Enable `debug` option to see debug overlay above the map:
-
-    * `green` - Limit the number of markers in the viewport `maxMarkersinViewportLimit`. Map is centered on this viewport
-    * `red` - Viewport contains all markers related to the `searchRadius`. User can move on this area without refresh the map.
-
-### Results
-
-List of results are synchronized with markers. The list is filtered by category and store are sort by distance to the map center.
-A small ES6 template string is use to built the HTML of each result.
+With cluster option enabled, you need to load the `markerclusterer.js` library before the Storelocator. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/marker-clustering)
 
 ```html
-<div class="storelocator-detailStore">
-    <span class="storelocator-detailStoreTitle">{title}</span>
-    <span class="storelocator-detailStoreDistance"><a href="http://www.google.fr/maps/dir/{origin}/{destination}" title="Itinerary" target="_blank">{distance}km</a></span>
-    <span class="storelocator-detailStoreAddress">{address}</span>
-    <span class="storelocator-detailStoreZipcode">{zipcode}</span>
-    <span class="storelocator-detailStoreCity">{city}</span>
-    <span class="storelocator-detailStorePhone"><a href="tel:{phone}" title="Call">{phone}</a></span>
-</div>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 ```
 
-!!! info "Distance"
-    You will notice that the distance information is caculate in backend with the PHP class. The value is not present in the original JSON.
+```javascript
+new storelocatorjs({
+    options: {
+        cluster: {
+            status: true,
+            options: {
+                gridSize: 50,
+                maxZoom: 13,
+                imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+                zoomOnClick: true,
+                averageCenter: true,
+                minimumClusterSize: 2,
+                styles: []
+            }
+        }
+    }
+});
+```
 
-### InfoWindow
+Default image can be changed, fill the option `cluster.options.styles` as below, to easily customized the style of the cluster image.
 
-Storelocator allow you to show more information of the marker when user click on it. It uses the native Google Maps infoWindow with a small ES6 template string to built the HTML of the info window.
+```javascript hl_lines="6 7 8 9"
+new storelocatorjs({
+    options: {
+        cluster: {
+            options: {
+                styles: [{
+                    "url": "/images/cluster.png",
+                    "textColor": "#000",
+                    "width": 60,
+                    "height": 60
+                }]
+            }
+        }
+    }
+});
+```
+
+### Markers update
+
+The storelocator auto-search allow to refresh markers on area bounds changed. Zoom or move events may trigger an auto-search if user extends the area. To use this feature, enable options `markersUpdate.status`.
+
+!!! tip "Viewport overlays"
+    Enable `debug` option to see viewport overlays above the map:
+
+    * `red`: list of all stores according to `maxRadius` option. User can move on this area without refresh the map.
+    * `green`: list of all stores according to the `limitInViewport` option. Map is centered on this viewport.
+
+### Info window
+
+Storelocator allow to show marker information with the native Google Maps info window. Below, the default template displays the fields available in the JSON.
 
 ```html
-<div class="storelocator-infoWIndow">
-    <span class="store-picture">><a href="{link}" title="Visit website" target="_blank"><img src="{picture}" alt="{title}" /></a></span>
+<div class="storelocator-infoWindow">
+    <span class="store-picture">
+        <img src="{picture}" alt="{title}" />
+    </span>
     <div class="storelocator-detailStore">
         <span class="storelocator-detailStoreTitle">{title}</span>
-        <span class="storelocator-detailStoreDistance"><a href="http://www.google.fr/maps/dir/${origin}/${destination}" title="Itinerary" target="_blank">{distance}km</a></span>
+        <span class="storelocator-detailStoreDistance">
+            <a href="http://www.google.fr/maps/dir/${origin}/${destination}" title="Itinerary" target="_blank">
+                {distance}km
+            </a>
+        </span>
         <span class="storelocator-detailStoreAddress">{address}</span>
         <span class="storelocator-detailStoreZipcode">{zipcode}</span>
         <span class="storelocator-detailStoreCity">{city}</span>
-        <span class="storelocator-detailStorePhone"><a href="tel:{phone}" title="Call">{phone}</a></span>
-        <span class="store-link"><a href="{link}" title="Visit website" target="_blank">{link}</a></span>
+        <span class="storelocator-detailStorePhone">
+            <a href="tel:{phone}" title="Call">{phone}</a>
+        </span>
+        <span class="store-link">
+            <a href="{link}" title="Visit website" target="_blank">{link}</a>
+        </span>
     </div>
 </div>
 ```
 
 !!! info "Distance"
-    You will notice that the distance information is caculate in backend with the PHP class. The value is not present in the original JSON.
-
-You can easily edit the CSS to customized the style of the infoWindow.
-
-Info window contains:
-
-* Marker information
-* Distance between search position/user position and marker position
-* Link to Google Maps itinerary
-
-### Loader
-
-Storelocator integrate a small loader, visible during request on the top of the map. The display is trigger with a `.active` CSS class add to `.storelocator-loader`.
-
-Structure of the loader:
-
-```html
-<div class="storelocator-loader active"></div>
-```
-
-### Log message
-
-Storelocator includes log message on requests and errors when `debug` option is enabled. `log` function has two parameters, use it only during development:
-
-* `method` - Choose between `log` and `warn` method of `window.console`
-* `message` - The message to show in the console
+    You will notice that the distance information is automatically caculate with the Node.js script.
 
 <script>
   ((window.gitter = {}).chat = {}).options = {

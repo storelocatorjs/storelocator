@@ -1,6 +1,6 @@
 export default {
 	apiKey: '',
-	urlWebservice: '',
+	webServiceUrl: '',
 	cluster: {
 		options: {
 			averageCenter: true,
@@ -25,7 +25,7 @@ export default {
 			styles: [{
 				category: 'userPosition',
 				colorBackground: '#4285f4',
-				colorBorder: '#4285f4'
+				colorText: '#fff'
 			}]
 		},
 		options: {
@@ -43,7 +43,7 @@ export default {
 	},
 	requests: {
 		searchRadius: 50,
-		storeLimit: 20
+		storesLimit: 20
 	},
 	selectors: {
 		container: '.storelocator',
@@ -56,8 +56,8 @@ export default {
 		sidebar: '.storelocator-sidebar',
 		sidebarResults: '.storelocator-sidebarResults'
 	},
-	updateMarkerOnBoundsChanged: {
-		maxMarkersInViewportLimit: 30,
+	markersUpdate: {
+		limitInViewport: 30,
 		maxRadius: 150,
 		status: true,
 		stepRadius: 50

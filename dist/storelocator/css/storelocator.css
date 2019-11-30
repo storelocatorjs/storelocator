@@ -244,40 +244,42 @@
         }
 }
 
-.storelocator-infoWIndow {
-        padding: 20px 0 20px 20px;
+.storelocator-infoWindow {
+        padding: 10px 0 10px 10px;
     }
 
-.storelocator-infoWIndow .storelocator-pictureStore {
+.storelocator-infoWindow .storelocator-pictureStore {
             margin-bottom: 20px;
             display: block;
             max-width: 250px;
         }
 
-.storelocator-infoWIndow .storelocator-pictureStore a {
+.storelocator-infoWindow .storelocator-pictureStore img {
                 display: block;
                 width: 100%;
                 height: auto;
             }
 
-.storelocator-infoWIndow .storelocator-pictureStore img {
-                display: block;
-                width: 100%;
-                height: auto;
-            }
-
-.storelocator-infoWIndow .storelocator-detailStore {
+.storelocator-infoWindow .storelocator-detailStore {
             max-width: 250px;
         }
 
-.storelocator-infoWIndow .storelocator-detailStoreTitle {
+.storelocator-infoWindow .storelocator-detailStoreTitle {
             padding-right: 90px;
         }
 
-.storelocator-infoWIndow .storelocator-detailStoreDistance {
+.storelocator-infoWindow .storelocator-detailStoreDistance {
             top: 1px;
             -webkit-transform: none;
                     transform: none;
+        }
+
+.storelocator-infoWindow .storelocator-detailStorePhone {
+            padding-bottom: 12px;
+        }
+
+.storelocator-infoWindow .storelocator-detailStoreUrl {
+            color: #000;
         }
 
 .storelocator-nav {
@@ -295,21 +297,6 @@
         padding: 0;
     }
 
-.storelocator-navListItem {
-        width: 50%;
-        height: 100%;
-        list-style-type: none;
-        border-bottom: 1px solid #b9b8b8;
-    }
-
-.storelocator-navListItem.active {
-            border-bottom: 2px solid #000;
-        }
-
-.storelocator-navListItem.active .storelocator-navButton{
-                color: #000;
-            }
-
 .storelocator-navButton {
         display: block;
         width: 100%;
@@ -323,6 +310,21 @@
         cursor: pointer;
         outline: none;
     }
+
+.storelocator-navListItem {
+        width: 50%;
+        height: 100%;
+        list-style-type: none;
+        border-bottom: 1px solid #b9b8b8;
+    }
+
+.storelocator-navListItem.active {
+            border-bottom: 2px solid #000;
+        }
+
+.storelocator-navListItem.active .storelocator-navButton {
+                color: #000;
+            }
 
 @media only screen and (min-width: 750px) {
         .storelocator .storelocator-nav {

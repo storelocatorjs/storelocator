@@ -1,19 +1,13 @@
 @import "./vars";
 
 .storelocator {
-    &-infoWIndow {
-        padding: 20px 0 20px 20px;
+    &-infoWindow {
+        padding: 10px 0 10px 10px;
 
         .storelocator-pictureStore {
             margin-bottom: 20px;
             display: block;
             max-width: 250px;
-
-            a {
-                display: block;
-                width: 100%;
-                height: auto;
-            }
 
             img {
                 display: block;
@@ -33,6 +27,14 @@
         .storelocator-detailStoreDistance {
             top: 1px;
             transform: none;
+        }
+
+        .storelocator-detailStorePhone {
+            padding-bottom: 12px;
+        }
+
+        .storelocator-detailStoreUrl {
+            color: #000;
         }
     }
 }

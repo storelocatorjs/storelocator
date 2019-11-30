@@ -34,7 +34,7 @@ export default class Storelocator {
 
 		this.cacheSelectors()
 		this.buildLoader()
-		this.markerStyles = this.getColorByMarkerCategory()
+		this.markerStyles = this.getMarkerStylesByCategory()
 
 		window.googleMapLoaded = () => {
 			if (this.options.geolocation.status) {
@@ -159,7 +159,7 @@ export default class Storelocator {
 		this.boundsGlobal = new window.google.maps.LatLngBounds()
 		this.currentRadius = this.options.requests.searchRadius
 
-		if (this.options.updateMarkerOnBoundsChanged.status) {
+		if (this.options.markersUpdate.status) {
 			this.boundsWithLimit = new window.google.maps.LatLngBounds()
 		}
 
@@ -194,7 +194,7 @@ export default class Storelocator {
 		}
 
 		// Detect zoom changed and bounds changed to refresh marker on the map
-		if (this.options.updateMarkerOnBoundsChanged.status) {
+		if (this.options.markersUpdate.status) {
 			this.map.addListener('bounds_changed', () => {
 				// Prevent multiple event triggered when loading and infoWindow opened
 				if (!this.isLoading && !this.infoWindowOpened) {
@@ -355,7 +355,7 @@ export default class Storelocator {
 					})
 				} else if (listMarkerIndexInViewport.length === this.markers.length) {
 					// If user see already all markers, zoom is too small, increase it until maxRadius
-					if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
+					if (this.currentRadius < this.options.markersUpdate.maxRadius) {
 						this.refreshMapOnBoundsChanged({
 							increaseRadius: true
 						})
@@ -383,7 +383,7 @@ export default class Storelocator {
 			({lat, lng} = this.searchData)
 
 			// Increase currentRadius
-			this.currentRadius = this.currentRadius + this.options.updateMarkerOnBoundsChanged.stepRadius
+			this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius
 		}
 
 		this.triggerRequest({
@@ -476,7 +476,7 @@ export default class Storelocator {
 		}
 
 		// Fecth store datas from the web service
-		fetch(this.options.urlWebservice, fetchConf)
+		fetch(this.options.webServiceUrl, fetchConf)
 			.then(response => {
 				if (!response.ok) {
 					// throw Error(response.statusText)
@@ -506,7 +506,7 @@ export default class Storelocator {
 	 * Serialize form datas
 	 * @param {String} lat Latitude
 	 * @param {String} lng Longitude
-	 * @return {Object} formData Datas required for the request (lat, lng, storeLimit, input, categories, radius)
+	 * @return {Object} formData Datas required for the request (lat, lng, storesLimit, input, categories, radius)
 	 */
 	serializeForm ({lat = false, lng = false}) {
 		let formDatas = {}
@@ -526,7 +526,7 @@ export default class Storelocator {
 		}
 
 		formDatas.radius = this.currentRadius
-		formDatas.limit = this.options.requests.storeLimit
+		formDatas.limit = this.options.requests.storesLimit
 
 		return formDatas
 	}
@@ -556,7 +556,7 @@ export default class Storelocator {
 		// Re-declare bounds on new research, it's important else zoom bug after one request
 		this.boundsGlobal = new window.google.maps.LatLngBounds()
 
-		if (this.options.updateMarkerOnBoundsChanged.status) {
+		if (this.options.markersUpdate.status) {
 			this.boundsWithLimit = new window.google.maps.LatLngBounds()
 		}
 
@@ -610,7 +610,7 @@ export default class Storelocator {
 			}
 
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
-			if (this.options.updateMarkerOnBoundsChanged.status) {
+			if (this.options.markersUpdate.status) {
 				this.createViewportWithLimitMarker({
 					stores: stores,
 					fitBounds: fitBounds
@@ -628,12 +628,12 @@ export default class Storelocator {
 
 	/**
 	 * Create a custom viewport (boundsWithLimit)
-	 * Display a minimal list of markers according to the maxMarkersInViewportLimit option
+	 * Display a minimal list of markers according to the limitInViewport option
 	 * @param {Object} options Datas to create the custom viewport
 	 */
 	createViewportWithLimitMarker (options) {
 		let {stores} = options
-		let maxMarkersInViewport = this.options.updateMarkerOnBoundsChanged.maxMarkersInViewportLimit
+		let maxMarkersInViewport = this.options.markersUpdate.limitInViewport
 		let maxLoop = (stores.length < maxMarkersInViewport) ? stores.length : maxMarkersInViewport
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
@@ -657,7 +657,7 @@ export default class Storelocator {
 	/**
 	 * Create custom overlay on the map for the debug mode
 	 * overlayGlobal: list of all stores according to maxRadius option
-	 * overlayLimit: list of all stores according to the maxMarkersInViewportLimit option
+	 * overlayLimit: list of all stores according to the limitInViewport option
 	 */
 	createOverlays () {
 		if (this.overlayGlobal !== null) {
@@ -781,10 +781,10 @@ export default class Storelocator {
 	}
 
 	/**
-	 * Get marker color by category, from options
+	 * Get marker styles by category, from options
 	 * @return {Object} Formatted object with category name into key and marker styles datas
 	 */
-	getColorByMarkerCategory () {
+	getMarkerStylesByCategory () {
 		let styles = {}
 		this.options.map.markers.styles.forEach((marker) => {
 			styles[marker.category] = {

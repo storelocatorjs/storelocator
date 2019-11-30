@@ -1,12 +1,10 @@
 import svgRoute from '../../svg/route.svg'
 
 export default function ({store, origin}) {
-	return `<div class="storelocator-infoWIndow">
+	return `<div class="storelocator-infoWindow">
                 ${store.picture
                     ? `<span class="storelocator-pictureStore">
-                        <a href="${store.link}" title="Visit website" target="_blank">
-                            <img src="${store.picture}" alt="${store.title}" />
-                        </a>
+                        <img src="${store.picture}" alt="${store.title}" />
                     </span>`
                 : ``}
                 <div class="storelocator-detailStore">
@@ -30,7 +28,7 @@ export default function ({store, origin}) {
                         ? `<span class="storelocator-detailStorePhone"><a href="tel:${store.phone}" title="Call">${store.phone}</a></span>`
                     : ``}
                     ${typeof store.link !== 'undefined'
-                    ? `<a href="${store.link}" title="Visit website" target="_blank" class="store-website">${store.link}</a>`
+                    ? `<a href="${store.link}" title="Visit website" target="_blank" class="storelocator-detailStoreUrl">${store.link}</a>`
                     : ``}
                 </div>
             </div>`

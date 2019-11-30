@@ -29,7 +29,7 @@ If you are creating an open source application under a license compatible with t
 
 [Read more about Storelocatorjs's license](https://yoriiis.github.io/storelocator.js/license.html)
 
-## Contributor
+## Contributors
 
 Created with ♥ by [@yoriiis](http://github.com/yoriiis)
 Many thanks to Cyril CAMBOURNAC for its contribution.

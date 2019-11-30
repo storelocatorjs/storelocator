@@ -6,7 +6,7 @@
     "lat": 48.8565815,
     "lng": 2.3602533,
     "phone": "(+33) 01 42 74 33 75",
-    "picture": "https://yoriiis.github.io/storelocator.js/demo/images/store-piment-cafe.jpg",
+    "picture": "../assets/store-piment-cafe.jpg",
     "title": "Le Piment Café",
     "zipcode": "75004"
 }, {
@@ -18,7 +18,7 @@
     "link": "http://www.leptittroquet.fr",
     "lng": 2.3010083,
     "phone": "(+33) 01 47 05 80 39",
-    "picture": "https://yoriiis.github.io/storelocator.js/demo/images/store-petit-troquet.jpg",
+    "picture": "../assets/store-petit-troquet.jpg",
     "title": "Le Petit Troquet",
     "zipcode": "75007"
 }, {
@@ -30,7 +30,7 @@
     "link": "http://www.crabemarteau.fr",
     "lng": 2.2884175,
     "phone": "(+33) 02 97 59 40 71",
-    "picture": "https://yoriiis.github.io/storelocator.js/demo/images/store-crabe-marteau.jpg",
+    "picture": "../assets/store-crabe-marteau.jpg",
     "title": "Le crabe Marteau",
     "zipcode": "56100"
 }, {
@@ -42,7 +42,7 @@
     "link": "http://www.cafe-elsur.com",
     "lng": 2.3492624,
     "phone": "(+33) 01 43 25 58 28",
-    "picture": "https://yoriiis.github.io/storelocator.js/demo/images/store-cafe-elsur.jpg",
+    "picture": "../assets/store-cafe-elsur.jpg",
     "title": "Café El Sur",
     "zipcode": "75004"
 }, {
@@ -54,7 +54,7 @@
     "link": "http://www.mamapetula.com",
     "lng": 2.3323415,
     "phone": "(+33) 01 47 05 80 39",
-    "picture": "https://yoriiis.github.io/storelocator.js/demo/images/store-mama-petula.jpg",
+    "picture": "../assets/store-mama-petula.jpg",
     "title": "Mama Petula - concept store végétal",
     "zipcode": "75014"
 }]

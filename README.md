@@ -121,7 +121,7 @@ The `onReady` function expose the `map` instance and is called when the map is i
 ```javascript
 new Storelocator({
     apiKey: '',
-    urlWebservice: ''
+    webServiceUrl: ''
 }, onReady: (map) => {
     map.triggerRequest({
         'lat': 48.8589507,

@@ -255,7 +255,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _default = {
   apiKey: '',
-  urlWebservice: '',
+  webServiceUrl: '',
   cluster: {
     options: {
       averageCenter: true,
@@ -280,7 +280,7 @@ var _default = {
       styles: [{
         category: 'userPosition',
         colorBackground: '#4285f4',
-        colorBorder: '#4285f4'
+        colorText: '#fff'
       }]
     },
     options: {
@@ -298,7 +298,7 @@ var _default = {
   },
   requests: {
     searchRadius: 50,
-    storeLimit: 20
+    storesLimit: 20
   },
   selectors: {
     container: '.storelocator',
@@ -311,8 +311,8 @@ var _default = {
     sidebar: '.storelocator-sidebar',
     sidebarResults: '.storelocator-sidebarResults'
   },
-  updateMarkerOnBoundsChanged: {
-    maxMarkersInViewportLimit: 30,
+  markersUpdate: {
+    limitInViewport: 30,
     maxRadius: 150,
     status: true,
     stepRadius: 50
@@ -377,7 +377,7 @@ class Storelocator {
     this.mapHasRequest = false;
     this.cacheSelectors();
     this.buildLoader();
-    this.markerStyles = this.getColorByMarkerCategory();
+    this.markerStyles = this.getMarkerStylesByCategory();
 
     window.googleMapLoaded = () => {
       if (this.options.geolocation.status) {
@@ -504,7 +504,7 @@ class Storelocator {
     this.boundsGlobal = new window.google.maps.LatLngBounds();
     this.currentRadius = this.options.requests.searchRadius;
 
-    if (this.options.updateMarkerOnBoundsChanged.status) {
+    if (this.options.markersUpdate.status) {
       this.boundsWithLimit = new window.google.maps.LatLngBounds();
     }
 
@@ -535,7 +535,7 @@ class Storelocator {
     } // Detect zoom changed and bounds changed to refresh marker on the map
 
 
-    if (this.options.updateMarkerOnBoundsChanged.status) {
+    if (this.options.markersUpdate.status) {
       this.map.addListener('bounds_changed', () => {
         // Prevent multiple event triggered when loading and infoWindow opened
         if (!this.isLoading && !this.infoWindowOpened) {
@@ -694,7 +694,7 @@ class Storelocator {
           });
         } else if (listMarkerIndexInViewport.length === this.markers.length) {
           // If user see already all markers, zoom is too small, increase it until maxRadius
-          if (this.currentRadius < this.options.updateMarkerOnBoundsChanged.maxRadius) {
+          if (this.currentRadius < this.options.markersUpdate.maxRadius) {
             this.refreshMapOnBoundsChanged({
               increaseRadius: true
             });
@@ -727,7 +727,7 @@ class Storelocator {
         lng
       } = this.searchData); // Increase currentRadius
 
-      this.currentRadius = this.currentRadius + this.options.updateMarkerOnBoundsChanged.stepRadius;
+      this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius;
     }
 
     this.triggerRequest({
@@ -823,7 +823,7 @@ class Storelocator {
       body: JSON.stringify(requestDatas)
     }; // Fecth store datas from the web service
 
-    fetch(this.options.urlWebservice, fetchConf).then(response => {
+    fetch(this.options.webServiceUrl, fetchConf).then(response => {
       if (!response.ok) {
         // throw Error(response.statusText)
         console.warn(response);
@@ -849,7 +849,7 @@ class Storelocator {
    * Serialize form datas
    * @param {String} lat Latitude
    * @param {String} lng Longitude
-   * @return {Object} formData Datas required for the request (lat, lng, storeLimit, input, categories, radius)
+   * @return {Object} formData Datas required for the request (lat, lng, storesLimit, input, categories, radius)
    */
 
 
@@ -873,7 +873,7 @@ class Storelocator {
     }
 
     formDatas.radius = this.currentRadius;
-    formDatas.limit = this.options.requests.storeLimit;
+    formDatas.limit = this.options.requests.storesLimit;
     return formDatas;
   }
   /**
@@ -904,7 +904,7 @@ class Storelocator {
 
     this.boundsGlobal = new window.google.maps.LatLngBounds();
 
-    if (this.options.updateMarkerOnBoundsChanged.status) {
+    if (this.options.markersUpdate.status) {
       this.boundsWithLimit = new window.google.maps.LatLngBounds();
     } // If geolocation enabled, add geolocation marker to the list and extend the bounds global
 
@@ -954,7 +954,7 @@ class Storelocator {
       } // Create custom bounds with limit viewport, no fitBounds the boundsGlobal
 
 
-      if (this.options.updateMarkerOnBoundsChanged.status) {
+      if (this.options.markersUpdate.status) {
         this.createViewportWithLimitMarker({
           stores: stores,
           fitBounds: fitBounds
@@ -971,7 +971,7 @@ class Storelocator {
   }
   /**
    * Create a custom viewport (boundsWithLimit)
-   * Display a minimal list of markers according to the maxMarkersInViewportLimit option
+   * Display a minimal list of markers according to the limitInViewport option
    * @param {Object} options Datas to create the custom viewport
    */
 
@@ -980,7 +980,7 @@ class Storelocator {
     let {
       stores
     } = options;
-    let maxMarkersInViewport = this.options.updateMarkerOnBoundsChanged.maxMarkersInViewportLimit;
+    let maxMarkersInViewport = this.options.markersUpdate.limitInViewport;
     let maxLoop = stores.length < maxMarkersInViewport ? stores.length : maxMarkersInViewport; // If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 
     if (this.geolocationData.userPositionChecked) {
@@ -1002,7 +1002,7 @@ class Storelocator {
   /**
    * Create custom overlay on the map for the debug mode
    * overlayGlobal: list of all stores according to maxRadius option
-   * overlayLimit: list of all stores according to the maxMarkersInViewportLimit option
+   * overlayLimit: list of all stores according to the limitInViewport option
    */
 
 
@@ -1121,12 +1121,12 @@ class Storelocator {
     });
   }
   /**
-   * Get marker color by category, from options
+   * Get marker styles by category, from options
    * @return {Object} Formatted object with category name into key and marker styles datas
    */
 
 
-  getColorByMarkerCategory() {
+  getMarkerStylesByCategory() {
     let styles = {};
     this.options.map.markers.styles.forEach(marker => {
       styles[marker.category] = {
@@ -1239,11 +1239,9 @@ function _default({
   store,
   origin
 }) {
-  return `<div class="storelocator-infoWIndow">
+  return `<div class="storelocator-infoWindow">
                 ${store.picture ? `<span class="storelocator-pictureStore">
-                        <a href="${store.link}" title="Visit website" target="_blank">
-                            <img src="${store.picture}" alt="${store.title}" />
-                        </a>
+                        <img src="${store.picture}" alt="${store.title}" />
                     </span>` : ``}
                 <div class="storelocator-detailStore">
                     ${store.title ? `<span class="storelocator-detailStoreTitle">${store.index + 1}. ${store.title}</span>` : ``}
@@ -1255,7 +1253,7 @@ function _default({
                     ${store.zipcode ? `<span class="storelocator-detailStoreZipcode">${store.zipcode}</span>` : ``}
                     ${store.city ? `<span class="storelocator-detailStoreCity">${store.city}</span>` : ``}
                     ${store.phone ? `<span class="storelocator-detailStorePhone"><a href="tel:${store.phone}" title="Call">${store.phone}</a></span>` : ``}
-                    ${typeof store.link !== 'undefined' ? `<a href="${store.link}" title="Visit website" target="_blank" class="store-website">${store.link}</a>` : ``}
+                    ${typeof store.link !== 'undefined' ? `<a href="${store.link}" title="Visit website" target="_blank" class="storelocator-detailStoreUrl">${store.link}</a>` : ``}
                 </div>
             </div>`;
 }

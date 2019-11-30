@@ -2,21 +2,21 @@
 
 /* Header */
 .md-header {
-    height: 60px;
-    padding-top: 6px;
+	height: 60px;
+	padding-top: 6px;
 }
 
 .md-header[data-md-state=shadow] {
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), 0 0.01rem 0.3rem rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), 0 0.01rem 0.3rem rgba(0, 0, 0, 0.2);
 }
 
 .md-header-nav__button.md-logo {
-    margin-top: -1px;
+	margin-top: -1px;
 }
 
 .md-header-nav__button.md-logo img {
-    width: 35px;
-    height: 35px;
+	width: 35px;
+	height: 35px;
 }
 
 /* Links color */
@@ -34,79 +34,121 @@
 .md-typeset [id] .headerlink:focus,
 .md-typeset [id]:target .headerlink,
 .md-typeset [id]:hover .headerlink:hover {
-    color: #ff7f15;
+	color: #ff7f15;
 }
 
 /* Research */
 .md-search-result__link:hover,
 .md-search-result__link[data-md-state=active] {
-    background-color: rgba(255, 171, 0, 0.1);
+	background-color: rgba(255, 171, 0, 0.1);
 }
 
 /* Feature page : iPad and iPhone */
 .md-content .wrapper-screenshot-touch img {
-    display: inline-block;
-    vertical-align: bottom;
-    width: 50%;
+	display: inline-block;
+	vertical-align: bottom;
+	width: 50%;
 }
 
 .md-content .wrapper-screenshot-touch img:last-child {
-    max-width: 27%;
-    margin-left: -80px;
+	max-width: 27%;
+	margin-left: -80px;
 }
 
 /* Gitter button */
 .gitter-open-chat-button {
-    width: 50px;
-    height: 50px;
-    text-indent: -9999px;
-    border-radius: 50px;
-    padding: 0;
-    bottom: 20px;
-    right: 20px;
-    background-image: url('../images/gitter.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 35%;
-    opacity: 0.8;
+	width: 50px;
+	height: 50px;
+	text-indent: -9999px;
+	border-radius: 50px;
+	padding: 0;
+	bottom: 20px;
+	right: 20px;
+	background-image: url('../images/gitter.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 35%;
+	opacity: 0.8;
 }
 
 .gitter-open-chat-button:hover {
-    background-color: #36bc98;
-    opacity: 1;
+	background-color: #36bc98;
+	opacity: 1;
 }
 
 .gitter-open-chat-button.is-collapsed {
-    transform: translateY(calc(150% + 20px));
+	transform: translateY(calc(150% + 20px));
 }
 
-@media screen and (max-width: 750px) {
-    /* Download page : License blocs */
-    .md-container .license-list {
-        display: block;
-    }
+/*Download page : license blocs */
+.md-content .license-list {
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+	width: 100%;
+    margin: 50px 0;
+}
 
-    .md-container .license-list li {
-        display: block;
-        width: 100%;
-        margin-left: 0;
-        margin-top: 20px;
-    }
+.md-content .license-listItem {
+	width: calc(33.33% - 13px);
+	margin: 0 auto;
+}
 
-    .md-container .license-list li:first-child {
-        margin-top: 0;
-    }
+.md-content .license-list a {
+	border-width: 2px;
+	border-style: solid;
+	display: block;
+	text-align: center;
+	border-radius: 8px;
+	padding-top: 15px;
+}
+
+.md-content .license-listItemType {
+	display: block;
+    padding: 0 10px 3px;
+}
+
+.md-content .license-listItemTitle {
+	display: block;
+	font-weight: bold;
+	font-size: 24px;
+}
+
+.md-content .license-listItemDuration {
+	display: block;
+    padding: 0 10px 7px;
+}
+
+.md-content .license-listItemLabel {
+	display: block;
+	font-style: italic;
+    padding: 0 10px;
+}
+
+.md-content .license-listItemPrice {
+	display: block;
+	background-color: #ff7f15;
+	padding: 15px 10px;
+	margin-top: 15px;
+}
+
+.md-content .license-listItemPriceValue {
+	display: inline-block;
+	color: #fff;
+	padding: 0;
+	font-weight: bold;
 }
 
 @media screen and (max-width: 500px) {
-    /* Feature page : iPad and iPhone */
-    .wrapper-screenshot-touch img {
-        display: inline-block;
-        width: 100%;
-    }
 
-    .wrapper-screenshot-touch img:last-child {
-        max-width: 60%;
-        margin-left: 0;
-    }
+	/* Feature page : iPad and iPhone */
+	.wrapper-screenshot-touch img {
+		display: inline-block;
+		width: 100%;
+	}
+
+	.wrapper-screenshot-touch img:last-child {
+		max-width: 60%;
+		margin-left: 0;
+	}
 }
