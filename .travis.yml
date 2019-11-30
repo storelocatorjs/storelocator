@@ -36,4 +36,4 @@ jobs:
         edge: true
         commit_message: Deploy Travis CI to %{target_branch} branch
         on:
-          branch: master
+          branch: develop
