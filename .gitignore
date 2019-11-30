@@ -1,8 +1,15 @@
+.env
+.firebase/
 .DS_STORE
 node_modules/
-server/node_modules/
 dist/**/*.map
 dist/demo/
 docs/demo/dist/
 jsdocs/*
 site/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+firebase-debug.log*

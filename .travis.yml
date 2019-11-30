@@ -40,5 +40,6 @@ jobs:
         - provider: firebase
           token: $FIREBASE_TOKEN
           cleanup: false
+          project: storelocatorjs
           on:
             branch: develop
