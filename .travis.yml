@@ -21,6 +21,7 @@ jobs:
         # - pip install mkdocs
         # - pip install mkdocs-material
         # - npm install
+        - npm install firebase-tools -g
         - cd functions
         - npm install
         - cd ../
