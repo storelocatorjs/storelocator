@@ -23,7 +23,7 @@ jobs:
       - pip install mkdocs-material
       - nvm install 8.13.0
       - npm install firebase-tools -g
-      - npm install firebase-functions
+      - npm install firebase-functions -g
 
     before_script:
       - make install-depencencies
