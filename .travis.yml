@@ -22,7 +22,7 @@ jobs:
       - pip install mkdocs
       - pip install mkdocs-material
       - nvm install 8.13.0
-      - npm install firebase-tools
+      - npm install firebase-tools -g
       - npm install firebase-functions
 
     before_script:
@@ -36,6 +36,12 @@ jobs:
       - npm run create:demo
 
     deploy:
+      - provider: firebase
+        token: $FIREBASE_TOKEN
+        cleanup: false
+        project: storelocatorjs
+        on:
+          branch: develop
       - provider: pages
         local_dir: site
         cleanup: false
@@ -43,11 +49,5 @@ jobs:
         keep_history: false
         edge: true
         commit_message: Deploy Travis CI to %{target_branch} branch
-        on:
-          branch: develop
-      - provider: firebase
-        token: $FIREBASE_TOKEN
-        cleanup: false
-        project: storelocatorjs
         on:
           branch: develop
