@@ -2,7 +2,7 @@ os: linux
 
 language: node_js
 
-node_js: "8.11.2"
+node_js: "8.13.0"
 
 # Safelist
 branches:
