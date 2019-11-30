@@ -20,7 +20,8 @@ module.exports = {
 	rules: {
 		indent: ['error', 'tab', { ignoredNodes: ['TemplateLiteral > *'] }],
 		'no-tabs': 0,
-		"no-console": 0
+		'no-console': 0,
+		'max-len': 'off'
 	},
 
 	globals: {

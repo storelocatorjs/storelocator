@@ -32,9 +32,8 @@ export default class Storelocator {
 		this.isLoading = false
 		this.mapHasRequest = false
 
-		if(this.options.webServiceUrl ===''){
+		if (this.options.webServiceUrl === '') {
 			throw new Error('storelocatorjs :: webServiceUrl is empty')
-			return
 		}
 
 		this.cacheSelectors()
