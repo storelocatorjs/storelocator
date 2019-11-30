@@ -25,7 +25,7 @@ jobs:
       - npm install firebase-tools -g
       - npm install firebase-functions -g
 
-    before_script:
+    install:
       - make install-depencencies
 
     script:
@@ -42,12 +42,12 @@ jobs:
         project: storelocatorjs
         on:
           branch: develop
-      - provider: pages
-        local_dir: site
-        cleanup: false
-        token: $GITHUB_TOKEN
-        keep_history: false
-        edge: true
-        commit_message: Deploy Travis CI to %{target_branch} branch
-        on:
-          branch: develop
+      # - provider: pages
+      #   local_dir: site
+      #   cleanup: false
+      #   token: $GITHUB_TOKEN
+      #   keep_history: false
+      #   edge: true
+      #   commit_message: Deploy Travis CI to %{target_branch} branch
+      #   on:
+      #     branch: develop
