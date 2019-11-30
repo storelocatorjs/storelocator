@@ -22,7 +22,7 @@ jobs:
         - pip install mkdocs
         - pip install mkdocs-material
         - npm install
-        - cd functions && npm install && cd ../
+        - cd functions && npm install && npm run deploy && cd ../
       script:
         - npm run build
         - npm run test:eslint && npm run test:stylelint
@@ -36,11 +36,5 @@ jobs:
           keep_history: false
           edge: true
           commit_message: Deploy Travis CI to %{target_branch} branch
-          on:
-            branch: develop
-        - provider: firebase
-          token: $FIREBASE_TOKEN
-          cleanup: false
-          project: storelocatorjs
           on:
             branch: develop
