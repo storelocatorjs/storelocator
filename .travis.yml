@@ -12,12 +12,8 @@ branches:
     - develop
 
 cache:
-  npm: false
-  pip: false
-
-env:
-  global:
-    - CLOUD_FUNCTION_DOMAIN=$CLOUD_FUNCTION_DOMAIN
+  npm: true
+  pip: true
 
 jobs:
   include:
@@ -44,6 +40,7 @@ jobs:
         token: $FIREBASE_TOKEN
         skip_cleanup: true
         project: storelocatorjs
+        message: "Deploy Travis CI to Cloud Functions"
         on:
           branch: develop
       - provider: pages
