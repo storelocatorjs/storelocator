@@ -4,42 +4,47 @@ const functions = require('firebase-functions')
 const storesDB = require('./json-datas/stores-full.json')
 const Stores = require('./stores.js')
 
-exports.Stores = functions
-	.region('europe-west1')
-	.https.onRequest((request, response) => {
-		// if (request.method === 'OPTIONS') {
-		// 	// Send response to OPTIONS requests
-		// 	response.set('Access-Control-Allow-Methods', 'POST')
-		// 	response.set('Access-Control-Allow-Headers', 'Content-Type')
-		// 	response.set('Access-Control-Max-Age', '3600')
-		// 	response.status(204).send('')
-		// } else {
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const cors = require('cors')
 
-		response.set('Access-Control-Allow-Origin', 'https://yoriiis.github.io')
-		response.set('Access-Control-Allow-Methods', 'POST')
+// Enable CORS
+app.use(cors())
 
-		// Get request parameters
-		const lat = request.query['lat'] || 'null2'
-		const lng = request.query['lng'] || null
-		const categories = request.query['categories'] || []
-		const radius = request.query['radius'] || null
-		const limit = request.query['limit'] || null
-		let results = null
+// Enable JSON parser
+app.use(bodyParser.json())
 
-		// // Filter stores if parameters are valid
-		if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
-			const stores = new Stores({
-				database: storesDB,
-				lat: lat,
-				lng: lng,
-				categories: categories,
-				radius: radius,
-				limit: limit
-			})
-			results = stores.filter()
-		}
+app.post('/', (request, response) => {
+	response.header('Content-type', 'application/json')
 
-		// Send status 200 with JSON results
-		response.status(200).send(results)
-		// }
-	})
+	// Get request parameters
+	const lat = request.body['lat'] || null
+	const lng = request.body['lng'] || null
+	const categories = request.body['categories'] || []
+	const radius = request.body['radius'] || null
+	const limit = request.body['limit'] || null
+	let results = null
+
+	// Filter stores if parameters are valid
+	if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+		const appStores = new Stores({
+			database: storesDB,
+			lat: lat,
+			lng: lng,
+			categories: categories,
+			radius: radius,
+			limit: limit
+		})
+		results = appStores.filter()
+	}
+
+	// Send status 200 with JSON results
+	response.status(200).json(results)
+})
+
+const stores = functions.region('europe-west1').https.onRequest(app)
+
+module.exports = {
+	stores
+}

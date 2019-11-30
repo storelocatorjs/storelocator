@@ -13,13 +13,20 @@ const Stores = class Stores {
 	 * @param {Integer} radius Radius of the request
 	 * @param {Integer} limit Limit of results of the request
 	 */
-	constructor ({database, lat, lng, categories = [], radius = 50, limit = 0}) {
+	constructor ({
+		database,
+		lat,
+		lng,
+		categories = [],
+		radius = 50,
+		limit = 0
+	}) {
 		this.database = database
 		this.lat = lat
 		this.lng = lng
 		this.categories = categories
-		this.radius = radius
-		this.limit = limit
+		this.radius = parseInt(radius)
+		this.limit = parseInt(limit)
 	}
 
 	/**
@@ -126,7 +133,13 @@ const Stores = class Stores {
 	// Official Web site: http://www.geodatasource.com
 	//
 	// GeoDataSource.com (C) All Rights Reserved 2015
-	getDistanceBetweenCoordinate ({lat1, lng1, lat2, lng2, unit}) {
+	getDistanceBetweenCoordinate ({
+		lat1,
+		lng1,
+		lat2,
+		lng2,
+		unit
+	}) {
 		let theta = lng1 - lng2
 		let dist =
 			Math.sin(this.deg2rad(lat1)) * Math.sin(this.deg2rad(lat2)) +

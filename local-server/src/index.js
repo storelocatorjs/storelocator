@@ -1,4 +1,4 @@
-const storesDB = require('./json-datas/stores-full.json')
+const storesDB = require('../json-datas/stores-full.json')
 const Stores = require('./stores.js')
 const express = require('express')
 const app = express()
