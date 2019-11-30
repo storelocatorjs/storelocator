@@ -27,9 +27,9 @@ jobs:
         - npm run test:eslint && npm run test:stylelint
         - npm run build:mkdocs:only
         - npm run create:demo
-        - cd site
       deploy:
         - provider: pages
+          local_dir: site
           cleanup: false
           token: $GITHUB_TOKEN
           keep_history: false
@@ -37,8 +37,8 @@ jobs:
           commit_message: Deploy Travis CI to %{target_branch} branch
           on:
             branch: develop
-        - provider: firebase
-          token: $FIREBASE_TOKEN
-          cleanup: false
-          on:
-            branch: develop
+        # - provider: firebase
+        #   token: $FIREBASE_TOKEN
+        #   cleanup: false
+        #   on:
+        #     branch: develop
