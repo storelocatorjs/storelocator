@@ -2,8 +2,8 @@ os: linux
 
 language: node_js
 
-node_js:
-  - "8.13.0"
+# node_js:
+#   - "8.13.0"
 
 python:
   - "3.6"
@@ -20,33 +20,36 @@ cache:
 
 jobs:
   include:
-    before_install:
-      - pip install mkdocs
-      - pip install mkdocs-material
-      - npm install firebase-tools -g
-      - npm install firebase-functions
-    before_script:
-      - npm install
-      - cd functions && npm install && cd ../
-    script:
-      - cd functions && npm run lint && cd ../
-      - npm run build
-      - npm run test:eslint && npm run test:stylelint
-      - npm run build:mkdocs:only
-      - npm run create:demo
-    deploy:
-      # - provider: pages
-      #   local_dir: site
-      #   cleanup: false
-      #   token: $GITHUB_TOKEN
-      #   keep_history: false
-      #   edge: true
-      #   commit_message: Deploy Travis CI to %{target_branch} branch
-      #   on:
-      #     branch: develop
-      - provider: firebase
-        token: $FIREBASE_TOKEN
-        skip_cleanup: true
-        project: storelocatorjs
-        on:
-          branch: develop
+    - language: python
+      python: 3.6
+      before_install:
+        - pip install mkdocs
+        - pip install mkdocs-material
+        - nvm install 8.13.0
+        - npm install firebase-tools -g
+        - npm install firebase-functions
+      before_script:
+        - npm install
+        - cd functions && npm install && cd ../
+      script:
+        - cd functions && npm run lint && cd ../
+        - npm run build
+        - npm run test:eslint && npm run test:stylelint
+        - npm run build:mkdocs:only
+        - npm run create:demo
+      deploy:
+        # - provider: pages
+        #   local_dir: site
+        #   cleanup: false
+        #   token: $GITHUB_TOKEN
+        #   keep_history: false
+        #   edge: true
+        #   commit_message: Deploy Travis CI to %{target_branch} branch
+        #   on:
+        #     branch: develop
+        - provider: firebase
+          token: $FIREBASE_TOKEN
+          skip_cleanup: true
+          project: storelocatorjs
+          on:
+            branch: develop
