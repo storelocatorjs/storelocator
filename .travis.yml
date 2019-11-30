@@ -28,7 +28,6 @@ jobs:
       script:
           - cd functions
           - npm run lint
-          - git checkout package-lock.json
           - cd ../
         # - npm run build
         # - npm run test:eslint && npm run test:stylelint
