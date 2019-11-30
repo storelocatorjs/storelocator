@@ -375,6 +375,12 @@ class Storelocator {
     this.onReady = onReady;
     this.isLoading = false;
     this.mapHasRequest = false;
+
+    if (this.options.webServiceUrl === '') {
+      throw new Error('storelocatorjs :: webServiceUrl is empty');
+      return;
+    }
+
     this.cacheSelectors();
     this.buildLoader();
     this.markerStyles = this.getMarkerStylesByCategory();
