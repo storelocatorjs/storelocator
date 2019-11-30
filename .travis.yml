@@ -16,8 +16,7 @@ cache:
 
 jobs:
   include:
-    - language: python
-      python: 3.6
+    - language: node_js
       before_script:
         # - pip install mkdocs
         # - pip install mkdocs-material
