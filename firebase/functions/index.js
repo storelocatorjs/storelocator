@@ -8,9 +8,14 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
+require('dotenv').config()
 
-// Enable CORS
-app.use(cors())
+// CORS configuration (add whitelist domain)
+app.use(
+	cors({
+		origin: process.env.CLOUD_FUNCTION_DOMAIN
+	})
+)
 
 // Enable JSON parser
 app.use(bodyParser.json())
