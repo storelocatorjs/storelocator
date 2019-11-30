@@ -31,7 +31,7 @@ jobs:
       deploy:
         - provider: pages
           local_dir: site
-          cleanup: true
+          cleanup: false
           token: $GITHUB_TOKEN
           keep_history: false
           edge: true
@@ -40,7 +40,7 @@ jobs:
             branch: develop
         - provider: firebase
           token: $FIREBASE_TOKEN
-          cleanup: true
+          cleanup: false
           project: storelocatorjs
           on:
             branch: develop
