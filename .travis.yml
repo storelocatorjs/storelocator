@@ -22,7 +22,7 @@ jobs:
         - pip install mkdocs
         - pip install mkdocs-material
         - npm install
-        - cd functions && npm install && npm run deploy && cd ../
+        - cd functions && npm install && cd ../
       script:
         - npm run build
         - npm run test:eslint && npm run test:stylelint
@@ -31,10 +31,16 @@ jobs:
       deploy:
         - provider: pages
           local_dir: site
-          cleanup: false
+          cleanup: true
           token: $GITHUB_TOKEN
           keep_history: false
           edge: true
           commit_message: Deploy Travis CI to %{target_branch} branch
+          on:
+            branch: develop
+        - provider: firebase
+          token: $FIREBASE_TOKEN
+          cleanup: true
+          project: storelocatorjs
           on:
             branch: develop
