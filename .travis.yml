@@ -11,8 +11,8 @@ branches:
     - develop
 
 cache:
-  npm: true
-  pip: true
+  npm: false
+  pip: false
 
 jobs:
   include:
