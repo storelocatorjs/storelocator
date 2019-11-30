@@ -40,3 +40,5 @@ jobs:
         - provider: firebase
           token: $FIREBASE_TOKEN
           cleanup: false
+          on:
+            branch: develop
