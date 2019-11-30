@@ -1,12 +1,12 @@
-title: Features - Storelocator.js
-description: The Storelocator is responsive and includes many features such as autocomplete, geolocation, markers with infoWindow and clusters. Markers can be filtered
+title: Features - Storelocatorjs
+description: Storelocatorjs is responsive and includes many features such as autocomplete, geolocation, markers, info window, filters and clusters
 
 ### Responsive design
 
-The Storelocator is responsive mobile first and can be customized with just a few CSS rules.
+Storelocatorjs is responsive mobile first and can be customized with just a few CSS rules.
 
 <center class="wrapper-screenshot-touch">
-![Storelocator on tablet](images/ipad.png)![Storelocator on mobile](images/iphone.png)
+![Storelocatorjs on tablet](images/ipad.png)![Storelocatorjs on mobile](images/iphone.png)
 </center>
 
 ### Maps styles
@@ -23,22 +23,22 @@ Below, an example of configuration:
 
 ### Autocomplete
 
-Storelocator include by default [Google Maps Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete). The `places` librairy is automatically loaded.
+Storelocatorjs include by default [Google Maps Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete). The `places` librairy is automatically loaded.
 
 ### Geolocation
 
-Storelocator integrate its own geolocation button `.storelocator-geolocButton` to trigger a geolocation request.
+Storelocatorjs integrate its own geolocation button `.storelocator-geolocButton` to trigger a geolocation request.
 
 !!! warning
     Geolocation need SSL certificat with `https` on Google Chrome and somes others recents browsers. Documentation is available on [Google Developers](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only).
 
 ### Filters
 
-The storelocator can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key `categories` as string format.
+Storelocatorjs can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key `categories` as string format.
 
 ### Marker styles
 
-Marker have a default style, the same as on Google Maps. Storelocator has an option to easily customized the style of the marker with a SVG.
+Marker have a default style, the same as on Google Maps. Storelocatorjs has an option to easily customized the style of the marker with a SVG.
 
 To use this feature, fill the option `map.markers` as below:
 
@@ -128,7 +128,7 @@ new storelocatorjs({
 
 ### Markers update
 
-The storelocator auto-search allow to refresh markers on area bounds changed. Zoom or move events may trigger an auto-search if user extends the area. To use this feature, enable options `markersUpdate.status`.
+Storelocatorjs auto-search allow to refresh markers on area bounds changed. Zoom or move events may trigger an auto-search if user extends the area. To use this feature, enable options `markersUpdate.status`.
 
 !!! tip "Viewport overlays"
     Enable `debug` option to see viewport overlays above the map:
@@ -138,7 +138,7 @@ The storelocator auto-search allow to refresh markers on area bounds changed. Zo
 
 ### Info window
 
-Storelocator allow to show marker information with the native Google Maps info window. Below, the default template displays the fields available in the JSON.
+Storelocatorjs allow to show marker information with the native Google Maps info window. Below, the default template displays the fields available in the JSON.
 
 ```html
 <div class="storelocator-infoWindow">

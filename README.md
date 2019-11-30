@@ -1,6 +1,6 @@
 <p>
     <a href="https://yoriiis.github.io/storelocatorjs" title="storelocatorjs">
-        <h2 align=center>Storelocator.js <small>with Google Maps</small></h2>
+        <h2 align=center>Storelocatorjs <small>with Google Maps</small></h2>
     </a>
 </p><br />
 <p align="center">
@@ -27,11 +27,11 @@
 
 ---
 
-Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a storelocator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
+Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a store locator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
 
 <center style="image-rendering: -webkit-optimize-contrast;">
-    <a href="https://yoriiis.github.io/vlitejs/demo" title="vLitejs demo">
-        <img src="https://yoriiis.github.io/storelocator.js/img/desktop.jpg" alt="Storelocator on desktop" />
+    <a href="https://yoriiis.github.io/storelocatorjs/demo" title="Storelocatorjs demo">
+        <img src="https://yoriiis.github.io/storelocatorjs/img/desktop.jpg" alt="Storelocatorjs on desktop" />
     </a>
 </center>
 
@@ -50,17 +50,17 @@ yarn add --dev storelocatorjs
 
 Online demo is available on [yoriiis.github.io/storelocatorjs/demo](https://yoriiis.github.io/storelocatorjs/demo).
 
-The project includes also several examples of storelocatorjs implementation.
+Storelocatorjs includes also several examples of storelocatorjs implementation.
 
 ## How it works
 
 ### Node.js server
 
-The project need a Node.js server to execute search requests. The code of the web service is included in the project and located in the `./server` folder. Host the script on a Node.js server.
+Storelocatorjs need a Node.js server to execute search requests. The code of the web service is included in the project and located in the `./server` folder. Host the script on a Node.js server.
 
 ### Structure
 
-The extended usage of the storelocator with filters and store categories used a minimalist HTML structure.
+The extended usage of the Storelocatorjs with filters and store categories used a minimalist HTML structure.
 
 ```html
 <div class="storelocator">
@@ -134,12 +134,12 @@ new Storelocator({
 
 The project is fully compatible with the most popular web browsers. More information about the HTML5 video support on <a href="https://caniuse.com/#feat=video" target="_blank" title="Video element - Can I use">Can I Use</a>. HTML and CSS files are W3C valid.
 
-## Licences
+## Licenses
 
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License at https://yoriiis.github.io/storelocator.js.
+Purchase a Storelocatorjs Commercial License at https://yoriiis.github.io/storelocatorjs.
 
 ### Open source license
 

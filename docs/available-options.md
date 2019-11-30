@@ -1,7 +1,7 @@
-title: How it works - Storelocator.js
-description: The project includes a minimalist HTML structure example to start your Storelocator. All options are listed here and can be changed in the constructor
+title: How it works - Storelocatorjs
+description: Storelocatorjs includes multiple options to personnalize the map
 
-Storelocator contains many options to allow you to easily configure your map according to your needs. List of all options with their default values.
+Storelocatorjs contains many options to allow you to easily configure your map according to your needs. List of all options with their default values.
 
 #### `apiKey`
 

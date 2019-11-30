@@ -335,9 +335,9 @@ exports.default = _default;
 * @name Storelocator
 * @version 2.0.0
 * @author: Joris DANIEL <joris.daniel@gmail.com>
-* @description: Create your own storelocator in Javascript native with Google Maps API V3. Storelocator.js is customizable, responsive and included a Node.js webservice with Fetch API
-* {@link https://yoriiis.github.io/storelocator.js}
-* @copyright 2018 Joris DANIEL <https://yoriiis.github.io/storelocator.js>
+* @description: Create your own store locator in Javascript native with Google Maps API V3. Storelocatorjs is customizable, responsive and included a Node.js webservice with Fetch API
+* {@link https://yoriiis.github.io/storelocatorjs}
+* @copyright 2018 Joris DANIEL <https://yoriiis.github.io/storelocatorjs>
 **/
 
 
@@ -364,8 +364,8 @@ class Storelocator {
   /**
    * Instanciate the constructor
    * @constructor
-   * @param {Object} options Storelocator options
-   * @param {Function} onReady Callback function executed when the storelocator is ready
+   * @param {Object} options Storelocatorjs options
+   * @param {Function} onReady Callback function executed when the store locator is ready
    */
   constructor({
     options,
@@ -825,8 +825,7 @@ class Storelocator {
 
     fetch(this.options.webServiceUrl, fetchConf).then(response => {
       if (!response.ok) {
-        // throw Error(response.statusText)
-        console.warn(response);
+        throw new Error(response);
       }
 
       return response;
@@ -841,8 +840,7 @@ class Storelocator {
       }
     }).catch(error => {
       this.loading(false);
-      console.warn(error);
-      throw new Error('Storelocator :: Connection error');
+      throw new Error(error);
     });
   }
   /**

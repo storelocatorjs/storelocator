@@ -8,6 +8,7 @@ node_js: "8.11.2"
 branches:
   only:
     - master
+    - develop
 
 cache:
   npm: true

@@ -1,5 +1,5 @@
 title: Getting started - Storelocatorjs
-description: Project includes CSS, Javascript and PHP files. The installation is fast and the Storelocator is easily customizable. Google Maps API is automatically loaded
+description: Install Storelocatorjs with npm or manual import. Installation is fast and the map is easily customizable. Google Maps API is automatically loaded
 
 ## Installation
 
@@ -45,7 +45,7 @@ Create an API key to use Google Maps API on the <a href="https://developers.goog
 
 ## Node.js server
 
-All requests to filter stores by geoposition are send to a web service. The project need a Node.js server to run the Node application located in the `./server` folder.
+All requests to filter stores by geoposition are send to a web service. Storelocatorjs need a Node.js server to run the Node application located in the `./server` folder.
 
 ## JSON structure
 

@@ -1,5 +1,5 @@
-title: Download - Storelocator.js
-description: Storelocator project is ony available with commercial License, valid for a whole year.
+title: Download - Storelocatorjs
+description: Storelocatorjs project is available with open source and commercial licenses
 
 Storelocatorjs is available as the `storelocatorjs` package name on [Github](https://github.com/yoriiis/storelocatorjs) and [npm](https://github.com/yoriiis/storelocatorjs).
 

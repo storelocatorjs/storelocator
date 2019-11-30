@@ -1,15 +1,15 @@
-title: How it works - Storelocator.js
-description: The project includes a minimalist HTML structure example to start your Storelocator. All options are listed here and can be changed in the constructor
+title: How it works - Storelocatorjs
+description: Storelocatorjs includes a minimalist HTML structure example to start your Storelocator. All options are listed here and can be changed in the constructor
 
 ## Node.js server
 
-The project need a Node.js server to execute search requests. The code of the web service is included in the project and located in the `./server` folder. Host the script on a Node.js server.
+Storelocatorjs need a Node.js server to execute search requests. The code of the web service is included in the project and located in the `./server` folder. Host the script on a Node.js server.
 
 ## HTML structure
 
 ### Basic usage
 
-The basic usage of the storelocator without filters and store categories used a minimalist HTML structure.
+The basic usage of the Storelocatorjs without filters and store categories used a minimalist HTML structure.
 
 ```html
 <div class="storelocator">
@@ -40,7 +40,7 @@ The basic usage of the storelocator without filters and store categories used a 
 
 ### Usage with filters
 
-The storelocator can have filters matches with store categories. Add the `<form>` tag highlight inside the sidebar. Categories can be personalized and category ids must correspond to identifiers in the JSON.
+Storelocatorjs can have filters matches with store categories. Add the `<form>` tag highlight inside the sidebar. Categories can be personalized and category ids must correspond to identifiers in the JSON.
 
 ```html hl_lines="4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
 <div class="storelocator">
@@ -99,7 +99,7 @@ The storelocatorjs class accept an object as parameter with 2 keys:
 
 #### Simple example
 
-The simplest way to use storelocator is like the example below. All default options are used except them passed in the constructor.
+The simplest way to use Storelocatorjs is like the example below. All default options are used except them passed in the constructor.
 
 ```javascript
 new Storelocator({
