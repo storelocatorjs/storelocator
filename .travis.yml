@@ -22,8 +22,8 @@ jobs:
       - pip install mkdocs
       - pip install mkdocs-material
       - nvm install 8.13.0
-      - npm install firebase-tools -g
-      - npm install firebase-functions -g
+      - npm install firebase-tools
+      - npm install firebase-functions
 
     install:
       - make install-depencencies
@@ -38,13 +38,13 @@ jobs:
     deploy:
       - provider: firebase
         token: $FIREBASE_TOKEN
-        cleanup: false
+        skip_cleanup: true
         project: storelocatorjs
         on:
           branch: develop
       # - provider: pages
       #   local_dir: site
-      #   cleanup: false
+      #   cleanup: true
       #   token: $GITHUB_TOKEN
       #   keep_history: false
       #   edge: true
