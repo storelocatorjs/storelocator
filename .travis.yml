@@ -18,11 +18,11 @@ jobs:
   include:
     - language: python
       python: 3.6
-      before_script:
+      # before_script:
         # - pip install mkdocs
         # - pip install mkdocs-material
         # - npm install
-      script:
+      # script:
           # - cd functions
           # - firebase deploy --only functions --token "${FIREBASE_TOKEN}"
           # - firebase --non-interactive deploy --token "${FIREBASE_TOKEN}"
@@ -33,12 +33,7 @@ jobs:
         # - npm run create:demo
       deploy:
           - provider: script
-            script:
-              - cd functions
-              - npm install
-              - npm run lint
-              - firebase deploy --only functions --token ${FIREBASE_TOKEN}
-              - cd ../
+            script: cd functions && npm install && npm run lint && firebase deploy --only functions --token ${FIREBASE_TOKEN} && cd ../
         # - provider: pages
         #   local_dir: site
         #   cleanup: false
