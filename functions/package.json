@@ -29,7 +29,6 @@
     "firebase-functions-test": "0.1.6"
   },
   "engines": {
-    "node": "8.13.0",
-    "npm": "6.4.1"
+    "node": "8"
   }
 }

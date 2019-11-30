@@ -18,20 +18,20 @@ cache:
 jobs:
   include:
     before_install:
+      - pip install -r requirements.txt
       - pip install mkdocs
       - pip install mkdocs-material
       - nvm install 8.13.0
-      - npm install firebase-tools -g
+      - npm install firebase-tools
       - npm install firebase-functions
 
     before_script:
-      - npm install
-      - cd functions && npm install && cd ../
+      - make install-depencencies
 
     script:
-      - cd functions && npm run lint && cd ../
+      - make lint-functions
       - npm run build
-      - npm run test:eslint && npm run test:stylelint
+      - make lint-storelocatorjs
       - npm run build:mkdocs:only
       - npm run create:demo
 
