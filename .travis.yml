@@ -19,21 +19,21 @@ jobs:
     - language: python
       python: 3.6
       before_script:
-        - pip install mkdocs
+        # - pip install mkdocs
         # - pip install mkdocs-material
         # - npm install
-      # script:
-          # - cd functions
-          # - firebase deploy --only functions --token "${FIREBASE_TOKEN}"
-          # - firebase --non-interactive deploy --token "${FIREBASE_TOKEN}"
-          # - cd ../
+        - cd functions
+        - npm install
+        - cd ../
+      script:
+          - cd functions
+          - npm run lint
+          - cd ../
         # - npm run build
         # - npm run test:eslint && npm run test:stylelint
         # - npm run build:mkdocs:only
         # - npm run create:demo
       deploy:
-          - provider: script
-            script: cd functions && npm install && npm run lint && firebase deploy --only functions --token ${FIREBASE_TOKEN} && cd ../
         # - provider: pages
         #   local_dir: site
         #   cleanup: false
@@ -43,3 +43,9 @@ jobs:
         #   commit_message: Deploy Travis CI to %{target_branch} branch
         #   on:
         #     branch: develop
+        - provider: firebase
+          token: $FIREBASE_TOKEN
+          cleanup: false
+          project: storelocatorjs
+          on:
+            branch: develop
