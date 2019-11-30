@@ -22,6 +22,7 @@ jobs:
         # - pip install mkdocs-material
         # - npm install
         - npm install firebase-tools -g
+        - npm install firebase-functions
         - cd functions
         - npm install
         - cd ../
@@ -45,7 +46,7 @@ jobs:
         #     branch: develop
         - provider: firebase
           token: $FIREBASE_TOKEN
-          cleanup: false
+          skip_cleanup: true
           project: storelocatorjs
           on:
             branch: develop
