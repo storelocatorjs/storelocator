@@ -15,6 +15,10 @@ cache:
   npm: false
   pip: false
 
+env:
+  global:
+    - CLOUD_FUNCTION_DOMAIN=$CLOUD_FUNCTION_DOMAIN
+
 jobs:
   include:
     before_install:
@@ -42,12 +46,12 @@ jobs:
         project: storelocatorjs
         on:
           branch: develop
-      # - provider: pages
-      #   local_dir: site
-      #   cleanup: true
-      #   token: $GITHUB_TOKEN
-      #   keep_history: false
-      #   edge: true
-      #   commit_message: Deploy Travis CI to %{target_branch} branch
-      #   on:
-      #     branch: develop
+      - provider: pages
+        local_dir: site
+        skip_cleanup: false
+        token: $GITHUB_TOKEN
+        keep_history: false
+        edge: true
+        commit_message: Deploy Travis CI to %{target_branch} branch
+        on:
+          branch: develop
