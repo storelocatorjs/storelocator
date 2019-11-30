@@ -27,7 +27,6 @@ jobs:
         - npm run test:eslint && npm run test:stylelint
         - npm run build:mkdocs:only
         - npm run create:demo
-        - cd firebase
       deploy:
         - provider: pages
           local_dir: site
