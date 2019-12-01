@@ -1,0 +1,28 @@
+@import "./vars";
+
+html,
+body {
+    height: auto;
+    margin: 0;
+}
+
+.storelocator {
+    position: relative;
+    height: auto;
+
+    &,
+    * {
+        box-sizing: border-box;
+    }
+}
+
+@media (--media-tablet) {
+    html,
+    body {
+        height: 100%;
+    }
+
+    .storelocator {
+        height: 100%;
+    }
+}
