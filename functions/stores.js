@@ -1,12 +1,12 @@
 /**
-* @license Commercial
-* @name Storelocator
-* @version 1.0.0
-* @author: Joris DANIEL aka Yoriiis
-* @description: Class Stores to filter stores with cloud functions
-* {@link https://yoriiis.github.io/storelocatorjs}
-* @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
-**/
+ * @name Storelocatorjs/Stores
+ * @version 1.0.0
+ * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
+ * @author: Joris DANIEL aka Yoriiis
+ * @description: Class Stores to filter stores with cloud functions
+ * {@link https://yoriiis.github.io/storelocatorjs}
+ * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
+ */
 
 /**
  * Class Stores to filter stores with cloud functions

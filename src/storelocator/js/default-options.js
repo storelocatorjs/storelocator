@@ -1,3 +1,7 @@
+/**
+ * storelocatorjs default options
+ * @module storelocatorjs/defaultOptions
+ */
 export default {
 	apiKey: '',
 	webServiceUrl: '',

@@ -20,6 +20,10 @@
             max-width: 250px;
         }
 
+        .storelocator-detailStoreAddress {
+            padding-right: 0;
+        }
+
         .storelocator-detailStoreTitle {
             padding-right: 90px;
         }

@@ -1,18 +1,18 @@
 /**
-* @license Commercial
-* @name Storelocator
-* @version 2.0.0
-* @author: Joris DANIEL aka Yoriiis
-* @description: Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.
-* {@link https://yoriiis.github.io/storelocatorjs}
-* @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
-**/
+ * @name Storelocatorjs
+ * @version 2.0.0
+ * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
+ * @author: Joris DANIEL aka Yoriiis
+ * @description: Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.
+ * {@link https://yoriiis.github.io/storelocatorjs}
+ * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
+ */
 
 'use strict'
 
 import templateSidebarItemResult from './templates/sidebar-item-result'
-import templateMarkerSvg from './templates/marker-svg'
 import templateInfoWindow from './templates/info-window'
+import markerSvg from '../svg/marker.svg'
 import defaultOptions from './default-options'
 
 /**
@@ -806,6 +806,7 @@ export default class Storelocator {
 		let offsetXLabel = (this.options.map.markers.width / 2) - 0.9
 		let offsetYLabel = (this.options.map.markers.height / 2) - 3
 		let colorBackground = this.markerStyles[category] ? this.markerStyles[category].colorBackground : '#E5454C'
+
 		return {
 			url: this.generateSVG({
 				colorBackground: colorBackground,
@@ -817,18 +818,33 @@ export default class Storelocator {
 	}
 
 	/**
-	 * Generate SVG from the associated template
+	 * Generate SVG from the associated SVG file
 	 * @param {Object} Style datas to customize the SVG
 	 * @return {Object} Custom SVG to generate a Google Maps marker icons
 	 */
 	generateSVG (options) {
+		// Create DOMParser from SVG string
+		const parser = new DOMParser()
+		let parserSvg = parser.parseFromString(markerSvg, 'text/html')
+		let elementMarkerSvg = parserSvg.querySelector('svg')
+
+		// Change SVG attributes
+		elementMarkerSvg.setAttribute('width', `${options.width}px`)
+		elementMarkerSvg.setAttribute('height', `${options.height}px`)
+		elementMarkerSvg.querySelectorAll('path').forEach(path => {
+			path.setAttribute('fill', options.colorBackground)
+		})
+
+		// Create Serializer from element
+		const serializer = new XMLSerializer()
+		var stringMarkerSvg = serializer.serializeToString(elementMarkerSvg)
+
+		// Format SVG to generate an icon on the map
 		let customSVG = {
 			mimetype: 'data:image/svg+xml;base64,',
-			svg: templateMarkerSvg(options)
+			scaledSize: new window.google.maps.Size(options.width, options.height)
 		}
-		customSVG.scaledSize = new window.google.maps.Size(options.width, options.height)
-
-		return customSVG.mimetype + btoa(customSVG.svg.replace(new RegExp('{{colorBackground}}', 'g'), options.colorBackground))
+		return customSVG.mimetype + btoa(stringMarkerSvg)
 	}
 
 	/**
