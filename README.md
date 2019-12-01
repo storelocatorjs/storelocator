@@ -10,7 +10,7 @@
     </a>
     <img alt="npm" src="https://img.shields.io/npm/v/storelocatorjs?style=for-the-badge">
     <img alt="Node.js" src="https://img.shields.io/node/v/storelocatorjs?style=for-the-badge">
-    <a href="https://gitter.im/storelocatorjs/storelocatorjs">
+    <a href="https://gitter.im/storelocatorjs/storelocator">
         <img alt="Support" src="https://img.shields.io/gitter/room/yoriiis/storelocatorjs?color=%2345cba1&style=for-the-badge">
     </a>
     <a href="https://bundlephobia.com/result?p=fela@latest">
@@ -31,7 +31,7 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
 
 <center style="image-rendering: -webkit-optimize-contrast;">
     <a href="https://yoriiis.github.io/storelocatorjs/demo" title="Storelocatorjs demo">
-        <img src="https://yoriiis.github.io/storelocatorjs/img/desktop.jpg" alt="Storelocatorjs on desktop" />
+        <img src="https://yoriiis.github.io/storelocatorjs/images/desktop.jpg" alt="Storelocatorjs on desktop" />
     </a>
 </center>
 
