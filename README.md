@@ -29,11 +29,11 @@
 
 Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a store locator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
 
-<center style="image-rendering: -webkit-optimize-contrast;">
+<p align="center">
     <a href="https://yoriiis.github.io/storelocatorjs/demo" title="Storelocatorjs demo">
-        <img src="https://yoriiis.github.io/storelocatorjs/images/desktop.jpg" alt="Storelocatorjs on desktop" />
+        <img src="https://yoriiis.github.io/storelocatorjs/images/desktop.jpg" alt="Storelocatorjs on desktop" width="650px" />
     </a>
-</center>
+</p>
 
 ## Installation
 
