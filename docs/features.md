@@ -166,7 +166,7 @@ Storelocatorjs allow to show marker information with the native Google Maps info
 ```
 
 !!! info "Distance"
-    You will notice that the distance information is automatically caculate with the Node.js script.
+    You will notice that the distance information is automatically caculate with the cloud function script.
 
 <script>
   ((window.gitter = {}).chat = {}).options = {

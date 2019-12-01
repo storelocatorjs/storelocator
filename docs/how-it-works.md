@@ -1,9 +1,9 @@
 title: How it works - Storelocatorjs
 description: Storelocatorjs includes a minimalist HTML structure example to start your Storelocator. All options are listed here and can be changed in the constructor
 
-## Node.js server
+## Cloud functions
 
-Storelocatorjs need a Node.js server to execute search requests. The code of the web service is included in the project and located in the `./server` folder. Host the script on a Node.js server.
+Storelocatorjs need a cloud function to execute search requests. The cloud function is includes in the project in the `./functions` folder. [Google Firebase](https://firebase.google.com/docs/functions) provides a really simple service to create and host your own cloud functions.
 
 ## HTML structure
 
@@ -126,7 +126,7 @@ new Storelocator({
 
 ## Requests
 
-All search requests use the fetch API to communicate with the Node.js server with the following parameters. Datas are transmitted by JSON format.
+All search requests use the fetch API to communicate with the cloud function with the following parameters. Datas are transmitted by JSON format.
 
 #### `lat`
 

@@ -21,7 +21,7 @@ new storelocatorjs({
 
 `mandatory - default: string = ''`
 
-Tells storelocatorjs where is located the Node.js web service to get JSON store datas.
+Tells storelocatorjs where is located the cloud function web service to get JSON store datas.
 
 ```javascript
 new storelocatorjs({

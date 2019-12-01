@@ -43,9 +43,21 @@ Google Maps API is automatically loaded by storelocator. The map is instanciate 
 
 Create an API key to use Google Maps API on the <a href="https://developers.google.com/maps/documentation/javascript/get-api-key?hl=Fr" target="_blank" title="Google Console API">Google Console API</a>.
 
-## Node.js server
+## Cloud functions
 
-All requests to filter stores by geoposition are send to a web service. Storelocatorjs need a Node.js server to run the Node application located in the `./server` folder.
+All requests to filter stores by geoposition are send to a cloud function as a web service. Storelocatorjs includes the cloud functions project from [Google Firebase](https://firebase.google.com/docs/functions) located in the `./functions` folder.
+
+Storelocatorjs examples are linked to the cloud function. Ton run run locally the cloud function, simply create a `.env` file from the `.env.dist` file in the `./functions` directory and fill the `CLOUD_FUNCTION_DOMAIN` variable with you virtual host to authorize the CORS requests.
+
+Then, to run Storelocatorjs examples, simply run the following commands:
+
+```
+cd functions
+npm install
+npm run serve
+```
+
+Cloud function will be automatically accessible locally on Storelocatorjs examples in the `./examples` folder.
 
 ## JSON structure
 

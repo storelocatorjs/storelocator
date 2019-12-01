@@ -2,10 +2,10 @@
 * @license Commercial
 * @name Storelocator
 * @version 2.0.0
-* @author: Joris DANIEL <joris.daniel@gmail.com>
-* @description: Create your own store locator in Javascript native with Google Maps API V3. Storelocatorjs is customizable, responsive and included a Node.js webservice with Fetch API
+* @author: Joris DANIEL aka Yoriiis
+* @description: Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.
 * {@link https://yoriiis.github.io/storelocatorjs}
-* @copyright 2018 Joris DANIEL <https://yoriiis.github.io/storelocatorjs>
+* @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
 **/
 
 'use strict'

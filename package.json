@@ -1,7 +1,7 @@
 {
 	"name": "storelocatorjs",
-	"version": "3.0.2",
-	"description": "Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme",
+	"version": "2.0.0",
+	"description": "Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.",
 	"keywords": [],
 	"homepage": "https://yoriiis.github.io/storelocatorjs",
 	"bugs": "https://github.com/yoriiis/storelocatorjs/issues",

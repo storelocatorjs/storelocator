@@ -1,5 +1,5 @@
 /**
- * Class Stores to filter stores in Node.js
+ * Class Stores to filter stores with cloud functions
  * @module storelocatorjs/Stores
  */
 const Stores = class Stores {

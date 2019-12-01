@@ -1,9 +1,8 @@
 'use strict'
 
-const functions = require('firebase-functions')
-const storesDB = require('./json-datas/stores-full.json')
+const storesDB = require('./json-datas/stores.json')
 const Stores = require('./stores.js')
-
+const functions = require('firebase-functions')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -20,6 +19,7 @@ app.use(
 // Enable JSON parser
 app.use(bodyParser.json())
 
+// Set the default route
 app.post('/', (request, response) => {
 	response.header('Content-type', 'application/json')
 
@@ -48,8 +48,10 @@ app.post('/', (request, response) => {
 	response.status(200).json(results)
 })
 
+// Set the cloud function
 const stores = functions.region('europe-west1').https.onRequest(app)
 
+// Export the cloud function
 module.exports = {
 	stores
 }

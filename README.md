@@ -54,9 +54,9 @@ Storelocatorjs includes also several examples of storelocatorjs implementation.
 
 ## How it works
 
-### Node.js server
+### Cloud functions
 
-Storelocatorjs need a Node.js server to execute search requests. The code of the web service is included in the project and located in the `./server` folder. Host the script on a Node.js server.
+All requests to filter stores by geoposition are send to a cloud function as a web service. Storelocatorjs includes the cloud functions project from [Google Firebase](https://firebase.google.com/docs/functions) located in the `./functions` folder.
 
 ### Structure
 
