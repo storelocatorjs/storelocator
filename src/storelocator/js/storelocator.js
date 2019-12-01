@@ -36,6 +36,10 @@ export default class Storelocator {
 			throw new Error('storelocatorjs :: webServiceUrl is empty')
 		}
 
+		if (this.options.apiKey === '') {
+			throw new Error('storelocatorjs :: apiKey is empty')
+		}
+
 		this.cacheSelectors()
 		this.buildLoader()
 		this.markerStyles = this.getMarkerStylesByCategory()
@@ -669,7 +673,7 @@ export default class Storelocator {
 			bounds: this.boundsGlobal,
 			strokeColor: null,
 			strokeOpacity: 0,
-			fillColor: '#FF0000',
+			fillColor: '#ff0000',
 			fillOpacity: 0.35,
 			map: this.map
 		})
@@ -805,10 +809,10 @@ export default class Storelocator {
 	getIconMarkerByCategory (category) {
 		let offsetXLabel = (this.options.map.markers.width / 2) - 0.9
 		let offsetYLabel = (this.options.map.markers.height / 2) - 3
-		let colorBackground = this.markerStyles[category] ? this.markerStyles[category].colorBackground : '#E5454C'
+		let colorBackground = this.markerStyles[category] ? this.markerStyles[category].colorBackground : '#e5454c'
 
 		return {
-			url: this.generateSVG({
+			url: this.generateMarkerSVG({
 				colorBackground: colorBackground,
 				width: this.options.map.markers.width,
 				height: this.options.map.markers.height
@@ -822,7 +826,7 @@ export default class Storelocator {
 	 * @param {Object} Style datas to customize the SVG
 	 * @return {Object} Custom SVG to generate a Google Maps marker icons
 	 */
-	generateSVG (options) {
+	generateMarkerSVG (options) {
 		// Create DOMParser from SVG string
 		const parser = new DOMParser()
 		let parserSvg = parser.parseFromString(markerSvg, 'text/html')

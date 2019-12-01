@@ -1,5 +1,5 @@
 # Project information
-site_name: 'storelocatorjs'
+site_name: 'Storelocatorjs'
 site_description: 'Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.'
 site_author: 'Joris DANIEL aka Yoriiis'
 site_url: 'https://yoriiis.github.io/storelocatorjs/'
@@ -23,6 +23,8 @@ copyright: 'Copyright &copy; 2019 - Joris DANIEL aka Yoriiis'
 
 # Documentation and theme
 theme:
+  logo:
+    icon: 'map'
   name: 'material'
   custom_dir: 'docs/theme'
   language: 'en'
