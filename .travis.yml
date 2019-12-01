@@ -9,7 +9,6 @@ python:
 branches:
   only:
     - master
-    - develop
 
 cache:
   npm: true
@@ -42,7 +41,8 @@ jobs:
         project: storelocatorjs
         message: "Deploy Travis CI to Cloud Functions"
         on:
-          branch: develop
+          branch: master
+
       - provider: pages
         local_dir: site
         token: $GITHUB_TOKEN
@@ -50,4 +50,4 @@ jobs:
         edge: true
         commit_message: Deploy Travis CI to %{target_branch} branch
         on:
-          branch: develop
+          branch: master
