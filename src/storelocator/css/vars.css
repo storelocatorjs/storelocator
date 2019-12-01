@@ -1,0 +1,16 @@
+:root {
+    --offsetSidebar: 20px;
+    --breakpointModile: 767px;
+    --widthFormSearch: 350px;
+    --heightFormSearch: 161px;
+    --colorFilters: rgba(0, 0, 0, 0.3);
+    --colorDetailStoreDistance: #9a9a9a;
+    --colorDetailStore: #000;
+    --colorLoader1: #f60;
+    --colorLoader2: #fc3;
+    --colorLoader3: #ea4c89;
+    --colorMobileNav: #b9b8b8;
+    --grey: #b9b8b8;
+}
+
+@custom-media --media-tablet only screen and (min-width: 750px);

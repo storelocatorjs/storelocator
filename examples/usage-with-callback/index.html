@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Storelocatorjs - Usage with callback</title>
+        <link rel="stylesheet" href="../../dist/storelocator/css/storelocator.css" />
+        <link rel="stylesheet" href="../assets/custom-style.css" />
+        </head>
+    <body>
+        <div class="storelocator">
+            <div class="storelocator-loader"></div>
+            <div class="storelocator-sidebar">
+                <form class="storelocator-formSearch" name="form-search">
+                    <input type="text" class="storelocator-inputSearch" placeholder="Enter a location" autocomplete="off" />
+                    <div class="storelocator-formFilters">
+                        <div class="storelocator-formFiltersRow">
+                            <div class="storelocator-formCheckbox">
+                                <input type="checkbox" id="cat-1" data-filter checked="checked" value="1" />
+                                <label for="cat-1" class="category-1">Categorie 1</label>
+                            </div>
+                            <div class="storelocator-formCheckbox">
+                                <input type="checkbox" id="cat-2" data-filter checked="checked" value="2" />
+                                <label for="cat-2" class="category-2">Categorie 2</label>
+                            </div>
+                        </div>
+                        <div class="storelocator-formFiltersRow">
+                            <div class="storelocator-formCheckbox">
+                                <input type="checkbox" id="cat-3" data-filter value="3" />
+                                <label for="cat-3" class="category-3">Categorie 3</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <nav class="storelocator-nav">
+                    <ul class="storelocator-navList">
+                        <li class="storelocator-navListItem active">
+                            <button class="storelocator-navButton" data-switch-view data-target="map">Map</button>
+                        </li>
+                        <li class="storelocator-navListItem">
+                            <button class="storelocator-navButton" data-switch-view data-target="list">List</button>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="storelocator-sidebarResults"></div>
+            </div>
+            <div class="storelocator-googleMaps active">
+                <div id="storelocator-googleMapsCanvas"></div>
+                <button class="storelocator-geolocButton"></button>
+            </div>
+        </div>
+
+        <script src="../../dist/storelocator/js/storelocator.js"></script>
+        <script>
+            var myStorelocator = new storelocatorjs({
+                options: {
+                    apiKey: 'CREATE_YOUR_API_KEY',
+                    webServiceUrl: 'http://localhost:5000/storelocatorjs/europe-west1/stores',
+                    map: {
+                        markers: {
+                            width: 30,
+                            height: 40,
+                            styles: [{
+                                'category': 'userPosition',
+                                'colorBackground': '#33ccff',
+                                'colorText': '#fff'
+                            }, {
+                                'category': '1',
+                                'colorBackground': '#ff6600',
+                                'colorText': '#fff'
+                            },{
+                                'category': '2',
+                                'colorBackground': '#ffcc33',
+                                'colorText': '#fff'
+                            },{
+                                'category': '3',
+                                'colorBackground': '#ea4c89',
+                                'colorText': '#fff'
+                            }]
+                        }
+                    },
+                },
+                onReady: function(map) {
+                    this.triggerRequest({
+                        'lat': 48.8589507,
+                        'lng': 2.2770202
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
