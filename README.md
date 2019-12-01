@@ -4,7 +4,7 @@
     </a>
 </p><br />
 <p align="center">
-    <img alt="TravisCI" src="https://img.shields.io/badge/storelocatorjs-v3.0.2-ff7f15.svg?style=for-the-badge">
+    <img alt="TravisCI" src="https://img.shields.io/badge/storelocatorjs-v2.0.0-546e7a.svg?style=for-the-badge">
     <a href="https://travis-ci.com/yoriiis/storelocatorjs">
         <img alt="TravisCI" src="https://img.shields.io/travis/yoriiis/storelocatorjs?style=for-the-badge">
     </a>
@@ -48,7 +48,7 @@ yarn add --dev storelocatorjs
 
 ## Demo
 
-Online demo is available on [yoriiis.github.io/storelocatorjs/demo](https://yoriiis.github.io/storelocatorjs/demo).
+Online demo is available on [yoriiis.github.io/storelocatorjs/demo.html](https://yoriiis.github.io/storelocatorjs/demo.html).
 
 Storelocatorjs includes also several examples of storelocatorjs implementation.
 
@@ -112,11 +112,11 @@ The extended usage of the Storelocatorjs with filters and store categories used 
 
 ### Options
 
-Storelocatorjs contains many options to allow you to easily configure your map according to your needs. Available options are available on the [Storelocatorjs website](https://yoriiis.github.io/storelocatorjs).
+Storelocatorjs contains many options to allow you to easily configure your map according to your needs. Options are available on the [Storelocatorjs website](https://yoriiis.github.io/storelocatorjs/available-options.html).
 
 #### Example with the onReady function
 
-The `onReady` function expose the `map` instance and is called when the map is instantiated and ready. With the example below, An automatic search is triggered with location coordinates passed in parameters.
+The `onReady` function expose the Google Maps instance as `map` variable and is called when the map is instantiated and ready. With the example below, an automatic search is triggered with location coordinates passed in parameters.
 
 ```javascript
 new Storelocator({
@@ -132,18 +132,18 @@ new Storelocator({
 
 ## Browsers support
 
-The project is fully compatible with the most popular web browsers. More information about the HTML5 video support on <a href="https://caniuse.com/#feat=video" target="_blank" title="Video element - Can I use">Can I Use</a>. HTML and CSS files are W3C valid.
+The project is fully compatible with the most popular web browsers. More information about the Google Maps support on <a href="https://developers.google.com/maps/documentation/javascript/browsersupport?hl=fr" target="_blank" title="Google Maps support">Google Developers</a>. HTML and CSS files are W3C valid.
 
 ## Licenses
 
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License at https://yoriiis.github.io/storelocatorjs.
+Purchase a Storelocatorjs Commercial License at https://yoriiis.github.io/storelocatorjs/licenses.html#purchasing.
 
 ### Open source license
 
-If you are creating an open source application under a license compatible with the GNU GPL license v3, you may use Storelocatorjs under the terms of the GPLv3.
+If you are creating an open source application under a license compatible with the [GNU GPL license v3](https://www.gnu.org/licenses/gpl-3.0.html), you may use Storelocatorjs under the terms of the GPLv3.
 
 ## Contributors
 

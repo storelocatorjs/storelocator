@@ -61,7 +61,7 @@ new storelocatorjs({
 
 `default: boolean = false`
 
-Tells storelocatorjs whether to enable the cluster of markers.
+Tells storelocatorjs whether to enable the marker clustering.
 
 ```javascript
 new storelocatorjs({
@@ -123,7 +123,7 @@ new storelocatorjs({
 
 `default: integer = 30`
 
-Tells storelocatorjs what is the marker width.
+Tells storelocatorjs what is the marker width in pixel (without unity).
 
 ```javascript
 new storelocatorjs({
@@ -141,7 +141,7 @@ new storelocatorjs({
 
 `default: integer = 40`
 
-Tells storelocatorjs what is the marker height.
+Tells storelocatorjs what is the marker height in pixel (without unity).
 
 ```javascript
 new storelocatorjs({
@@ -177,7 +177,7 @@ new storelocatorjs({
 });
 ```
 
-The array `map.markers.styles` can accept entries for each category to customize markers by category
+The array `map.markers.styles` can accept entries for each category to customize markers by category.
 
 ```javascript
 new storelocatorjs({
@@ -208,6 +208,8 @@ new storelocatorjs({
 `default: object`
 
 Tells storelocatorjs marker options. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/reference/3.37/map#MapOptions).
+
+`map.options.styles` can be used to stylized the map. Documentation is available on the [feature page](https://yoriiis.github.io/storelocatorjs/features.html#maps-styles)
 
 ```javascript
 new storelocatorjs({

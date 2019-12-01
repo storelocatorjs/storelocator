@@ -1,5 +1,5 @@
 title: Getting started - Storelocatorjs
-description: Install Storelocatorjs with npm or manual import. Installation is fast and the map is easily customizable. Google Maps API is automatically loaded
+description: Install Storelocatorjs with npm or manual import. Installation is fast and the map is easily customizable. Google Maps API is automatically loaded and cloud function is included
 
 ## Installation
 
@@ -16,7 +16,8 @@ import storelocatorjs from 'storelocatorjs';
 import 'storelocatorjs.css';
 
 new storelocatorjs({
-    selector: '#player'
+    apiKey: ''
+    webSerciceUrl: ''
 });
 ```
 
@@ -30,24 +31,25 @@ Includes files manually in your project:
 
 <script>
     new storelocatorjs({
-        selector: '#player'
+        apiKey: ''
+        webSerciceUrl: ''
     });
 </script>
 ```
 
 ## Load Google Maps API
 
-Google Maps API is automatically loaded by storelocator. The map is instanciate when the API is ready.
+Google Maps API is automatically loaded by storelocatorjs. The map is instanciate when the API is ready.
 
 ## API key
 
 Create an API key to use Google Maps API on the <a href="https://developers.google.com/maps/documentation/javascript/get-api-key?hl=Fr" target="_blank" title="Google Console API">Google Console API</a>.
 
-## Cloud functions
+## Cloud function
 
 All requests to filter stores by geoposition are send to a cloud function as a web service. Storelocatorjs includes the cloud functions project from [Google Firebase](https://firebase.google.com/docs/functions) located in the `./functions` folder.
 
-Storelocatorjs examples are linked to the cloud function. Ton run run locally the cloud function, simply create a `.env` file from the `.env.dist` file in the `./functions` directory and fill the `CLOUD_FUNCTION_DOMAIN` variable with you virtual host to authorize the CORS requests.
+Storelocatorjs examples are linked to the cloud function. To run locally the cloud function, simply create a `.env` from the `.env.dist` file in the `./functions` directory and fill the `CLOUD_FUNCTION_DOMAIN` variable with you virtual host to authorize CORS requests.
 
 Then, to run Storelocatorjs examples, simply run the following commands:
 
@@ -61,7 +63,7 @@ Cloud function will be automatically accessible locally on Storelocatorjs exampl
 
 ## JSON structure
 
-The storelocatorjs project includes a JSON example in the folder `./server/datas/stores.json`.
+The storelocatorjs project includes a JSON example in the folder `./functions/database.json`.
 Datas are stored in an array of object for better performance.<br />
 
 !!! warning "Mandatory JSON structure"

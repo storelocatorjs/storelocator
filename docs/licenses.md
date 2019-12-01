@@ -1,7 +1,7 @@
 title: Licenses - Storelocatorjs
 description: Informations about commercial licenses to use the Storelocatorjs. There are two available Licenses which can be used by a developer, a team or an organization
 
-# Storelocator Licenses
+# Storelocatorjs Licenses
 
 Storelocatorjs has three kinds of licenses: open-source, commercial, and OEM.
 
@@ -15,14 +15,14 @@ Releasing your project that uses Storelocatorjs under the GPLv3, in turn, requir
 
 ## Commercial license
 
-The commercial license is designed to for you to use Storelocator for an unlimited amount of applications during **ONE** year. With the commercial license, your code is kept propietary, to yourself. If you want to use Storelocator to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license.
+The commercial license is designed to for you to use Storelocatorjs for an unlimited amount of applications during **ONE** year. With the commercial license, your code is kept propietary, to yourself. If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the commercial license is the appropriate license.
 
 ### Purchasing
 
-Purchasing takes a minute, payment is made via [Gumroad](https://gumroad.com/yoriiis). Our purchasing form accepts credit cards or PayPal. Once purchased, you'll receive a commercial license PDF and you will be all set to use Storelocator in your commercial applications. With the purchase of a commercial license:
+Purchasing takes a minute, payment is made via [Gumroad](https://gumroad.com/yoriiis). Our purchasing form accepts credit cards or PayPal. Once purchased, you'll receive a commercial license PDF and you will be all set to use Storelocatorjs in your commercial applications. With the purchase of a commercial license:
 
-* You may use Storelocator in as many commercial applications you like.
-* You may use Storelocator in your own commercial applications and products. For example: premium WordPress, Drupal, or other CMS themes, plugins and templates.
+* You may use Storelocatorjs in as many commercial applications you like.
+* You may use Storelocatorjs in your own commercial applications and products. For example: premium WordPress, Drupal, or other CMS themes, plugins and templates.
 * Customers and users of your products do not need to purchase their own license — so long as they are not developing their own commercial products with Storelocator.
 
 **Commercial Licenses are priced and valid for a whole year for as many developers as you want.**
@@ -41,14 +41,14 @@ Purchasing takes a minute, payment is made via [Gumroad](https://gumroad.com/yor
     </li>
 </ul>
 
-Read the Storelocator Commercial License Agreement below for complete terms and details. For any questions about licensing, contact [joris.daniel@gmail.com](mailto:joris.daniel@gmail.com).
+Read the Storelocatorjs Commercial License Agreement below for complete terms and details. For any questions about licensing, contact [joris.daniel@gmail.com](mailto:joris.daniel@gmail.com).
 
 ## Commercial OEM license
 
-If you want to include Storelocator as part of a commercial interface builder, SDK, or toolkit, choose the Commercial OEM license. Commercial OEM licenses are customized for each customer. Please contact me by email: [joris.daniel@gmail.com](joris.daniel@gmail.com).
+If you want to include Storelocatorjs as part of a commercial interface builder, SDK, or toolkit, choose the Commercial OEM license. Commercial OEM licenses are customized for each customer. Please contact me by email: [joris.daniel@gmail.com](joris.daniel@gmail.com).
 
 !!! info
-    Below are the official Storelocator Commercial License terms, as well as a plain English summary of the terms. These summaries are provided for your convenience, but are not binding; your use of Storelocator is governed by the full license terms.
+    Below are the official Storelocatorjs Commercial License terms, as well as a plain English summary of the terms. These summaries are provided for your convenience, but are not binding; your use of Storelocatorjs is governed by the full license terms.
 
 ## License Agreement
 
@@ -64,7 +64,7 @@ This Software License Agreement (the "**Agreement**") is between Joris DANIEL ("
 
 1.4 - "**Modification**" means any revision, adaptation, or derivative of the Software produced by You.
 
-1.5 - The "**Software**" means Storelocator version 1.
+1.5 - The "**Software**" means Storelocatorjs version 1.
 
 ### 2. Commercial license grant
 

@@ -1,6 +1,6 @@
 'use strict'
 
-const storesDB = require('./json-datas/stores.json')
+const storesDB = require('./database.json')
 const Stores = require('./stores.js')
 const functions = require('firebase-functions')
 const express = require('express')

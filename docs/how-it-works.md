@@ -1,5 +1,5 @@
 title: How it works - Storelocatorjs
-description: Storelocatorjs includes a minimalist HTML structure example to start your Storelocator. All options are listed here and can be changed in the constructor
+description: Storelocatorjs includes a minimalist HTML structure example to start your storelocator. All options are listed here and can be changed in the constructor
 
 ## Cloud functions
 
@@ -9,7 +9,7 @@ Storelocatorjs need a cloud function to execute search requests. The cloud funct
 
 ### Basic usage
 
-The basic usage of the Storelocatorjs without filters and store categories used a minimalist HTML structure.
+The basic usage of the Storelocatorjs without filters or store categories use a minimalist HTML structure.
 
 ```html
 <div class="storelocator">
@@ -40,7 +40,7 @@ The basic usage of the Storelocatorjs without filters and store categories used 
 
 ### Usage with filters
 
-Storelocatorjs can have filters matches with store categories. Add the `<form>` tag highlight inside the sidebar. Categories can be personalized and category ids must correspond to identifiers in the JSON.
+Storelocatorjs can have filters matches with store categories. Add the `<form>` tag highlight inside the sidebar. Categories can be personalized and category ids must correspond to identifiers in the [JSON](getting-started.html#category).
 
 ```html hl_lines="4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
 <div class="storelocator">
@@ -94,7 +94,7 @@ Storelocatorjs can have filters matches with store categories. Add the `<form>` 
 
 The storelocatorjs class accept an object as parameter with 2 keys:
 
-* `options` - Object of options (mandatory key `apiKey` and `webServiceUrl`)
+* `options` - Object of [options](available-options.html) (mandatory key `apiKey` and `webServiceUrl`)
 * `onReady` - Callback function (optional)
 
 #### Simple example

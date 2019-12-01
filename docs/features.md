@@ -1,5 +1,5 @@
 title: Features - Storelocatorjs
-description: Storelocatorjs is responsive and includes many features such as autocomplete, geolocation, markers, info window, filters and clusters
+description: Storelocatorjs is responsive and includes many features such as cloud function, autocomplete, geolocation, markers, info window, filters and clusters
 
 ### Responsive design
 
@@ -23,7 +23,7 @@ Below, an example of configuration:
 
 ### Autocomplete
 
-Storelocatorjs include by default [Google Maps Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete). The `places` librairy is automatically loaded.
+Storelocatorjs includes by default [Google Maps Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete). The `places` librairy is automatically loaded.
 
 ### Geolocation
 
@@ -34,11 +34,11 @@ Storelocatorjs integrate its own geolocation button `.storelocator-geolocButton`
 
 ### Filters
 
-Storelocatorjs can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key `categories` as string format.
+Storelocatorjs can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key [`categories`](getting-started.html#category) as string format.
 
 ### Marker styles
 
-Marker have a default style, the same as on Google Maps. Storelocatorjs has an option to easily customized the style of the marker with a SVG.
+Marker have a default style, the same as on Google Maps. Storelocatorjs has an option to easily customized the style of the marker with a pretty SVG.
 
 To use this feature, fill the option `map.markers` as below:
 
@@ -70,9 +70,9 @@ To use this feature, fill the option `map.markers` as below:
 }
 ```
 
-You can change the marker dimensions (width and height) in pixel by passing an integer.
+You can change marker dimensions (`width` and `height`) in pixel by passing an integer (without unity).
 
-`map.markers.style` contains object, each objects correspond to a marker category, with 3 parameters:
+`map.markers.style` contains object and each objects correspond to a marker category, with 3 parameters:
 
 !!! tip "Geolocation marker"
     The marker category __`userPosition`__ allow you to customized the marker style of the user geolocation. Do not change the category name of this marker.<br /><br />
@@ -82,7 +82,7 @@ You can change the marker dimensions (width and height) in pixel by passing an i
 
 ### Clusters
 
-With cluster option enabled, you need to load the `markerclusterer.js` library before the Storelocator. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/marker-clustering)
+With cluster option enabled, you need to load the `markerclusterer.js` library before the storelocatorjs. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/marker-clustering)
 
 ```html
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
@@ -138,7 +138,7 @@ Storelocatorjs auto-search allow to refresh markers on area bounds changed. Zoom
 
 ### Info window
 
-Storelocatorjs allow to show marker information with the native Google Maps info window. Below, the default template displays the fields available in the JSON.
+Storelocatorjs allow to show marker informations with the native Google Maps info window. Below, the default template displays the fields available in the JSON.
 
 ```html
 <div class="storelocator-infoWindow">
@@ -166,7 +166,7 @@ Storelocatorjs allow to show marker information with the native Google Maps info
 ```
 
 !!! info "Distance"
-    You will notice that the distance information is automatically caculate with the cloud function script.
+    You will notice that the distance information is automatically caculate with the cloud function script 👍.
 
 <script>
   ((window.gitter = {}).chat = {}).options = {
