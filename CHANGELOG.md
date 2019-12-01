@@ -1,3 +1,10 @@
+# 2.0.1
+
+#### Updates
+
+* Add npm keywords
+
+
 # 2.0.0
 
 #### New features
