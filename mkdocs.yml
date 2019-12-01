@@ -25,7 +25,6 @@ copyright: 'Copyright &copy; 2019 - Joris DANIEL aka Yoriiis'
 theme:
   name: 'material'
   custom_dir: 'docs/theme'
-  # favicon: 'images/storelocatorjs-favicon.png'
   language: 'en'
   palette:
     primary: 'white'
