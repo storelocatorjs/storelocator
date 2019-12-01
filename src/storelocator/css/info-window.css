@@ -29,12 +29,8 @@
         }
 
         .storelocator-detailStoreDistance {
-            top: 1px;
+            top: 0;
             transform: none;
-        }
-
-        .storelocator-detailStorePhone {
-            padding-bottom: 12px;
         }
 
         .storelocator-detailStoreUrl {

@@ -1,3 +1,13 @@
+/**
+ * @name Storelocatorjs/CloudFunction
+ * @version 1.0.0
+ * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
+ * @author: Joris DANIEL aka Yoriiis
+ * @description: Storelocatorjs cloud function
+ * {@link https://yoriiis.github.io/storelocatorjs}
+ * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
+ */
+
 'use strict'
 
 const storesDB = require('./database.json')

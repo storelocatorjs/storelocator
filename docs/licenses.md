@@ -1,5 +1,5 @@
 title: Licenses - Storelocatorjs
-description: Informations about commercial licenses to use the Storelocatorjs. There are two available Licenses which can be used by a developer, a team or an organization
+description: Informations about open source and commercial licenses to use the Storelocatorjs.
 
 # Storelocatorjs Licenses
 
@@ -21,11 +21,11 @@ The commercial license is designed to for you to use Storelocatorjs for an unlim
 
 Purchasing takes a minute, payment is made via [Gumroad](https://gumroad.com/yoriiis). Our purchasing form accepts credit cards or PayPal. Once purchased, you'll receive a commercial license PDF and you will be all set to use Storelocatorjs in your commercial applications. With the purchase of a commercial license:
 
+* You may use Storelocatorjs during a whole year for as many fevelopers as you want
 * You may use Storelocatorjs in as many commercial applications you like.
 * You may use Storelocatorjs in your own commercial applications and products. For example: premium WordPress, Drupal, or other CMS themes, plugins and templates.
 * Customers and users of your products do not need to purchase their own license — so long as they are not developing their own commercial products with Storelocator.
 
-**Commercial Licenses are priced and valid for a whole year for as many developers as you want.**
 
 <ul class="license-list">
     <li class="license-listItem">
@@ -41,6 +41,7 @@ Purchasing takes a minute, payment is made via [Gumroad](https://gumroad.com/yor
     </li>
 </ul>
 
+**Commercial Licenses are priced and valid for a whole year for as many developers as you want.**
 Read the Storelocatorjs Commercial License Agreement below for complete terms and details. For any questions about licensing, contact [joris.daniel@gmail.com](mailto:joris.daniel@gmail.com).
 
 ## Commercial OEM license

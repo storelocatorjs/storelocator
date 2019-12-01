@@ -37,7 +37,7 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
 
 ## Installation
 
-The plugin is available as the `storelocatorjs` package name on [npm](https://www.npmjs.com/package/storelocatorjs).
+The library is available as the `storelocatorjs` package name on [npm](https://www.npmjs.com/package/storelocatorjs).
 
 ```
 npm i --save-dev storelocatorjs
@@ -139,7 +139,7 @@ The project is fully compatible with the most popular web browsers. More informa
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License at https://yoriiis.github.io/storelocatorjs/licenses.html#purchasing.
+Purchase a Storelocatorjs Commercial License on the [license page](https://yoriiis.github.io/storelocatorjs/licenses.html#purchasing).
 
 ### Open source license
 

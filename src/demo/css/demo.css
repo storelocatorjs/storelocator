@@ -79,10 +79,6 @@ body {
     }
 }
 
-.storelocator {
-    font-family: 'Roboto', arial, sans-serif;
-}
-
 /* Override form filters style */
 .storelocator-formFilters label.category-1::before {
     border: 2px solid #f60;

@@ -10,26 +10,26 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
 
 ## Github & npm
 
-The plugin is available as the `storelocatorjs` package name on [Github](https://github.com/yoriiis/storelocatorjs) and [npm](https://www.npmjs.com/package/storelocatorjs).<br />
+The library is available as the `storelocatorjs` package name on [Github](https://github.com/yoriiis/storelocatorjs) and [npm](https://www.npmjs.com/package/storelocatorjs).<br />
 If you like the project, like it on Github 😃<br /><br />
 <a class="github-button" href="https://github.com/yoriiis/storelocatorjs" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star yoriiis/storelocatorjs on GitHub">Star</a>
 
 ## Browsers support
 
-The project is fully compatible with the most popular web browsers. More information about the HTML5 video support on <a href="https://caniuse.com/#feat=video" target="_blank" title="Video element - Can I use">Can I Use</a>. HTML and CSS files are W3C valid.
+The project is fully compatible with the most popular web browsers. More information about the Google Maps support on <a href="https://developers.google.com/maps/documentation/javascript/browsersupport?hl=fr" target="_blank" title="Google Maps support">Google Developers</a>. HTML and CSS files are W3C valid.
 
 ## Licenses
 
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License at [yoriiis.github.io/storelocatorjs](https://yoriiis.github.io/storelocatorjs).
+Purchase a Storelocatorjs Commercial License on the [license page](licenses.html#purchasing).
 
 ### Open source license
 
 If you are creating an open source application under a license compatible with the [GNU GPL license v3](https://www.gnu.org/licenses/gpl-3.0.html), you may use Storelocatorjs under the terms of the GPLv3.
 
-[Read more about Storelocatorjs's license](https://yoriiis.github.io/storelocatorjs/license.html)
+[Read more about Storelocatorjs's license](licenses.html)
 
 ## Contributors
 
