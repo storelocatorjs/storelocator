@@ -16,7 +16,7 @@
     <a href="https://bundlephobia.com/result?p=fela@latest">
         <img alt="Bundlephobia" src="https://img.shields.io/bundlephobia/minzip/storelocatorjs?style=for-the-badge">
     </a>
-    <a href="https://npmjs.com/package/chunks-webpack-plugin">
+    <a href="https://npmjs.com/package/storelocatorjs">
         <img alt="Npm downloads" src="https://img.shields.io/npm/dm/storelocatorjs?color=fb3e44&label=npm%20downloads&style=for-the-badge">
     </a>
 </p>
