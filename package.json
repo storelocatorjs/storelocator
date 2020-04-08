@@ -1,6 +1,6 @@
 {
 	"name": "storelocatorjs",
-	"version": "2.0.2",
+	"version": "2.1.0",
 	"description": "Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.",
 	"keywords": [
 		"cloud function",

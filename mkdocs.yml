@@ -23,8 +23,6 @@ copyright: 'Copyright &copy; 2019 - Joris DANIEL aka Yoriiis'
 
 # Documentation and theme
 theme:
-  logo:
-    icon: 'map'
   name: 'material'
   custom_dir: 'docs/theme'
   language: 'en'
@@ -34,16 +32,6 @@ theme:
   font:
     text: 'Roboto'
     code: 'Ubuntu Mono'
-  feature:
-    tabs: false
-
-# Options
-extra:
-  social:
-    - type: 'github'
-      link: 'https://github.com/yoriiis'
-    - type: 'linkedin'
-      link: 'https://www.linkedin.com/in/jorisdaniel'
 
 # Google Analytics
 google_analytics:

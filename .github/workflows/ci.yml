@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  - push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.x
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 8.13.0
+
+      - run: pip install mkdocs
+      - run: pip install mkdocs-material
+      - run: npm i firebase-tools
+      - run: npm i firebase-functions
+      - run: npm i
+      - run: cd ./functions && npm i && cd ../
+      - run: cd functions && npm run lint && cd ../
+      - run: npm run test:eslint
+      - run: npm run test:stylelint
+      - run: npm run build
+      - run: npm run build:mkdocs:only
+      - run: npm run create:demo
+      - run: git config --global user.name "${GH_NAME}"
+      - run: git config --global user.email "${GH_EMAIL}"
+
+      - name: Deploy to Github Pages
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@v1.3.0
+        with:
+          args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

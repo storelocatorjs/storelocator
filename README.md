@@ -4,10 +4,8 @@
     </a>
 </p><br />
 <p align="center">
-    <img alt="TravisCI" src="https://img.shields.io/badge/storelocatorjs-v2.0.2-546e7a.svg?style=for-the-badge">
-    <a href="https://travis-ci.com/yoriiis/storelocatorjs">
-        <img alt="TravisCI" src="https://img.shields.io/travis/yoriiis/storelocatorjs?style=for-the-badge">
-    </a>
+    <img src="https://img.shields.io/badge/storelocatorjs-v2.1.0-546e7a.svg?style=for-the-badge">
+    <img alt="Github Action" src="https://img.shields.io/github/workflow/status/yoriiis/storelocatorjs/CI/master?style=for-the-badge">
     <img alt="npm" src="https://img.shields.io/npm/v/storelocatorjs?style=for-the-badge">
     <img alt="Node.js" src="https://img.shields.io/node/v/storelocatorjs?style=for-the-badge">
     <a href="https://gitter.im/storelocatorjs/storelocator">

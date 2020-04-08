@@ -1,6 +1,20 @@
-# 2.0.2
+# CHANGELOG
 
-#### Updates
+## 2.1.0
+
+### Updates
+
+* Move CI from Travis to Github Actions
+
+### Fixes
+
+* Fix sticky nav displayed above the map on the demo [#26](https://github.com/yoriiis/storelocatorjs/issues/26)
+
+### Updates
+
+## 2.0.2
+
+### Updates
 
 * Bumps `eslint-plugin-node` from 5.2.1 to 6.0.1
 * Bumps `eslint` from 4.18.2 to 4.19.1
@@ -27,17 +41,15 @@
 * Bumps `babel-eslint` from 8.0.1 to 10.0.3
 * Bumps `postcss-nested` from 3.0.0 to 4.2.1
 
+## 2.0.1
 
-# 2.0.1
-
-#### Updates
+### Updates
 
 * Add npm keywords
 
+## 2.0.0
 
-# 2.0.0
-
-#### New features
+### New features
 
 * Add all sources of the storelocatorjs project, including:
     * CSS
@@ -64,15 +76,14 @@
 * Add `CHANGELOG` file
 * Add `.editorconfig` file
 
-#### Updates
+### Updates
 
 * Add prefix `.storelocator-` before all CSS classes use by storelocatorjs to prevent conflicts
 * Rename all CSS class with [FUN](https://benfrain.com/enduring-css-writing-style-sheets-rapidly-changing-long-lived-projects/#h-H2_5) methodology
 
+## 1.0.0
 
-# 1.0.0
-
-#### New features
+### New features
 
 * First release of storelocatorjs
 * Update README
