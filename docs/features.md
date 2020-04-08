@@ -36,7 +36,7 @@ Storelocatorjs integrate its own geolocation button `.storelocator-geolocButton`
 
 ### Filters
 
-Storelocatorjs can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key [`categories`](getting-started#category) as string format.
+Storelocatorjs can be used with or without filters. Filters let you filter stores by categories. Store categories can be unlimited but **must be unique** for each marker. Identifie them by a unique ID in the JSON key [`categories`](getting-started.md#category) as string format.
 
 ### Marker styles
 
