@@ -23,13 +23,13 @@ The project is fully compatible with the most popular web browsers. More informa
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License on the [license page](licenses.html#purchasing).
+Purchase a Storelocatorjs Commercial License on the [license page](licenses.md#purchasing).
 
 ### Open source license
 
 If you are creating an open source application under a license compatible with the [GNU GPL license v3](https://www.gnu.org/licenses/gpl-3.0.html), you may use Storelocatorjs under the terms of the GPLv3.
 
-[Read more about Storelocatorjs's license](licenses.html)
+[Read more about Storelocatorjs's license](licenses.md)
 
 ## Contributors
 
