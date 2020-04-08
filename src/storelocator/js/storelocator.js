@@ -340,9 +340,8 @@ export default class Storelocator {
 			e.preventDefault()
 
 			let currentLink = e.target.parentNode
-			let currentMarker = this.markers[
-				currentLink.getAttribute('data-marker-index')
-			]
+			let markerIndex = currentLink.getAttribute('data-marker-index')
+			let currentMarker = this.markers[markerIndex]
 
 			this.map.panTo(currentMarker.getPosition())
 			this.map.setZoom(16)
