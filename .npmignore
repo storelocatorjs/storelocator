@@ -4,6 +4,8 @@ dist/demo/
 docs/
 examples/
 functions/
+jsdocs/
+site/
 src/
 .browserslistrc
 .editorconfig
