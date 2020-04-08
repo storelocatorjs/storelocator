@@ -24,8 +24,9 @@ jobs:
       - run: npm i firebase-functions
       - run: npm i
       - run: cd ./functions && npm i && cd ../
-      - run: make lint-functions
-      - run: make lint-storelocatorjs
+      - run: cd functions && npm run lint && cd ../
+      - run: npm run test:eslint
+      - run: npm run test:stylelint
       - run: npm run build
       - run: npm run build:mkdocs:only
       - run: npm run create:demo

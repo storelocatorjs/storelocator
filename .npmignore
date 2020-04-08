@@ -12,11 +12,9 @@ src/
 .firebaserc
 .gitignore
 .nvmrc
-.travis.yml
 babel.config.js
 firebase.json
 jsdoc.json
-Makefile
 mkdocs.yml
 package-lock.json
 package.json
