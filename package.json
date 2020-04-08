@@ -25,7 +25,7 @@
 		"build": "rm -rf ./dist/ && webpack --mode=production",
 		"build:jsdoc": "jsdoc --configure ./jsdoc.json",
 		"build:mkdocs": "rm -rf ./site/ && npm run build && npm run build:mkdocs:only && npm run create:demo",
-		"build:mkdocs:only": "mkdocs build",
+		"build:mkdocs:only": "python -m mkdocs build",
 		"create:demo": "cp -rv ./dist/. ./site/dist/",
 		"start": "rm -rf ./dist/ && webpack --mode=development",
 		"test:eslint": "eslint -c ./.eslintrc.js ./src/ ./functions/",
