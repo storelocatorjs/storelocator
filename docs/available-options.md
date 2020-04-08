@@ -1,5 +1,7 @@
+---
 title: How it works - Storelocatorjs
 description: Storelocatorjs includes multiple options to personnalize the map
+---
 
 Storelocatorjs contains many options to allow you to easily configure your map according to your needs. List of all options with their default values.
 

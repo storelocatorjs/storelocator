@@ -1,5 +1,7 @@
+---
 title: Getting started - Storelocatorjs
 description: Install Storelocatorjs with npm or manual import. Installation is fast and the map is easily customizable. Google Maps API is automatically loaded and cloud function is included
+---
 
 ## Installation
 

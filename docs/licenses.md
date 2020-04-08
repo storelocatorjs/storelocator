@@ -1,5 +1,7 @@
+---
 title: Licenses - Storelocatorjs
 description: Informations about open source and commercial licenses to use the Storelocatorjs.
+---
 
 # Storelocatorjs Licenses
 

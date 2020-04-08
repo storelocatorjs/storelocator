@@ -1,5 +1,7 @@
+---
 title: Download - Storelocatorjs
 description: Storelocatorjs project is available with open source and commercial licenses
+---
 
 Storelocatorjs is available as the `storelocatorjs` package name on [Github](https://github.com/yoriiis/storelocatorjs) and [npm](https://github.com/yoriiis/storelocatorjs).
 

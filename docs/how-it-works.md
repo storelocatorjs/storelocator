@@ -1,5 +1,7 @@
+---
 title: How it works - Storelocatorjs
 description: Storelocatorjs includes a minimalist HTML structure example to start your storelocator. All options are listed here and can be changed in the constructor
+---
 
 ## Cloud functions
 

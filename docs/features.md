@@ -1,5 +1,7 @@
+---
 title: Features - Storelocatorjs
 description: Storelocatorjs is responsive and includes many features such as cloud function, autocomplete, geolocation, markers, info window, filters and clusters
+---
 
 ### Responsive design
 
