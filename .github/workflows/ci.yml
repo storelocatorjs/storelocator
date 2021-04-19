@@ -23,11 +23,11 @@ jobs:
 
       - run: pip install mkdocs
       - run: pip install mkdocs-material
-      - run: npm i firebase-tools
-      - run: npm i firebase-functions
+      # - run: npm i firebase-tools
+      # - run: npm i firebase-functions
       - run: npm i
-      - run: cd ./functions && npm i && cd ../
-      - run: cd functions && npm run lint && cd ../
+      # - run: cd ./functions && npm i && cd ../
+      # - run: cd functions && npm run lint && cd ../
       - run: npm run test:eslint
       - run: npm run test:stylelint
       - run: npm run build
@@ -45,9 +45,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v1.3.0
-        with:
-          args: deploy --only functions
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      # - name: Deploy to Firebase
+      #   uses: w9jds/firebase-action@v1.3.0
+      #   with:
+      #     args: deploy --only functions
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
