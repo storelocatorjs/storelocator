@@ -19,7 +19,7 @@ nav:
   - Licenses: 'licenses.md'
 
 # Copyright
-copyright: 'Copyright &copy; 2019 - Joris DANIEL aka Yoriiis'
+copyright: 'Copyright &copy; 2021 - Joris DANIEL aka Yoriiis'
 
 # Documentation and theme
 theme:
@@ -32,11 +32,6 @@ theme:
   font:
     text: 'Roboto'
     code: 'Ubuntu Mono'
-
-# Google Analytics
-google_analytics:
-  - 'UA-108758282-1'
-  - 'auto'
 
 # Extensions
 markdown_extensions:
