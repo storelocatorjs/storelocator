@@ -46,7 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v1.5.0
+        uses: w9jds/firebase-action@v1.3.0
         with:
           args: deploy --only functions
         env:
