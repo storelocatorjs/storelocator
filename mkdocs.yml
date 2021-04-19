@@ -33,11 +33,6 @@ theme:
     text: 'Roboto'
     code: 'Ubuntu Mono'
 
-# Google Analytics
-google_analytics:
-  - 'UA-108758282-1'
-  - 'auto'
-
 # Extensions
 markdown_extensions:
   - markdown.extensions.admonition
