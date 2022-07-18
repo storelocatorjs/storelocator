@@ -1,36 +1,33 @@
+const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+const appDirectory = fs.realpathSync(process.cwd())
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production'
 
 	return {
-		watch: !isProduction,
 		entry: {
-			storelocator: './src/storelocator/config.js',
-			demo: './src/demo/config.js'
+			'usage-basic': `${resolveApp('examples/usage-basic/config.js')}`
 		},
 		watchOptions: {
 			ignored: /node_modules/
 		},
-		devtool: !isProduction ? 'source-map' : 'none',
+		devtool: isProduction ? false : 'source-map',
 		output: {
-			path: path.resolve(__dirname, './dist'),
-			publicPath: '/dist/',
-			filename: '[name]/js/[name].js',
-			library: 'storelocatorjs',
-			libraryTarget: 'umd',
-			sourceMapFilename: '[file].map',
-			libraryExport: 'default'
+			path: resolveApp('examples/dist/'),
+			filename: 'scripts/[name].js'
 		},
 		module: {
 			rules: [
 				{
 					test: /\.js$/,
-					include: path.resolve(__dirname, './src'),
+					include: [resolveApp('examples'), resolveApp('dist')],
 					use: [
 						{
 							loader: 'babel-loader'
@@ -39,10 +36,7 @@ module.exports = (env, argv) => {
 				},
 				{
 					test: /\.css$/,
-					include: [
-						path.resolve(__dirname, './src'),
-						path.resolve(__dirname, './node_modules/leaflet')
-					],
+					include: [resolveApp('examples'), resolveApp('dist')],
 					use: [
 						MiniCssExtractPlugin.loader,
 						{
@@ -52,24 +46,41 @@ module.exports = (env, argv) => {
 							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
-									config: path.resolve(__dirname, './')
+									config: resolveApp('postcss.config.js')
 								}
 							}
 						}
 					]
-				},
-				{
-					test: /\.svg$/,
-					loader: 'svg-inline-loader'
 				}
 			]
 		},
+		resolve: {
+			extensions: ['.js', '.css']
+		},
+		devServer: {
+			static: {
+				directory: resolveApp('examples')
+			},
+			historyApiFallback: true,
+			port: 3000,
+			compress: true,
+			hot: true,
+			https: true
+		},
+		context: appDirectory,
 		plugins: [
+			new webpack.ProgressPlugin(),
 			new MiniCssExtractPlugin({
-				filename: `[name]/css/[name].css`,
-				chunkFilename: `[name]/css/[name].css`
+				filename: 'styles/[name].css',
+				chunkFilename: 'styles/[name].css'
 			}),
-			new webpack.optimize.ModuleConcatenationPlugin()
+			new webpack.optimize.ModuleConcatenationPlugin(),
+			new HtmlWebpackPlugin({
+				filename: 'index.html',
+				template: resolveApp('examples/usage-basic/index.html'),
+				chunks: ['usage-basic'],
+				publicPath: '../'
+			})
 		],
 		stats: {
 			assets: true,
@@ -94,10 +105,10 @@ module.exports = (env, argv) => {
 							// Drop console.log|console.info|console.debug
 							// Keep console.warn|console.error
 							pure_funcs: ['console.log', 'console.info', 'console.debug']
-						}
+						},
+						mangle: true
 					}
-				}),
-				new CssMinimizerPlugin()
+				})
 			],
 			chunkIds: 'deterministic', // or 'named'
 			removeAvailableModules: true,

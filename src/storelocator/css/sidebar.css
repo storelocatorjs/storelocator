@@ -1,78 +1,77 @@
-@import "./vars";
+@import './vars';
 
 .storelocator {
-    &-sidebarResults {
-        display: none;
-        overflow: auto;
-        height: 100%;
-        border-top: 1px solid #e7e7e7;
-    }
+	&-sidebarResults {
+		display: none;
+		overflow: auto;
+		height: 100%;
+		border-top: 1px solid #e7e7e7;
+	}
 
-    &-sidebar {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        z-index: 1;
-        background: #fff;
+	&-sidebar {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		z-index: 500;
+		background: #fff;
 
-        &.active {
-            .storelocator-sidebarResults {
-                display: block;
-            }
-        }
-    }
+		&.active {
+			.storelocator-sidebarResults {
+				display: block;
+			}
+		}
+	}
 
-    &-sidebarResultsListItem {
-        display: block;
-        padding: 20px;
-        border-top: 1px solid #e7e7e7;
+	&-sidebarResultsListItem {
+		display: block;
+		padding: 20px;
+		border-top: 1px solid #e7e7e7;
 
-        &:first-child {
-            border-top: none;
-        }
-    }
+		&:first-child {
+			border-top: none;
+		}
+	}
 
-    &-sidebarResultsList {
-        padding: 0;
-        margin: 0;
-    }
+	&-sidebarResultsList {
+		padding: 0;
+		margin: 0;
+	}
 
-    &-sidebarNoResults {
-        margin: 0;
-        padding: 20px;
-        font-size: 13px;
-        line-height: 20px;
-        color: var(--grey);
-        font-style: italic;
-    }
+	&-sidebarNoResults {
+		margin: 0;
+		padding: 20px;
+		font-size: 13px;
+		line-height: 20px;
+		color: var(--grey);
+		font-style: italic;
+	}
 
-    &-sidebarIntro {
-        font-size: 13px;
-        line-height: 20px;
-        font-style: italic;
-        padding: 10px 20px;
-        color: var(--grey);
-        margin: 0;
-    }
+	&-sidebarIntro {
+		font-size: 13px;
+		line-height: 20px;
+		font-style: italic;
+		padding: 10px 20px;
+		color: var(--grey);
+		margin: 0;
+	}
 }
 
 @media (--media-tablet) {
-    .storelocator {
-        &-sidebar {
-            position: absolute;
-            top: var(--offsetSidebar);
-            left: var(--offsetSidebar);
-            width: var(--widthFormSearch);
-            height: auto;
-            max-height: calc(100% - calc(var(--offsetSidebar) * 2));
-            z-index: 5;
-            border-radius: 0 0 5px 5px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
-        }
+	.storelocator {
+		&-sidebar {
+			position: absolute;
+			top: var(--offsetSidebar);
+			left: var(--offsetSidebar);
+			width: var(--widthFormSearch);
+			height: auto;
+			max-height: calc(100% - calc(var(--offsetSidebar) * 2));
+			border-radius: 0 0 5px 5px;
+			background-color: #fff;
+			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+		}
 
-        &-sidebarResults {
-            display: block;
-        }
-    }
+		&-sidebarResults {
+			display: block;
+		}
+	}
 }
