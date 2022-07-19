@@ -33,7 +33,9 @@
 		"test:stylelint": "stylelint './src/**/*.css' './docs/theme/assets/stylesheets/**/*.css' --config ./stylelint.config.js"
 	},
 	"dependencies": {
-		"leaflet": "^1.8.0"
+		"leaflet": "^1.8.0",
+		"leaflet-geosearch": "^3.6.1",
+		"leaflet.markercluster": "^1.5.3"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.7.7",

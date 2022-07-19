@@ -2,27 +2,27 @@
 
 html,
 body {
-    height: auto;
-    margin: 0;
+	height: auto;
+	margin: 0;
 }
 
 .storelocator {
-    position: relative;
-    height: auto;
+	position: relative;
+	height: auto;
 
-    &,
-    * {
-        box-sizing: border-box;
-    }
+	&,
+	* {
+		box-sizing: border-box;
+	}
 }
 
 @media (--media-tablet) {
-    html,
-    body {
-        height: 100%;
-    }
+	html,
+	body {
+		height: 100%;
+	}
 
-    .storelocator {
-        height: 100%;
-    }
+	.storelocator {
+		height: 100%;
+	}
 }

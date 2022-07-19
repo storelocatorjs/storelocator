@@ -3,10 +3,12 @@ import Storelocator from '../../dist/storelocator/js/storelocator'
 
 const myStorelocator = new Storelocator({
 	options: {
-		// apiKey: 'CREATE_YOUR_API_KEY',
-		// webServiceUrl: 'http://localhost:5000/storelocatorjs/europe-west1/stores'
+		webServiceUrl: 'http://localhost:3001',
 		geolocation: {
 			startOnLoad: false,
+			status: true
+		},
+		cluster: {
 			status: true
 		}
 	}

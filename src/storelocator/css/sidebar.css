@@ -1,4 +1,4 @@
-@import './vars';
+@import "./vars";
 
 .storelocator {
 	&-sidebarResults {
@@ -12,7 +12,7 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		z-index: 500;
+		z-index: 5;
 		background: #fff;
 
 		&.active {

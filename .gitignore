@@ -1,11 +1,7 @@
-.env
-.firebase/
 .DS_STORE
 node_modules/
-dist/**/*.map
-dist/demo/
+dist
 docs/demo/dist/
-jsdocs/*
 site/
 
 # Logs

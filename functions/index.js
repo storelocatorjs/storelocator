@@ -8,11 +8,8 @@
  * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
  */
 
-'use strict'
-
 const storesDB = require('./database.json')
 const Stores = require('./stores.js')
-const functions = require('firebase-functions')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -20,11 +17,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 // CORS configuration (add whitelist domain)
-app.use(
-	cors({
-		origin: process.env.CLOUD_FUNCTION_DOMAIN
-	})
-)
+app.use(cors())
 
 // Enable JSON parser
 app.use(bodyParser.json())
@@ -58,10 +51,8 @@ app.post('/', (request, response) => {
 	response.status(200).json(results)
 })
 
-// Set the cloud function
-const stores = functions.region('europe-west1').https.onRequest(app)
+const port = 3001
 
-// Export the cloud function
-module.exports = {
-	stores
-}
+app.listen(port, () => {
+	console.log(`Example app listening on port ${port}`)
+})
