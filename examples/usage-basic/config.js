@@ -10,6 +10,7 @@ const myStorelocator = new Storelocator({
 		},
 		cluster: {
 			status: true
-		}
+		},
+		debug: true
 	}
 })

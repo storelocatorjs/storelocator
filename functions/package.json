@@ -7,7 +7,7 @@
 	"main": "index.js",
 	"scripts": {
 		"lint": "eslint .",
-		"start": "nodemon index.js"
+		"start": "nodemon --inspect index.js"
 	},
 	"dependencies": {
 		"dotenv": "8.2.0"

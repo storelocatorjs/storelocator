@@ -26,25 +26,25 @@
 	&-geolocButton {
 		position: absolute;
 		right: 10px;
-		bottom: 105px;
-		width: 40px;
-		height: 40px;
+		bottom: 97px;
+		width: 30px;
+		height: 30px;
 		background-color: #fff;
 		z-index: 5;
 		border: none;
 		cursor: pointer;
 
-		&::before {
-			content: "";
-			background-image: url("//maps.gstatic.com/tactile/mylocation/mylocation-sprite-2x.png");
-			background-size: 180px 18px;
-			display: block;
+		svg {
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			width: 18px;
 			height: 18px;
+		}
+
+		&.active svg {
+			fill: #1a73e8;
 		}
 	}
 
@@ -59,17 +59,15 @@
 			color: #fff;
 		}
 	}
-}
 
-/* Override autocomplete styles */
-.pac-container {
-	.pac-item {
-		padding: 4px 5px 3px;
-	}
+	.leaflet-control-zoom {
+		border: none;
 
-	.pac-icon {
-		margin-right: 9px;
-		margin-left: 5px;
+		.leaflet-control-zoom-in,
+		.leaflet-control-zoom-out {
+			border: none;
+			box-shadow: none;
+		}
 	}
 }
 
