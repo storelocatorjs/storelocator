@@ -60,6 +60,14 @@
 		}
 	}
 
+	.leaflet-marker-icon {
+		&.userLocation {
+			svg {
+				fill: #4285f4;
+			}
+		}
+	}
+
 	.leaflet-control-zoom {
 		border: none;
 

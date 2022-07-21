@@ -7,40 +7,46 @@ import { createElement } from 'jsx-dom'
  */
 export default function TemplateSidebarItemResult({ store, origin }) {
 	return (
-		<li className="storelocator-sidebarResultsListItem" data-category={store.category}>
+		<li className="storelocator-sidebarResultsListItem">
 			<div className="storelocator-detailStore">
-				{store.title && (
+				{store.properties.title && (
 					<span className="storelocator-detailStoreTitle">
 						<a
 							href=""
 							title="See on the map"
 							className="store-center-marker-js"
-							data-marker-index={store.index}
+							data-marker-index={store.properties.index}
 						>
-							{store.index + 1}. <span>{store.title}</span>
+							{store.properties.index}. <span>{store.properties.title}</span>
 						</a>
 					</span>
 				)}
 				<a
-					href={`http://www.google.fr/maps/dir/{origin}/${store.lat},${store.lng}`}
+					href={`http://www.google.fr/maps/dir/{origin}/${store.properties.lat},${store.properties.lng}`}
 					title="See the itinerary on Google Maps"
 					target="_blank"
 					className="storelocator-detailStoreDistance"
 				>
-					<span>{store.distance.toFixed(2)}km</span>
+					<span>{store.properties.distance.toFixed(2)}km</span>
 					<div innerHTML={svgRoute}></div>
 				</a>
-				{store.address && (
-					<span className="storelocator-detailStoreAddress">{store.address}</span>
+				{store.properties.address && (
+					<span className="storelocator-detailStoreAddress">
+						{store.properties.address}
+					</span>
 				)}
-				{store.zipcode && (
-					<span className="storelocator-detailStoreZipcode">{store.zipcode}</span>
+				{store.properties.zipcode && (
+					<span className="storelocator-detailStoreZipcode">
+						{store.properties.zipcode}
+					</span>
 				)}
-				{store.city && <span className="storelocator-detailStoreCity">{store.city}</span>}
-				{store.phone && (
+				{store.properties.city && (
+					<span className="storelocator-detailStoreCity">{store.properties.city}</span>
+				)}
+				{store.properties.phone && (
 					<span className="storelocator-detailStorePhone">
-						<a href="tel:{store.phone}" title="Call">
-							{store.phone}
+						<a href="tel:{store.properties.phone}" title="Call">
+							{store.properties.phone}
 						</a>
 					</span>
 				)}

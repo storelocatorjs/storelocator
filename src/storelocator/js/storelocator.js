@@ -70,9 +70,6 @@ export default class Storelocator {
 		this.inputSearch = this.containerStorelocator.querySelector(
 			this.options.selectors.inputSearch
 		)
-		this.searchFilters = [
-			...this.containerStorelocator.querySelectorAll(this.options.selectors.searchFilters)
-		]
 		this.nav = this.containerStorelocator.querySelector(this.options.selectors.nav)
 		this.sidebar = this.containerStorelocator.querySelector(this.options.selectors.sidebar)
 		this.sidebarResults = this.containerStorelocator.querySelector(
@@ -116,25 +113,18 @@ export default class Storelocator {
 			e.preventDefault()
 		})
 
-		// Event listener on search form filters
-		this.searchFilters.forEach((filter) => {
-			filter.addEventListener('change', this.onChangeSearchFormFilter)
-		})
-
 		this.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 	}
 
 	onLocationFound(e) {
-		const marker = Leaflet.marker(e.latlng, {
-			icon: Leaflet.divIcon({
-				html: this.getMarkerIconWithColor({
-					color: '#4285f4'
-				}),
-				className: '',
-				iconSize: [24, 40],
-				iconAnchor: [12, 40]
-			})
-		}).addTo(this.map)
+		const marker = {
+			type: 'Feature',
+			geometry: {
+				type: 'Point',
+				coordinates: [e.latitude, e.longitude]
+			}
+		}
+		this.addMarkertoMap({ markers: marker, className: 'userLocation', displayIndex: false })
 
 		this.geolocationData.userPositionChecked = true
 		this.geolocationData.position = e.latlng
@@ -250,6 +240,39 @@ export default class Storelocator {
 		if (typeof this.onReady === 'function') {
 			this.onReady(this.map)
 		}
+	}
+
+	addMarkertoMap({ markers, className, displayIndex = true }) {
+		let counterMarker = 0
+		let counterPopup = 0
+		Leaflet.geoJSON(markers, {
+			pointToLayer: (feature, latlng) => {
+				counterMarker++
+				const html = `<div class="markerIcon">${markerSvg}${
+					displayIndex ? `<span class="markerIcon-index">${counterMarker}` : ''
+				}`
+				return Leaflet.marker(latlng, {
+					icon: Leaflet.divIcon({
+						html,
+						className,
+						iconSize: [24, 40],
+						iconAnchor: [12, 40]
+					})
+				})
+			},
+			onEachFeature: (feature, layer) => {
+				counterPopup++
+				feature.properties.index = counterPopup
+				if (feature.properties) {
+					layer.bindPopup(
+						templateInfoWindow({
+							store: feature
+						})
+					)
+				}
+			}
+			// coordsToLatLng: (coords) => new L.LatLng(coords[0], coords[1])
+		}).addTo(this.map)
 	}
 
 	/**
@@ -539,19 +562,10 @@ export default class Storelocator {
 	 * Serialize form datas
 	 * @param {String} lat Latitude
 	 * @param {String} lng Longitude
-	 * @return {Object} formData Datas required for the request (lat, lng, storesLimit, input, categories, radius)
+	 * @return {Object} formData Datas required for the request (lat, lng, storesLimit, input, radius)
 	 */
 	serializeForm({ lat = false, lng = false }) {
 		let formDatas = {}
-		let categories = []
-
-		// Get all selected categories
-		this.searchFilters.forEach((filter, index) => {
-			if (filter.checked) {
-				categories.push(filter.value)
-			}
-		})
-		formDatas.categories = categories
 
 		if (lat && lng) {
 			formDatas.lat = lat
@@ -600,7 +614,8 @@ export default class Storelocator {
 			zoomToBoundsOnClick: true
 		})
 
-		// Loop on all stores by category
+		this.addMarkertoMap({ markers: stores })
+
 		const html = (
 			<>
 				<p class="storelocator-sidebarIntro">
@@ -609,10 +624,13 @@ export default class Storelocator {
 				<ul class="storelocator-sidebarResultsList">
 					{stores.map((store, index) => {
 						noResult = false
-						store.index = index
-						store.position = Leaflet.latLng(store.lat, store.lng)
+						store.properties.index = index + 1
+						store.properties.position = Leaflet.latLng(
+							store.geometry.coordinates[1],
+							store.geometry.coordinates[0]
+						)
 						this.boundsGlobal.extend(store.position)
-						this.createMarkers(store)
+						// this.createMarkers(store)
 
 						return <TemplateSidebarItemResult store={store} origin={origin} />
 					})}
@@ -620,7 +638,7 @@ export default class Storelocator {
 			</>
 		)
 
-		this.map.addLayer(this.markersGroup)
+		// this.map.addLayer(this.markersGroup)
 		// this.map.fitBounds(new Leaflet.featureGroup(this.markers).getBounds())
 
 		// If no result, show error message and center map on current country
@@ -650,10 +668,10 @@ export default class Storelocator {
 
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
 			if (this.options.markersUpdate.status) {
-				this.createViewportWithLimitMarker({
-					stores,
-					fitBounds
-				})
+				// this.createViewportWithLimitMarker({
+				// 	stores,
+				// 	fitBounds
+				// })
 			} else {
 				// Else, and if requested, fitbounds the boundsGlobal
 				// if (fitBounds) {
@@ -726,35 +744,35 @@ export default class Storelocator {
 	 * Create a Map markers
 	 * @param {Object} data Marker datas
 	 */
-	createMarkers(data) {
-		let marker = Leaflet.marker([data.lat, data.lng], {
-			icon: Leaflet.divIcon({
-				html: this.getMarkerIconWithColor({ index: data.index + 1 }),
-				className: '',
-				iconSize: [24, 40],
-				iconAnchor: [12, 40]
-			})
-		}).addTo(this.map)
+	// createMarkers(data) {
+	// 	let marker = Leaflet.marker([data.lat, data.lng], {
+	// 		icon: Leaflet.divIcon({
+	// 			html: this.getMarkerIcon({ index: data.index + 1 }),
+	// 			className: '',
+	// 			iconSize: [24, 40],
+	// 			iconAnchor: [12, 40]
+	// 		})
+	// 	}).addTo(this.map)
 
-		this.markersGroup.addLayer(marker)
-		marker.store = data
+	// 	this.markersGroup.addLayer(marker)
+	// 	marker.store = data
 
-		const htmlPopup = templateInfoWindow({
-			store: data,
-			origin
-		})
-		marker.bindPopup(htmlPopup, {
-			offset: Leaflet.point(0, -35)
-		})
+	// 	const htmlPopup = templateInfoWindow({
+	// 		store: data,
+	// 		origin
+	// 	})
+	// 	marker.bindPopup(htmlPopup, {
+	// 		offset: Leaflet.point(0, -35)
+	// 	})
 
-		this.markers.push(marker)
-	}
+	// 	this.markers.push(marker)
+	// }
 
-	getMarkerIconWithColor({ color = '#000', index = -1 }) {
-		const svgWithColor = markerSvg.trim().replace('<svg ', `<svg fill="${color}" `)
-		const htmlIndex = `<span class="markerIcon-index">${index}`
-		return `<div class="markerIcon">${svgWithColor}${index >= 0 ? htmlIndex : ''}`
-	}
+	// getMarkerIcon({ index = -1 } = {}) {
+	// 	return `<div class="markerIcon">${markerSvg}${
+	// 		index >= 0 ? `<span class="markerIcon-index">${index}` : ''
+	// 	}`
+	// }
 
 	/**
 	 * Extends multiple object into one

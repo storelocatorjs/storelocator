@@ -8,7 +8,7 @@
  * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
  */
 
-const storesDB = require('./database.json')
+const database = require('./database.json')
 const Stores = require('./stores.js')
 const express = require('express')
 const app = express()
@@ -29,7 +29,6 @@ app.post('/', (request, response) => {
 	// Get request parameters
 	const lat = request.body['lat'] || null
 	const lng = request.body['lng'] || null
-	const categories = request.body['categories'] || []
 	const radius = request.body['radius'] || null
 	const limit = request.body['limit'] || null
 	let results = null
@@ -37,12 +36,11 @@ app.post('/', (request, response) => {
 	// Filter stores if parameters are valid
 	if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
 		const appStores = new Stores({
-			database: storesDB,
-			lat: lat,
-			lng: lng,
-			categories: categories,
-			radius: radius,
-			limit: limit
+			database,
+			lat,
+			lng,
+			radius,
+			limit
 		})
 		results = appStores.filter()
 	}

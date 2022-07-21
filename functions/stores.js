@@ -19,15 +19,13 @@ const Stores = class Stores {
 	 * @param {Object} database Database of stores (JSON)
 	 * @param {String} lat Latitude of the request
 	 * @param {String} lng Longitude of the request
-	 * @param {Array} categories Selected categories of the request
 	 * @param {Integer} radius Radius of the request
 	 * @param {Integer} limit Limit of results of the request
 	 */
-	constructor({ database, lat, lng, categories = [], radius = 50, limit = 0 }) {
+	constructor({ database, lat, lng, radius = 50, limit = 0 }) {
 		this.database = database
 		this.lat = lat
 		this.lng = lng
-		this.categories = categories
 		this.radius = parseInt(radius)
 		this.limit = parseInt(limit)
 	}
@@ -37,38 +35,13 @@ const Stores = class Stores {
 	 * @return {Object} List of stores filtered (JSON)
 	 */
 	filter() {
-		// Check if the request is filtered by category
-		let stores =
-			this.categories.length === 0
-				? this.database
-				: this.filterStoreByCategory(this.categories)
-
 		// Filter store by geoposition
-		return this.filterStoreByGeoPosition(stores)
-	}
-
-	/**
-	 * Filter store by categories in the database
-	 * @param {Array} categories Array of selected categories
-	 * @return {Object} Stores filtered by categories
-	 */
-	filterStoreByCategory(categories) {
-		let storesFiltered = []
-
-		// Loop on all stores, with filter
-		for (let i = 0, lengthStores = this.database.length; i < lengthStores; i++) {
-			let currentStore = this.database[i]
-			if (categories.indexOf(currentStore.category) !== -1) {
-				storesFiltered.push(currentStore)
-			}
-		}
-
-		return storesFiltered
+		return this.filterStoreByGeoPosition(this.database)
 	}
 
 	/**
 	 * Filter store by geoposition
-	 * @param {Object} stores Stores filtered by categories
+	 * @param {Object} stores Stores
 	 * @return {Object} Stores filtered by geoposition
 	 */
 	filterStoreByGeoPosition(stores) {
@@ -84,19 +57,19 @@ const Stores = class Stores {
 			storesByDistance = this.getDistanceBetweenCoordinate({
 				lat1: this.lat,
 				lng1: this.lng,
-				lat2: currentStore.lat,
-				lng2: currentStore.lng,
+				lat2: currentStore.geometry.coordinates[1],
+				lng2: currentStore.geometry.coordinates[0],
 				unit: 'K'
 			})
-			currentStore.distance = storesByDistance
+			currentStore.properties.distance = storesByDistance
 			listStores.push(currentStore)
 		}
 
 		// Sort by distance to mapcenter
 		listStores.sort((arrayA, arrayB) => {
-			if (arrayA.distance < arrayB.distance) {
+			if (arrayA.properties.distance < arrayB.properties.distance) {
 				return -1
-			} else if (arrayA.distance > arrayB.distance) {
+			} else if (arrayA.properties.distance > arrayB.properties.distance) {
 				return 1
 			} else {
 				return 0
@@ -105,7 +78,7 @@ const Stores = class Stores {
 
 		let storesFiltered = []
 		for (let i = 0, lengthStores = listStores.length; i < lengthStores; i++) {
-			if (listStores[i].distance > this.radius) {
+			if (listStores[i].properties.distance > this.radius) {
 				break
 			}
 			storesFiltered.push(listStores[i])
