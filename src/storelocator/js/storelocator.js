@@ -8,6 +8,7 @@
  * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
  */
 
+import { extend } from './utils'
 import Leaflet from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-geosearch/dist/geosearch.css'
@@ -33,7 +34,7 @@ export default class Storelocator {
 	 * @param {Function} onReady Callback function executed when the store locator is ready
 	 */
 	constructor({ options, onReady }) {
-		this.options = this.extend(true, defaultOptions, options)
+		this.options = extend(true, defaultOptions, options)
 		this.onReady = onReady
 		this.isLoading = false
 		this.mapHasRequest = false
@@ -116,22 +117,22 @@ export default class Storelocator {
 		this.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 	}
 
-	onLocationFound(e) {
-		const marker = {
-			type: 'Feature',
-			geometry: {
-				type: 'Point',
-				coordinates: [e.latitude, e.longitude]
-			}
-		}
-		this.addMarkertoMap({ markers: marker, className: 'userLocation', displayIndex: false })
+	onLocationFound({ longitude, latitude, latlng }) {
+		this.addMarkertoMap({
+			markers: {
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: [longitude, latitude]
+				}
+			},
+			className: 'userLocation',
+			displayIndex: false
+		})
 
 		this.geolocationData.userPositionChecked = true
-		this.geolocationData.position = e.latlng
-		this.geolocationData.marker = marker
-
+		this.geolocationData.position = latlng
 		this.geolocButton.classList.add('active')
-
 		this.loading(false)
 	}
 
@@ -227,7 +228,7 @@ export default class Storelocator {
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
 				// Clone object before to prevent reference
-				let cloneClusterOptions = this.extend(true, this.options.cluster.options)
+				let cloneClusterOptions = extend(true, this.options.cluster.options)
 				// this.markerCluster = new window.MarkerClusterer(
 				// 	this.map,
 				// 	this.markers,
@@ -244,34 +245,34 @@ export default class Storelocator {
 
 	addMarkertoMap({ markers, className, displayIndex = true }) {
 		let counterMarker = 0
-		let counterPopup = 0
-		Leaflet.geoJSON(markers, {
+		this.geoJSONLayer = Leaflet.geoJSON(markers, {
 			pointToLayer: (feature, latlng) => {
 				counterMarker++
-				const html = `<div class="markerIcon">${markerSvg}${
-					displayIndex ? `<span class="markerIcon-index">${counterMarker}` : ''
-				}`
+				const counterHtml = displayIndex
+					? `<span class="markerIcon-index">${counterMarker}`
+					: ''
+				const html = `<div class="markerIcon">${markerSvg}${counterHtml}`
+				const icon = Leaflet.divIcon({
+					html,
+					className,
+					iconSize: [24, 40],
+					iconAnchor: [12, 40]
+				})
 				return Leaflet.marker(latlng, {
-					icon: Leaflet.divIcon({
-						html,
-						className,
-						iconSize: [24, 40],
-						iconAnchor: [12, 40]
-					})
+					icon
 				})
 			},
 			onEachFeature: (feature, layer) => {
-				counterPopup++
-				feature.properties.index = counterPopup
-				if (feature.properties) {
+				feature.properties &&
 					layer.bindPopup(
 						templateInfoWindow({
 							store: feature
-						})
+						}),
+						{
+							offset: Leaflet.point(0, -35)
+						}
 					)
-				}
 			}
-			// coordsToLatLng: (coords) => new L.LatLng(coords[0], coords[1])
 		}).addTo(this.map)
 	}
 
@@ -279,14 +280,13 @@ export default class Storelocator {
 	 * Initialize the user geolocation
 	 */
 	initGeolocation() {
-		// Check the browser support
-		if (navigator.geolocation) {
-			// Start geolocation on page load
-			if (this.options.geolocation.startOnLoad) {
-				if (window.location.protocol === 'https:') {
-					this.checkUserPosition()
-				}
-			}
+		if (
+			navigator.geolocation &&
+			this.options.geolocation.startOnLoad &&
+			window.location.protocol === 'https:'
+		) {
+			this.loading(true)
+			this.map.locate({ setView: true, maxZoom: 6, enableHighAccuracy: true })
 		}
 	}
 
@@ -306,7 +306,7 @@ export default class Storelocator {
 		e.preventDefault()
 		if (navigator.geolocation) {
 			this.loading(true)
-			this.checkUserPosition()
+			this.map.locate({ setView: true, maxZoom: 6, enableHighAccuracy: true })
 		}
 	}
 
@@ -352,69 +352,23 @@ export default class Storelocator {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarResultItem(e) {
-		if (e.target && e.target.parentNode.classList.contains('store-center-marker-js')) {
+		const target = e.target
+		const currentLink = target.parentNode
+
+		if (target && currentLink.classList.contains('store-center-marker-js')) {
 			e.preventDefault()
 
-			let currentLink = e.target.parentNode
-			let markerIndex = currentLink.getAttribute('data-marker-index')
-			let currentMarker = this.markers[markerIndex]
+			const markerId = parseInt(currentLink.getAttribute('data-marker-id'))
 
-			const { lat, lng } = currentMarker.getLatLng()
-			this.map.setView([lat, lng])
-			this.map.setZoom(12)
-			currentMarker.openPopup()
-			this.containerStorelocator
-				.querySelector('[data-switch-view][data-target="map"]')
-				.click()
-			// window.google.maps.event.trigger(this.map, 'resize')
+			this.geoJSONLayer.eachLayer((layer) => {
+				if (layer.feature.properties.id === markerId) {
+					layer.openPopup()
+					this.containerStorelocator
+						.querySelector('[data-switch-view][data-target="map"]')
+						.click()
+				}
+			})
 		}
-	}
-
-	/**
-	 * Check user position with Map geolocation API
-	 * Get the user current position if available
-	 */
-	checkUserPosition() {
-		this.map.locate({ setView: true, maxZoom: 6, enableHighAccuracy: true })
-		// navigator.geolocation.getCurrentPosition(
-		// 	(position) => {
-		// 		let lat = position.coords.latitude
-		// 		let lng = position.coords.longitude
-		// 		let markerGeoloc = null
-		// 		let positionGeoloc = new window.google.maps.LatLng(lat, lng)
-
-		// 		let options = {
-		// 			position: positionGeoloc,
-		// 			map: this.map
-		// 		}
-
-		// 		// Disable SVG for IE, they don't works
-		// 		if (!this.isBrowserIE()) {
-		// 			options.icon = this.options.map.markers.styles.length
-		// 				? this.getIconMarkerByCategory('userPosition').url
-		// 				: ''
-		// 		}
-
-		// 		markerGeoloc = new window.google.maps.Marker(options)
-
-		// 		// Store geolocation data
-		// 		this.geolocationData.userPositionChecked = true
-		// 		this.geolocationData.position = positionGeoloc
-		// 		this.geolocationData.marker = markerGeoloc
-
-		// 		if (this.inputSearch.value !== '') {
-		// 			this.inputSearch.value = ''
-		// 		}
-
-		// 		this.triggerRequest({
-		// 			lat,
-		// 			lng
-		// 		})
-		// 	},
-		// 	(response) => {
-		// 		this.loading(false)
-		// 	}
-		// )
 	}
 
 	/**
@@ -463,11 +417,9 @@ export default class Storelocator {
 			lat = this.map.getCenter().lat()
 			lng = this.map.getCenter().lng()
 		} else if (increaseRadius) {
-			// Get lat/lng from searchData
 			;({ lat, lng } = this.searchData)
 
-			// Increase currentRadius
-			this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius
+			this.currentRadius += this.options.markersUpdate.stepRadius
 		}
 
 		this.triggerRequest({
@@ -542,15 +494,12 @@ export default class Storelocator {
 				return response
 			})
 			.then((res) => res.json())
-			.then((jsonResponse) => {
-				let data = jsonResponse
-
-				if (data !== null) {
+			.then((stores) => {
+				stores &&
 					this.parseStores({
-						stores: data,
+						stores,
 						fitBounds
 					})
-				}
 			})
 		// .catch((error) => {
 		// 	this.loading(false)
@@ -584,15 +533,8 @@ export default class Storelocator {
 	 * Create all store results
 	 * @param {Object} options Store datas from the web service
 	 */
-	parseStores(options) {
-		let noResult = true
-		let { stores } = options
-		let { fitBounds } = options
-
-		// Destroy old markers before parse new stores
-		this.destroyMarkers()
-
-		// Re-declare bounds on new research, it's important else zoom bug after one request
+	parseStores({ stores, fitBounds }) {
+		this.sidebarResults.replaceChildren()
 		this.boundsGlobal = Leaflet.latLngBounds()
 
 		if (this.options.markersUpdate.status) {
@@ -601,8 +543,9 @@ export default class Storelocator {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
-			this.markers.push(this.geolocationData.marker)
 			this.boundsGlobal.extend(this.geolocationData.position)
+		} else {
+			this.geoJSONLayer && this.geoJSONLayer.clearLayers()
 		}
 
 		// Get lat/lng from searchData
@@ -616,48 +559,27 @@ export default class Storelocator {
 
 		this.addMarkertoMap({ markers: stores })
 
-		const html = (
-			<>
-				<p class="storelocator-sidebarIntro">
-					{stores.length} results sorted by distance correspond to your research
-				</p>
-				<ul class="storelocator-sidebarResultsList">
-					{stores.map((store, index) => {
-						noResult = false
-						store.properties.index = index + 1
-						store.properties.position = Leaflet.latLng(
-							store.geometry.coordinates[1],
-							store.geometry.coordinates[0]
-						)
-						this.boundsGlobal.extend(store.position)
-						// this.createMarkers(store)
-
-						return <TemplateSidebarItemResult store={store} origin={origin} />
-					})}
-				</ul>
-			</>
-		)
-
 		// this.map.addLayer(this.markersGroup)
 		// this.map.fitBounds(new Leaflet.featureGroup(this.markers).getBounds())
 
-		// If no result, show error message and center map on current country
-		if (noResult) {
+		if (stores.length) {
 			this.sidebarResults.appendChild(
-				<p class="storelocator-sidebarNoResults">
-					No results for your request.
-					<br />
-					Please try a new search with differents choices.
-				</p>
+				<>
+					<p class="storelocator-sidebarIntro">
+						{stores.length} results sorted by distance correspond to your research
+					</p>
+					<ul class="storelocator-sidebarResultsList">
+						{stores.map((store, index) => {
+							const [longitude, latitude] = store.geometry.coordinates
+							store.properties.position = Leaflet.latLng(longitude, latitude)
+							store.properties.index = index + 1
+							this.boundsGlobal.extend(store.position)
+
+							return <TemplateSidebarItemResult store={store} origin={origin} />
+						})}
+					</ul>
+				</>
 			)
-			if (this.overlayLimit !== null) {
-				// this.overlayLimit.setMap(null)
-			}
-			if (this.overlayGlobal !== null) {
-				// this.overlayGlobal.setMap(null)
-			}
-		} else {
-			this.sidebarResults.appendChild(html)
 
 			// Add all maskers to cluster if option is enabled
 			if (typeof MarkerClusterer !== 'undefined') {
@@ -678,8 +600,21 @@ export default class Storelocator {
 				// 	this.map.fitBounds(this.boundsGlobal)
 				// }
 			}
+		} else {
+			this.sidebarResults.appendChild(
+				<p class="storelocator-sidebarNoResults">
+					No results for your request.
+					<br />
+					Please try a new search with differents choices.
+				</p>
+			)
+			if (this.overlayLimit !== null) {
+				// this.overlayLimit.setMap(null)
+			}
+			if (this.overlayGlobal !== null) {
+				// this.overlayGlobal.setMap(null)
+			}
 		}
-
 		this.loading(false)
 	}
 
@@ -719,89 +654,5 @@ export default class Storelocator {
 	createOverlays() {
 		Leaflet.rectangle(this.boundsGlobal, { color: '#ff0000', weight: 1 }).addTo(this.map)
 		Leaflet.rectangle(this.boundsWithLimit, { color: '#54ff00', weight: 1 }).addTo(this.map)
-	}
-
-	/**
-	 * Destroy all created Google Map markers
-	 */
-	destroyMarkers() {
-		// Loop backwards on markers and remove them
-		for (let i = this.markers.length - 1; i >= 0; i--) {
-			let currentMarker = this.markers[i]
-
-			if (this.options.cluster.status) {
-				this.markersGroup.removeLayer(currentMarker)
-			}
-
-			// Remove the marker
-			currentMarker.remove()
-		}
-
-		this.markers = []
-	}
-
-	/**
-	 * Create a Map markers
-	 * @param {Object} data Marker datas
-	 */
-	// createMarkers(data) {
-	// 	let marker = Leaflet.marker([data.lat, data.lng], {
-	// 		icon: Leaflet.divIcon({
-	// 			html: this.getMarkerIcon({ index: data.index + 1 }),
-	// 			className: '',
-	// 			iconSize: [24, 40],
-	// 			iconAnchor: [12, 40]
-	// 		})
-	// 	}).addTo(this.map)
-
-	// 	this.markersGroup.addLayer(marker)
-	// 	marker.store = data
-
-	// 	const htmlPopup = templateInfoWindow({
-	// 		store: data,
-	// 		origin
-	// 	})
-	// 	marker.bindPopup(htmlPopup, {
-	// 		offset: Leaflet.point(0, -35)
-	// 	})
-
-	// 	this.markers.push(marker)
-	// }
-
-	// getMarkerIcon({ index = -1 } = {}) {
-	// 	return `<div class="markerIcon">${markerSvg}${
-	// 		index >= 0 ? `<span class="markerIcon-index">${index}` : ''
-	// 	}`
-	// }
-
-	/**
-	 * Extends multiple object into one
-	 * @param {Boolean} deep Enable extend for deep object properties
-	 * @param {Array} objects List of objects to merged
-	 * @return {Object} Objects merged into one
-	 */
-	extend(deep = false, ...objects) {
-		let extended = {}
-
-		// Merge the object into the extended object
-		let merge = (obj) => {
-			for (let prop in obj) {
-				if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-					// If deep merge and property is an object, merge properties
-					if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
-						extended[prop] = this.extend(true, extended[prop], obj[prop])
-					} else {
-						extended[prop] = obj[prop]
-					}
-				}
-			}
-		}
-
-		// Loop through each object and conduct a merge
-		objects.forEach((object) => {
-			merge(object)
-		})
-
-		return extended
 	}
 }

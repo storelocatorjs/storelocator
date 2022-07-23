@@ -15,21 +15,23 @@ export default function TemplateSidebarItemResult({ store, origin }) {
 							href=""
 							title="See on the map"
 							className="store-center-marker-js"
-							data-marker-index={store.properties.index}
+							data-marker-id={store.properties.id}
 						>
 							{store.properties.index}. <span>{store.properties.title}</span>
 						</a>
 					</span>
 				)}
-				<a
-					href={`http://www.google.fr/maps/dir/{origin}/${store.properties.lat},${store.properties.lng}`}
-					title="See the itinerary on Google Maps"
-					target="_blank"
-					className="storelocator-detailStoreDistance"
-				>
-					<span>{store.properties.distance.toFixed(2)}km</span>
-					<div innerHTML={svgRoute}></div>
-				</a>
+				{store.properties.distance && (
+					<a
+						href={`http://www.google.fr/maps/dir/{origin}/${store.properties.lat},${store.properties.lng}`}
+						title="See the itinerary on Google Maps"
+						target="_blank"
+						className="storelocator-detailStoreDistance"
+					>
+						<span>{store.properties.distance.toFixed(2)}km</span>
+						<div innerHTML={svgRoute}></div>
+					</a>
+				)}
 				{store.properties.address && (
 					<span className="storelocator-detailStoreAddress">
 						{store.properties.address}

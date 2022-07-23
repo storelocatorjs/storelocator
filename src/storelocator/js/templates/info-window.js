@@ -15,19 +15,19 @@ export default function ({ store, origin }) {
 			)}
 			<div className="storelocator-detailStore">
 				{store.properties.title && (
-					<span className="storelocator-detailStoreTitle">
-						{store.properties.index}. {store.properties.title}
-					</span>
+					<span className="storelocator-detailStoreTitle">{store.properties.title}</span>
 				)}
-				<a
-					href={`http://www.google.fr/maps/dir/${origin}/${store.properties.lat},${store.properties.lng}`}
-					title="See the itinerary on Google Maps"
-					target="_blank"
-					className="storelocator-detailStoreDistance"
-				>
-					<span>{store.properties.distance.toFixed(2)}km</span>
-					<div innerHTML={svgRoute}></div>
-				</a>
+				{store.properties.distance && (
+					<a
+						href={`http://www.google.fr/maps/dir/${origin}/${store.properties.lat},${store.properties.lng}`}
+						title="See the itinerary on Google Maps"
+						target="_blank"
+						className="storelocator-detailStoreDistance"
+					>
+						<span>{store.properties.distance.toFixed(2)}km</span>
+						<div innerHTML={svgRoute}></div>
+					</a>
+				)}
 				{store.properties.address && (
 					<span className="storelocator-detailStoreAddress">
 						{store.properties.address}
