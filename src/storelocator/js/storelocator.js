@@ -164,7 +164,7 @@ export default class Storelocator {
 			position: null
 		}
 
-		this.map = Leaflet.map('storelocator-googleMapsCanvas', {
+		this.map = Leaflet.map('storelocator-mapCanvas', {
 			center: this.options.map.options.center,
 			zoomControl: false,
 			zoom: this.options.map.options.zoom
@@ -287,7 +287,7 @@ export default class Storelocator {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarNav(e) {
-		let mapView = this.containerStorelocator.querySelector('.storelocator-googleMaps')
+		let mapView = this.containerStorelocator.querySelector('.storelocator-map')
 
 		e.preventDefault()
 

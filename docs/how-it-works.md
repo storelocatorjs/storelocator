@@ -33,8 +33,8 @@ The basic usage of the Storelocatorjs without filters or store categories use a 
         </nav>
         <div class="storelocator-sidebarResults"></div>
     </div>
-    <div class="storelocator-googleMaps active">
-        <div id="storelocator-googleMapsCanvas"></div>
+    <div class="storelocator-map active">
+        <div id="storelocator-mapCanvas"></div>
         <button class="storelocator-geolocButton"></button>
     </div>
 </div>
@@ -85,8 +85,8 @@ Storelocatorjs can have filters matches with store categories. Add the `<form>` 
         </nav>
         <div class="storelocator-sidebarResults"></div>
     </div>
-    <div class="storelocator-googleMaps active">
-        <div id="storelocator-googleMapsCanvas"></div>
+    <div class="storelocator-map active">
+        <div id="storelocator-mapCanvas"></div>
         <button class="storelocator-geolocButton"></button>
     </div>
 </div>
