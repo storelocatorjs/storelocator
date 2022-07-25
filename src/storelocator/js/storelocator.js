@@ -10,16 +10,12 @@
 
 import { extend } from './utils'
 import Leaflet from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import 'leaflet-geosearch/dist/geosearch.css'
 import TemplateSidebarItemResult from './templates/sidebar-item-result'
 import templateInfoWindow from './templates/info-window'
 import markerSvg from '../svg/marker.svg'
 import defaultOptions from './default-options'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import markerClusterGroup from 'leaflet.markercluster'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { createElement, Fragment } from 'jsx-dom'
 
 /**
@@ -43,6 +39,16 @@ export default class Storelocator {
 			// throw new Error('storelocatorjs :: webServiceUrl is empty')
 		}
 
+		this.containerStorelocator = document.querySelector('.storelocator')
+		this.formSearch = this.containerStorelocator.querySelector('.storelocator-formSearch')
+		this.inputSearch = this.containerStorelocator.querySelector('.storelocator-inputSearch')
+		this.nav = this.containerStorelocator.querySelector('.storelocator-nav')
+		this.sidebar = this.containerStorelocator.querySelector('.storelocator-sidebar')
+		this.sidebarResults = this.containerStorelocator.querySelector(
+			'.storelocator-sidebarResults'
+		)
+		this.geolocButton = this.containerStorelocator.querySelector('.storelocator-geolocButton')
+
 		this.onClickSidebarResultItem = this.onClickSidebarResultItem.bind(this)
 		this.onChangeSearchFormFilter = this.onChangeSearchFormFilter.bind(this)
 		this.onClickGeolocationButton = this.onClickGeolocationButton.bind(this)
@@ -50,7 +56,6 @@ export default class Storelocator {
 		this.onShowLocation = this.onShowLocation.bind(this)
 		this.onLocationFound = this.onLocationFound.bind(this)
 
-		this.cacheSelectors()
 		this.buildLoader()
 
 		this.initMap()
@@ -61,31 +66,10 @@ export default class Storelocator {
 	}
 
 	/**
-	 * Cache DOM selectors
-	 */
-	cacheSelectors() {
-		this.containerStorelocator = document.querySelector(this.options.selectors.container)
-		this.formSearch = this.containerStorelocator.querySelector(
-			this.options.selectors.formSearch
-		)
-		this.inputSearch = this.containerStorelocator.querySelector(
-			this.options.selectors.inputSearch
-		)
-		this.nav = this.containerStorelocator.querySelector(this.options.selectors.nav)
-		this.sidebar = this.containerStorelocator.querySelector(this.options.selectors.sidebar)
-		this.sidebarResults = this.containerStorelocator.querySelector(
-			this.options.selectors.sidebarResults
-		)
-		this.geolocButton = this.containerStorelocator.querySelector(
-			this.options.selectors.geolocButton
-		)
-	}
-
-	/**
 	 * Build the loader
 	 */
 	buildLoader() {
-		this.loader = this.containerStorelocator.querySelector(this.options.selectors.loader)
+		this.loader = this.containerStorelocator.querySelector('.storelocator-loader')
 		this.loader.appendChild(
 			<>
 				<div class="storelocator-loaderBar"></div>
@@ -108,12 +92,6 @@ export default class Storelocator {
 			button.addEventListener('click', this.onClickSidebarNav)
 		})
 
-		// Event listener on search form
-		// Prevent native form submit, managed by autocomplete
-		this.formSearch.addEventListener('submit', (e) => {
-			e.preventDefault()
-		})
-
 		this.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 	}
 
@@ -126,8 +104,7 @@ export default class Storelocator {
 					coordinates: [longitude, latitude]
 				}
 			},
-			className: 'userLocation',
-			displayIndex: false
+			className: 'userLocation'
 		})
 
 		this.geolocationData.userPositionChecked = true
@@ -243,15 +220,10 @@ export default class Storelocator {
 		}
 	}
 
-	addMarkertoMap({ markers, className, displayIndex = true }) {
-		let counterMarker = 0
+	addMarkertoMap({ markers, className }) {
 		this.geoJSONLayer = Leaflet.geoJSON(markers, {
 			pointToLayer: (feature, latlng) => {
-				counterMarker++
-				const counterHtml = displayIndex
-					? `<span class="markerIcon-index">${counterMarker}`
-					: ''
-				const html = `<div class="markerIcon">${markerSvg}${counterHtml}`
+				const html = `<div class="markerIcon">${markerSvg}</div>`
 				const icon = Leaflet.divIcon({
 					html,
 					className,
@@ -353,19 +325,17 @@ export default class Storelocator {
 	 */
 	onClickSidebarResultItem(e) {
 		const target = e.target
-		const currentLink = target.parentNode
+		const markerId = target.getAttribute('data-marker-id')
 
-		if (target && currentLink.classList.contains('store-center-marker-js')) {
+		if (target && markerId) {
 			e.preventDefault()
 
-			const markerId = parseInt(currentLink.getAttribute('data-marker-id'))
-
 			this.geoJSONLayer.eachLayer((layer) => {
-				if (layer.feature.properties.id === markerId) {
+				if (layer.feature.properties.id === parseInt(markerId)) {
 					layer.openPopup()
-					this.containerStorelocator
-						.querySelector('[data-switch-view][data-target="map"]')
-						.click()
+					// this.containerStorelocator
+					// 	.querySelector('[data-switch-view][data-target="map"]')
+					// 	.click()
 				}
 			})
 		}
@@ -534,6 +504,7 @@ export default class Storelocator {
 	 * @param {Object} options Store datas from the web service
 	 */
 	parseStores({ stores, fitBounds }) {
+		this.sidebar.classList.add('active')
 		this.sidebarResults.replaceChildren()
 		this.boundsGlobal = Leaflet.latLngBounds()
 
@@ -564,21 +535,15 @@ export default class Storelocator {
 
 		if (stores.length) {
 			this.sidebarResults.appendChild(
-				<>
-					<p class="storelocator-sidebarIntro">
-						{stores.length} results sorted by distance correspond to your research
-					</p>
-					<ul class="storelocator-sidebarResultsList">
-						{stores.map((store, index) => {
-							const [longitude, latitude] = store.geometry.coordinates
-							store.properties.position = Leaflet.latLng(longitude, latitude)
-							store.properties.index = index + 1
-							this.boundsGlobal.extend(store.position)
+				<ul class="storelocator-sidebarResultsList">
+					{stores.map((store) => {
+						const [longitude, latitude] = store.geometry.coordinates
+						store.properties.position = Leaflet.latLng(longitude, latitude)
+						this.boundsGlobal.extend(store.position)
 
-							return <TemplateSidebarItemResult store={store} origin={origin} />
-						})}
-					</ul>
-				</>
+						return <TemplateSidebarItemResult store={store} />
+					})}
+				</ul>
 			)
 
 			// Add all maskers to cluster if option is enabled

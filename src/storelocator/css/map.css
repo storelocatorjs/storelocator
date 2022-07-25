@@ -50,20 +50,45 @@
 
 	.markerIcon {
 		position: relative;
-
-		&-index {
-			position: absolute;
-			top: 5px;
-			left: 50%;
-			transform: translateX(-50%);
-			color: #fff;
-		}
 	}
 
 	.leaflet-marker-icon {
 		&.userLocation {
 			svg {
 				fill: #4285f4;
+			}
+		}
+	}
+
+	.leaflet-popup-content-wrapper {
+		box-shadow: none;
+		border-radius: 10px;
+	}
+
+	.leaflet-control-geosearch {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		margin: 0;
+		width: calc(100% - 40px);
+		box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+		max-width: 100%;
+
+		form {
+			border: 0;
+			box-shadow: none;
+
+			input {
+				height: 40px;
+				font-size: 15px;
+			}
+
+			.reset {
+				line-height: 40px;
+			}
+
+			.results {
+				font-size: 14px;
 			}
 		}
 	}
@@ -88,6 +113,11 @@
 			width: 100%;
 			height: 100%;
 			padding-top: 0;
+		}
+
+		.leaflet-control-geosearch {
+			width: 100%;
+			max-width: 350px;
 		}
 	}
 }

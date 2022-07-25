@@ -1,7 +1,5 @@
 :root {
-	--offsetSidebar: 20px;
 	--breakpointModile: 767px;
-	--widthFormSearch: 350px;
 	--heightFormSearch: 161px;
 	--colorFilters: rgb(0 0 0 / 30%);
 	--colorDetailStoreDistance: #9a9a9a;

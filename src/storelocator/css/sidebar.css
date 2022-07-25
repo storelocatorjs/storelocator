@@ -14,8 +14,11 @@
 		flex-direction: column;
 		z-index: 5;
 		background: #fff;
+		display: none;
 
 		&.active {
+			display: block;
+
 			.storelocator-sidebarResults {
 				display: block;
 			}
@@ -45,26 +48,17 @@
 		color: var(--grey);
 		font-style: italic;
 	}
-
-	&-sidebarIntro {
-		font-size: 13px;
-		line-height: 20px;
-		font-style: italic;
-		padding: 10px 20px;
-		color: var(--grey);
-		margin: 0;
-	}
 }
 
 @media (--media-tablet) {
 	.storelocator {
 		&-sidebar {
 			position: absolute;
-			top: var(--offsetSidebar);
-			left: var(--offsetSidebar);
-			width: var(--widthFormSearch);
-			height: auto;
-			max-height: calc(100% - calc(var(--offsetSidebar) * 2));
+			top: 20px;
+			left: 20px;
+			width: 350px;
+			height: 100%;
+			max-height: calc(100% - 40px);
 			border-radius: 0 0 5px 5px;
 			background-color: #fff;
 			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
