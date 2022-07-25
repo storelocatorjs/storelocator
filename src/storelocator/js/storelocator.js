@@ -10,8 +10,8 @@
 
 import { extend } from './utils'
 import Leaflet from 'leaflet'
-import TemplateSidebarItemResult from './templates/sidebar-item-result'
-import templateInfoWindow from './templates/info-window'
+import TemplateResult from './templates/result'
+import TemplatePopup from './templates/popup'
 import markerSvg from '../svg/marker.svg'
 import defaultOptions from './default-options'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
@@ -29,11 +29,14 @@ export default class Storelocator {
 	 * @param {Object} options Storelocatorjs options
 	 * @param {Function} onReady Callback function executed when the store locator is ready
 	 */
-	constructor({ options, onReady }) {
+	constructor({ options, onReady = () => {}, templateResult, templatePopup }) {
 		this.options = extend(true, defaultOptions, options)
 		this.onReady = onReady
 		this.isLoading = false
 		this.mapHasRequest = false
+
+		this.templateResult = templateResult || TemplateResult
+		this.templatePopup = templatePopup || TemplatePopup
 
 		if (this.options.webServiceUrl === '') {
 			// throw new Error('storelocatorjs :: webServiceUrl is empty')
@@ -55,13 +58,14 @@ export default class Storelocator {
 		this.onClickSidebarNav = this.onClickSidebarNav.bind(this)
 		this.onShowLocation = this.onShowLocation.bind(this)
 		this.onLocationFound = this.onLocationFound.bind(this)
+		this.onMapReady = this.onMapReady.bind(this)
 
+		this.init()
+	}
+
+	init() {
 		this.buildLoader()
-
 		this.initMap()
-
-		// 	this.initAutocomplete()
-
 		this.addEvents()
 	}
 
@@ -83,27 +87,26 @@ export default class Storelocator {
 	 * Create event listeners
 	 */
 	addEvents() {
-		// Event listener on sidebar result items
+		this.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 		this.sidebarResults.addEventListener('click', this.onClickSidebarResultItem)
 
-		// Event listeners on sidebar navigation items
 		let buttons = [...this.nav.querySelectorAll('[data-switch-view]')]
 		buttons.forEach((button) => {
 			button.addEventListener('click', this.onClickSidebarNav)
 		})
-
-		this.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 	}
 
 	onLocationFound({ longitude, latitude, latlng }) {
 		this.addMarkertoMap({
-			markers: {
-				type: 'Feature',
-				geometry: {
-					type: 'Point',
-					coordinates: [longitude, latitude]
+			features: [
+				{
+					type: 'Feature',
+					geometry: {
+						type: 'Point',
+						coordinates: [longitude, latitude]
+					}
 				}
-			},
+			],
 			className: 'userLocation'
 		})
 
@@ -166,36 +169,7 @@ export default class Storelocator {
 			zoomControl: false,
 			zoom: this.options.map.options.zoom
 		})
-		this.map.whenReady(() => {
-			this.map.on('locationfound', this.onLocationFound)
-			this.map.on('geosearch/showlocation', this.onShowLocation)
-
-			if (this.options.markersUpdate.status) {
-				this.map.on('moveend', () => {
-					// Prevent multiple event triggered when loading and infoWindow opened
-					if (!this.isLoading && !this.infoWindowOpened) {
-						this.onMoveEnd()
-					}
-				})
-			}
-
-			if (this.options.geolocation.status) {
-				this.initGeolocation()
-			}
-			this.map.addControl(
-				new GeoSearchControl({
-					provider: new OpenStreetMapProvider(),
-					style: 'bar',
-					updateMap: false,
-					showMarker: false
-				})
-			)
-			Leaflet.control
-				.zoom({
-					position: 'bottomright'
-				})
-				.addTo(this.map)
-		})
+		this.map.whenReady(this.onMapReady)
 
 		Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
@@ -213,32 +187,58 @@ export default class Storelocator {
 				// )
 			}
 		}
-
-		// Called the user callback if available
-		if (typeof this.onReady === 'function') {
-			this.onReady(this.map)
-		}
 	}
 
-	addMarkertoMap({ markers, className }) {
-		this.geoJSONLayer = Leaflet.geoJSON(markers, {
+	onMapReady() {
+		this.map.on('locationfound', this.onLocationFound)
+		this.map.on('geosearch/showlocation', this.onShowLocation)
+
+		if (this.options.markersUpdate.status) {
+			this.map.on('moveend', () => {
+				// Prevent multiple event triggered when loading and infoWindow opened
+				if (!this.isLoading && !this.infoWindowOpened) {
+					this.onMoveEnd()
+				}
+			})
+		}
+
+		if (this.options.geolocation.status) {
+			this.initGeolocation()
+		}
+		this.map.addControl(
+			new GeoSearchControl({
+				provider: new OpenStreetMapProvider(),
+				style: 'bar',
+				updateMap: false,
+				showMarker: false
+			})
+		)
+		Leaflet.control
+			.zoom({
+				position: 'bottomright'
+			})
+			.addTo(this.map)
+
+		this.onReady(this.map)
+	}
+
+	addMarkertoMap({ features, className }) {
+		this.geoJSONLayer = Leaflet.geoJSON(features, {
 			pointToLayer: (feature, latlng) => {
-				const html = `<div class="markerIcon">${markerSvg}</div>`
-				const icon = Leaflet.divIcon({
-					html,
-					className,
-					iconSize: [24, 40],
-					iconAnchor: [12, 40]
-				})
 				return Leaflet.marker(latlng, {
-					icon
+					icon: Leaflet.divIcon({
+						html: `<div class="markerIcon">${markerSvg}</div>`,
+						className,
+						iconSize: [24, 40],
+						iconAnchor: [12, 40]
+					})
 				})
 			},
 			onEachFeature: (feature, layer) => {
 				feature.properties &&
 					layer.bindPopup(
-						templateInfoWindow({
-							store: feature
+						this.templatePopup({
+							feature
 						}),
 						{
 							offset: Leaflet.point(0, -35)
@@ -400,14 +400,6 @@ export default class Storelocator {
 	}
 
 	/**
-	 * Initialize Map Autocomplete
-	 * @documentation https://developers.google.com/maps/documentation/javascript/places-autocomplete
-	 */
-	initAutocomplete() {
-		this.inputSearch.focus()
-	}
-
-	/**
 	 * Function called on autocomplete changes
 	 * Trigger a request with the new user research
 	 * @param {String} lat Latitude of the research
@@ -464,10 +456,10 @@ export default class Storelocator {
 				return response
 			})
 			.then((res) => res.json())
-			.then((stores) => {
-				stores &&
+			.then((features) => {
+				features &&
 					this.parseStores({
-						stores,
+						features,
 						fitBounds
 					})
 			})
@@ -503,7 +495,7 @@ export default class Storelocator {
 	 * Create all store results
 	 * @param {Object} options Store datas from the web service
 	 */
-	parseStores({ stores, fitBounds }) {
+	parseStores({ features, fitBounds }) {
 		this.sidebar.classList.add('active')
 		this.sidebarResults.replaceChildren()
 		this.boundsGlobal = Leaflet.latLngBounds()
@@ -528,20 +520,20 @@ export default class Storelocator {
 			zoomToBoundsOnClick: true
 		})
 
-		this.addMarkertoMap({ markers: stores })
+		this.addMarkertoMap({ features })
 
 		// this.map.addLayer(this.markersGroup)
 		// this.map.fitBounds(new Leaflet.featureGroup(this.markers).getBounds())
 
-		if (stores.length) {
+		if (features.length) {
 			this.sidebarResults.appendChild(
 				<ul class="storelocator-sidebarResultsList">
-					{stores.map((store) => {
-						const [longitude, latitude] = store.geometry.coordinates
-						store.properties.position = Leaflet.latLng(longitude, latitude)
-						this.boundsGlobal.extend(store.position)
+					{features.map((feature) => {
+						const [longitude, latitude] = feature.geometry.coordinates
+						feature.properties.position = Leaflet.latLng(longitude, latitude)
+						this.boundsGlobal.extend(feature.position)
 
-						return <TemplateSidebarItemResult store={store} />
+						return this.templateResult({ feature })
 					})}
 				</ul>
 			)
@@ -556,7 +548,7 @@ export default class Storelocator {
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
 			if (this.options.markersUpdate.status) {
 				// this.createViewportWithLimitMarker({
-				// 	stores,
+				// 	features,
 				// 	fitBounds
 				// })
 			} else {
@@ -589,9 +581,10 @@ export default class Storelocator {
 	 * @param {Object} options Datas to create the custom viewport
 	 */
 	createViewportWithLimitMarker(options) {
-		let { stores } = options
+		let { features } = options
 		let maxMarkersInViewport = this.options.markersUpdate.limitInViewport
-		let maxLoop = stores.length < maxMarkersInViewport ? stores.length : maxMarkersInViewport
+		let maxLoop =
+			features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {
@@ -599,7 +592,7 @@ export default class Storelocator {
 		}
 
 		for (let i = 0; i < maxLoop; i++) {
-			this.boundsWithLimit.extend(stores[i].position)
+			this.boundsWithLimit.extend(features[i].position)
 		}
 
 		if (options.fitBounds) {

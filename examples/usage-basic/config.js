@@ -1,5 +1,6 @@
 import '../../dist/storelocator/css/storelocator.css'
 import Storelocator from '../../dist/storelocator/js/storelocator'
+import { createElement, Fragment } from 'jsx-dom'
 
 const myStorelocator = new Storelocator({
 	options: {
@@ -13,4 +14,13 @@ const myStorelocator = new Storelocator({
 		},
 		debug: true
 	}
+	// onReady: (map) => {
+	// 	console.log(map)
+	// }
+	// templateResult: ({ feature }) => {
+	// 	return <div>{feature.properties.title}</div>
+	// },
+	// templatePopup: ({ feature }) => {
+	// 	return <div>{feature.properties.title}</div>
+	// }
 })
