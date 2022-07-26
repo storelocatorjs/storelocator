@@ -10,6 +10,7 @@
 
 import { extend } from './utils'
 import Leaflet from 'leaflet'
+import TemplateMap from './templates/map'
 import TemplateResult from './templates/result'
 import TemplatePopup from './templates/popup'
 import markerSvg from '../svg/marker.svg'
@@ -29,9 +30,10 @@ export default class Storelocator {
 	 * @param {Object} options Storelocatorjs options
 	 * @param {Function} onReady Callback function executed when the store locator is ready
 	 */
-	constructor({ options, onReady = () => {}, templateResult, templatePopup }) {
+	constructor({ target, options, onReady = () => {}, templateResult, templatePopup }) {
 		this.options = extend(true, defaultOptions, options)
 		this.onReady = onReady
+		this.target = target
 		this.isLoading = false
 		this.mapHasRequest = false
 
@@ -41,16 +43,6 @@ export default class Storelocator {
 		if (this.options.webServiceUrl === '') {
 			// throw new Error('storelocatorjs :: webServiceUrl is empty')
 		}
-
-		this.containerStorelocator = document.querySelector('.storelocator')
-		this.formSearch = this.containerStorelocator.querySelector('.storelocator-formSearch')
-		this.inputSearch = this.containerStorelocator.querySelector('.storelocator-inputSearch')
-		this.nav = this.containerStorelocator.querySelector('.storelocator-nav')
-		this.sidebar = this.containerStorelocator.querySelector('.storelocator-sidebar')
-		this.sidebarResults = this.containerStorelocator.querySelector(
-			'.storelocator-sidebarResults'
-		)
-		this.geolocButton = this.containerStorelocator.querySelector('.storelocator-geolocButton')
 
 		this.onClickSidebarResultItem = this.onClickSidebarResultItem.bind(this)
 		this.onChangeSearchFormFilter = this.onChangeSearchFormFilter.bind(this)
@@ -64,23 +56,25 @@ export default class Storelocator {
 	}
 
 	init() {
-		this.buildLoader()
+		this.render()
+
+		this.containerStorelocator = this.target.querySelector('.storelocator')
+		this.formSearch = this.containerStorelocator.querySelector('.storelocator-formSearch')
+		this.inputSearch = this.containerStorelocator.querySelector('.storelocator-inputSearch')
+		this.nav = this.containerStorelocator.querySelector('.storelocator-nav')
+		this.sidebar = this.containerStorelocator.querySelector('.storelocator-sidebar')
+		this.sidebarResults = this.containerStorelocator.querySelector(
+			'.storelocator-sidebarResults'
+		)
+		this.geolocButton = this.containerStorelocator.querySelector('.storelocator-geolocButton')
+		this.loader = this.containerStorelocator.querySelector('.storelocator-loader')
+
 		this.initMap()
 		this.addEvents()
 	}
 
-	/**
-	 * Build the loader
-	 */
-	buildLoader() {
-		this.loader = this.containerStorelocator.querySelector('.storelocator-loader')
-		this.loader.appendChild(
-			<>
-				<div class="storelocator-loaderBar"></div>
-				<div class="storelocator-loaderBar"></div>
-				<div class="storelocator-loaderBar"></div>
-			</>
-		)
+	render() {
+		this.target.append(<TemplateMap />)
 	}
 
 	/**
