@@ -43,7 +43,7 @@ jobs:
           build_dir: site
           keep_history: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Deploy to Firebase
       #   uses: w9jds/firebase-action@v1.3.0
