@@ -1,13 +1,3 @@
-/**
- * @name Storelocatorjs/CloudFunction
- * @version 1.0.0
- * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
- * @author: Joris DANIEL aka Yoriiis
- * @description: Storelocatorjs cloud function
- * {@link https://yoriiis.github.io/storelocatorjs}
- * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
- */
-
 const database = require('./database.json')
 const Stores = require('./stores.js')
 const express = require('express')
@@ -23,7 +13,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Set the default route
-app.post('/', (request, response) => {
+app.get('/', (request, response) => {
 	response.header('Content-type', 'application/json')
 
 	// Get request parameters
