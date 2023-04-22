@@ -434,7 +434,7 @@ export default class Storelocator {
 
 		// Fecth configuration
 		let fetchConf = {
-			method: 'POST',
+			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			},

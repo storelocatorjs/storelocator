@@ -1,6 +1,12 @@
-@import "./vars";
+@import './vars';
 
 .storelocator {
+	height: 100%;
+
+	&-map {
+		height: 100%;
+	}
+
 	&-googleMaps {
 		position: relative;
 		height: 0;
@@ -12,15 +18,16 @@
 		&.active {
 			display: block;
 		}
+	}
 
-		#storelocator-mapCanvas {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 1;
-		}
+	#storelocator-mapCanvas {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		height: 100%;
 	}
 
 	&-geolocButton {

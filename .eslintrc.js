@@ -1,5 +1,5 @@
 module.exports = {
-	parser: 'babel-eslint',
+	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		ecmaVersion: 6,
 		ecmaFeatures: {
@@ -16,9 +16,7 @@ module.exports = {
 		es6: true
 	},
 
-	extends: ['standard'],
-
-	plugins: ['prettier'],
+	extends: ['standard', 'plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended'],
 
 	rules: {
 		indent: ['error', 'tab', { ignoredNodes: ['TemplateLiteral *'] }],

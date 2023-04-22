@@ -14,7 +14,7 @@ const myStorelocator = new Storelocator({
 		},
 		debug: true
 	},
-	target: document.querySelector('#page')
+	target: document.querySelector('body')
 	// onReady: (map) => {
 	// 	console.log(map)
 	// }
