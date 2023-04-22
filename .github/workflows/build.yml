@@ -1,9 +1,8 @@
-name: CI
+name: Build
 
 on:
   push:
-    branches:
-      - master
+  pull_request:
 
 jobs:
   build:
