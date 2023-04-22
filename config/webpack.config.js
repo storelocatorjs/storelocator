@@ -1,24 +1,29 @@
+const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
+const appDirectory = fs.realpathSync(process.cwd())
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
+
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production'
 
 	return {
+		context: appDirectory,
 		watch: !isProduction,
 		entry: {
-			storelocator: './src/storelocator/config.js',
-			demo: './src/demo/config.js'
+			storelocator: resolveApp('src/storelocator/config.js'),
+			demo: resolveApp('src/demo/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
 		},
-		devtool: !isProduction ? 'source-map' : 'none',
+		devtool: isProduction ? false : 'source-map',
 		output: {
-			path: path.resolve(__dirname, './dist'),
+			path: resolveApp('dist'),
 			publicPath: '/dist/',
 			filename: '[name]/js/[name].js',
 			library: 'storelocatorjs',
@@ -30,19 +35,19 @@ module.exports = (env, argv) => {
 			rules: [
 				{
 					test: /\.js$/,
-					include: path.resolve(__dirname, './src'),
+					include: resolveApp('src'),
 					use: [
 						{
-							loader: 'babel-loader'
+							loader: 'babel-loader',
+							options: {
+								configFile: resolveApp('config/babel.config.js')
+							}
 						}
 					]
 				},
 				{
 					test: /\.css$/,
-					include: [
-						path.resolve(__dirname, './src'),
-						path.resolve(__dirname, './node_modules/leaflet')
-					],
+					include: [resolveApp('src'), resolveApp('node_modules/leaflet')],
 					use: [
 						MiniCssExtractPlugin.loader,
 						{
@@ -52,7 +57,7 @@ module.exports = (env, argv) => {
 							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
-									config: path.resolve(__dirname, './')
+									config: resolveApp('config/postcss.config.js')
 								}
 							}
 						}

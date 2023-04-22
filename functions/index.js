@@ -1,9 +1,10 @@
-const database = require('./database.json')
-const Stores = require('./stores.js')
-const express = require('express')
+import database from './database.json'
+import Stores from './stores.js'
+import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+
 const app = express()
-const bodyParser = require('body-parser')
-const cors = require('cors')
 require('dotenv').config()
 
 // CORS configuration (add whitelist domain)
@@ -17,10 +18,10 @@ app.get('/', (request, response) => {
 	response.header('Content-type', 'application/json')
 
 	// Get request parameters
-	const lat = request.body['lat'] || null
-	const lng = request.body['lng'] || null
-	const radius = request.body['radius'] || null
-	const limit = request.body['limit'] || null
+	const lat = request.body.lat || null
+	const lng = request.body.lng || null
+	const radius = request.body.radius || null
+	const limit = request.body.limit || null
 	let results = null
 
 	// Filter stores if parameters are valid

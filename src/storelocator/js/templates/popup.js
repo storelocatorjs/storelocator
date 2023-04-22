@@ -9,21 +9,15 @@ export default function ({ feature }) {
 		<div className="storelocator-popup">
 			<div className="storelocator-detailStore">
 				{feature.properties.title && (
-					<span className="storelocator-detailStoreTitle">
-						{feature.properties.title}
-					</span>
+					<span className="storelocator-detailStoreTitle">{feature.properties.title}</span>
 				)}
 				{feature.properties.address && (
 					<span className="storelocator-detailStoreAddress">
-						{feature.properties?.address} {feature.properties?.zipcode}{' '}
-						{feature.properties?.city}
+						{feature.properties?.address} {feature.properties?.zipcode} {feature.properties?.city}
 					</span>
 				)}
 				{feature.properties.phone && (
-					<a
-						href={`tel:${feature.properties.phone}`}
-						class="storelocator-detailStorePhone"
-					>
+					<a href={`tel:${feature.properties.phone}`} class="storelocator-detailStorePhone">
 						{feature.properties.phone}
 					</a>
 				)}

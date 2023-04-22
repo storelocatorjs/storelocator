@@ -1,5 +1,3 @@
-@import "./vars";
-
 .storelocator {
 	&-sidebarResults {
 		display: none;
@@ -10,7 +8,6 @@
 
 	&-sidebar {
 		position: relative;
-		display: flex;
 		flex-direction: column;
 		z-index: 5;
 		background: #fff;

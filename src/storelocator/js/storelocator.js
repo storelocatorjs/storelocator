@@ -1,13 +1,3 @@
-/**
- * @name Storelocatorjs
- * @version 2.1.0
- * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
- * @author: Joris DANIEL aka Yoriiis
- * @description: Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.
- * {@link https://yoriiis.github.io/storelocatorjs}
- * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
- */
-
 import { extend } from './utils'
 import Leaflet from 'leaflet'
 import TemplateMap from './templates/map'
@@ -16,7 +6,7 @@ import TemplatePopup from './templates/popup'
 import markerSvg from '../svg/marker.svg'
 import defaultOptions from './default-options'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
-import markerClusterGroup from 'leaflet.markercluster'
+// import markerClusterGroup from 'leaflet.markercluster'
 import { createElement, Fragment } from 'jsx-dom'
 
 /**
@@ -63,9 +53,7 @@ export default class Storelocator {
 		this.inputSearch = this.containerStorelocator.querySelector('.storelocator-inputSearch')
 		this.nav = this.containerStorelocator.querySelector('.storelocator-nav')
 		this.sidebar = this.containerStorelocator.querySelector('.storelocator-sidebar')
-		this.sidebarResults = this.containerStorelocator.querySelector(
-			'.storelocator-sidebarResults'
-		)
+		this.sidebarResults = this.containerStorelocator.querySelector('.storelocator-sidebarResults')
 		this.geolocButton = this.containerStorelocator.querySelector('.storelocator-geolocButton')
 		this.loader = this.containerStorelocator.querySelector('.storelocator-loader')
 
@@ -84,7 +72,7 @@ export default class Storelocator {
 		this.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 		this.sidebarResults.addEventListener('click', this.onClickSidebarResultItem)
 
-		let buttons = [...this.nav.querySelectorAll('[data-switch-view]')]
+		const buttons = [...this.nav.querySelectorAll('[data-switch-view]')]
 		buttons.forEach((button) => {
 			button.addEventListener('click', this.onClickSidebarNav)
 		})
@@ -173,7 +161,7 @@ export default class Storelocator {
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
 				// Clone object before to prevent reference
-				let cloneClusterOptions = extend(true, this.options.cluster.options)
+				const cloneClusterOptions = extend(true, this.options.cluster.options)
 				// this.markerCluster = new window.MarkerClusterer(
 				// 	this.map,
 				// 	this.markers,
@@ -281,7 +269,7 @@ export default class Storelocator {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarNav(e) {
-		let mapView = this.containerStorelocator.querySelector('.storelocator-map')
+		const mapView = this.containerStorelocator.querySelector('.storelocator-map')
 
 		e.preventDefault()
 
@@ -342,7 +330,7 @@ export default class Storelocator {
 		if (this.markers.length) {
 			clearTimeout(this.boundsChangeTimer)
 			this.boundsChangeTimer = setTimeout(() => {
-				let listMarkerIndexInViewport = []
+				const listMarkerIndexInViewport = []
 
 				this.markers.forEach((marker, index) => {
 					if (this.map.getBounds().contains(marker.getLatLng())) {
@@ -422,7 +410,7 @@ export default class Storelocator {
 		this.mapHasRequest = true
 		this.loading(true)
 
-		let requestDatas = this.serializeForm({
+		const requestDatas = this.serializeForm({
 			lat,
 			lng
 		})
@@ -433,7 +421,7 @@ export default class Storelocator {
 		// this.searchData.position = new window.google.maps.LatLng(lat, lng)
 
 		// Fecth configuration
-		let fetchConf = {
+		const fetchConf = {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -470,7 +458,7 @@ export default class Storelocator {
 	 * @return {Object} formData Datas required for the request (lat, lng, storesLimit, input, radius)
 	 */
 	serializeForm({ lat = false, lng = false }) {
-		let formDatas = {}
+		const formDatas = {}
 
 		if (lat && lng) {
 			formDatas.lat = lat
@@ -506,7 +494,7 @@ export default class Storelocator {
 		}
 
 		// Get lat/lng from searchData
-		let origin = this.searchData.position
+		const origin = this.searchData.position
 		this.markersGroup = Leaflet.markerClusterGroup({
 			showCoverageOnHover: false,
 			removeOutsideVisibleBounds: true,
@@ -575,10 +563,9 @@ export default class Storelocator {
 	 * @param {Object} options Datas to create the custom viewport
 	 */
 	createViewportWithLimitMarker(options) {
-		let { features } = options
-		let maxMarkersInViewport = this.options.markersUpdate.limitInViewport
-		let maxLoop =
-			features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
+		const { features } = options
+		const maxMarkersInViewport = this.options.markersUpdate.limitInViewport
+		const maxLoop = features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {

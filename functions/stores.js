@@ -45,7 +45,7 @@ const Stores = class Stores {
 	 * @return {Object} Stores filtered by geoposition
 	 */
 	filterStoreByGeoPosition(stores) {
-		let listStores = []
+		const listStores = []
 		let currentStore
 		let storesByDistance
 
@@ -76,7 +76,7 @@ const Stores = class Stores {
 			}
 		})
 
-		let storesFiltered = []
+		const storesFiltered = []
 		for (let i = 0, lengthStores = listStores.length; i < lengthStores; i++) {
 			if (listStores[i].properties.distance > this.radius) {
 				break
@@ -113,13 +113,11 @@ const Stores = class Stores {
 	//
 	// GeoDataSource.com (C) All Rights Reserved 2015
 	getDistanceBetweenCoordinate({ lat1, lng1, lat2, lng2, unit }) {
-		let theta = lng1 - lng2
-		let dist =
+		const theta = lng1 - lng2
+		const dist =
 			Math.sin(this.deg2rad(lat1)) * Math.sin(this.deg2rad(lat2)) +
-			Math.cos(this.deg2rad(lat1)) *
-				Math.cos(this.deg2rad(lat2)) *
-				Math.cos(this.deg2rad(theta))
-		let miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
+			Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * Math.cos(this.deg2rad(theta))
+		const miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
 		unit = unit.toUpperCase()
 
 		if (unit === 'K') {

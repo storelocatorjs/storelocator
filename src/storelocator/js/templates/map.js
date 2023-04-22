@@ -12,20 +12,12 @@ export default function TemplateMap() {
 				<nav class="storelocator-nav">
 					<ul class="storelocator-navList">
 						<li class="storelocator-navListItem active">
-							<button
-								class="storelocator-navButton"
-								data-switch-view
-								data-target="map"
-							>
+							<button class="storelocator-navButton" data-switch-view data-target="map">
 								Map
 							</button>
 						</li>
 						<li class="storelocator-navListItem">
-							<button
-								class="storelocator-navButton"
-								data-switch-view
-								data-target="list"
-							>
+							<button class="storelocator-navButton" data-switch-view data-target="list">
 								List
 							</button>
 						</li>

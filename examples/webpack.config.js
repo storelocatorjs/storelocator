@@ -12,15 +12,16 @@ module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production'
 
 	return {
+		context: appDirectory,
 		entry: {
-			'usage-basic': `${resolveApp('examples/usage-basic/config.js')}`
+			'usage-basic': resolveApp('examples/usage-basic/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
 		},
 		devtool: isProduction ? false : 'source-map',
 		output: {
-			path: resolveApp('examples/dist/'),
+			path: resolveApp('examples/dist'),
 			filename: 'scripts/[name].js'
 		},
 		module: {
@@ -30,7 +31,10 @@ module.exports = (env, argv) => {
 					include: [resolveApp('examples'), resolveApp('dist')],
 					use: [
 						{
-							loader: 'babel-loader'
+							loader: 'babel-loader',
+							options: {
+								configFile: resolveApp('config/babel.config.js')
+							}
 						}
 					]
 				},
@@ -46,7 +50,7 @@ module.exports = (env, argv) => {
 							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
-									config: resolveApp('postcss.config.js')
+									config: resolveApp('config/postcss.config.js')
 								}
 							}
 						}
@@ -59,7 +63,7 @@ module.exports = (env, argv) => {
 		},
 		devServer: {
 			static: {
-				directory: resolveApp('examples')
+				directory: resolveApp('./')
 			},
 			historyApiFallback: true,
 			port: 3000,
@@ -79,7 +83,11 @@ module.exports = (env, argv) => {
 				filename: 'index.html',
 				template: resolveApp('examples/usage-basic/index.html'),
 				chunks: ['usage-basic'],
-				publicPath: '../'
+				publicPath: './',
+				port: 3000,
+				hot: true,
+				// host: '0.0.0.0',
+				https: true
 			})
 		],
 		stats: {

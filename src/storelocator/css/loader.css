@@ -1,7 +1,5 @@
-@import "./vars";
-
 @keyframes loading {
-	from {
+	0% {
 		left: 50%;
 		width: 0;
 		z-index: 100;
@@ -13,7 +11,7 @@
 		z-index: 10;
 	}
 
-	to {
+	100% {
 		left: 0;
 		width: 100%;
 	}
@@ -36,7 +34,7 @@
 		}
 
 		.storelocator-loaderBar {
-			content: "";
+			content: '';
 			display: inline-block;
 			position: absolute;
 			width: 0;

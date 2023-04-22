@@ -1,14 +1,5 @@
 module.exports = function (api) {
-	const presets = [
-		[
-			'@babel/preset-env',
-			{
-				targets: {
-					node: '8.13.0'
-				}
-			}
-		]
-	]
+	const presets = [['@babel/preset-env']]
 
 	api.cache(true)
 

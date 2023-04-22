@@ -1,14 +1,12 @@
-@import "./vars";
-
 html,
 body {
-	height: auto;
+	height: 100%;
 	margin: 0;
 }
 
 .storelocator {
 	position: relative;
-	height: auto;
+	height: 100%;
 
 	&,
 	* {
