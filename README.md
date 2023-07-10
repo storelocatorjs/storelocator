@@ -24,7 +24,7 @@ yarn add storelocatorjs --dev
 
 ## Demo
 
-Online demo is available on [yoriiis.github.io/storelocatorjs/demo.html](https://storelocatorjs.github.io/demo.html).
+Online demo is available on [https://storelocatorjs.github.io/demo](https://storelocatorjs.github.io/demo).
 
 Storelocatorjs includes also several examples of storelocatorjs implementation.
 
