@@ -24,9 +24,6 @@
 	"scripts": {
 		"build": "rm -rf ./dist/ && webpack --mode=production --config=./config/webpack.config.js",
 		"build:example": "rm -rf ./examples/dist/ && webpack --mode=production --config=./examples/webpack.config.js",
-		"build:mkdocs": "rm -rf ./site/ && npm run build && npm run build:mkdocs:only && npm run create:demo",
-		"build:mkdocs:only": "python -m mkdocs build",
-		"create:demo": "cp -rv ./dist/. ./site/dist/",
 		"dev": "rm -rf ./dist/ && webpack --mode=development --config=./config/webpack.config.js",
 		"start:example": "rm -rf ./examples/dist/ && webpack serve --mode=development --config=./examples/webpack.config.js",
 		"test": "echo \"No test specified\" && exit 0"
