@@ -9,11 +9,11 @@ description: Install Storelocatorjs with npm or manual import. Installation is f
 
 Install Storelocatorjs with npm:
 
-```shell
+```bash
 npm install storelocatorjs
 ```
 
-```javascript
+```js
 import storelocatorjs from 'storelocatorjs';
 import 'storelocatorjs.css';
 
@@ -32,10 +32,10 @@ Includes files manually in your project:
 <script src="storelocator.js"></script>
 
 <script>
-    new storelocatorjs({
-        apiKey: ''
-        webSerciceUrl: ''
-    });
+  new storelocatorjs({
+      apiKey: ''
+      webSerciceUrl: ''
+  });
 </script>
 ```
 
@@ -55,7 +55,7 @@ Storelocatorjs examples are linked to the cloud function. To run locally the clo
 
 Then, to run Storelocatorjs examples, simply run the following commands:
 
-```
+```bash
 cd functions
 npm install
 npm run serve
@@ -69,12 +69,13 @@ The storelocatorjs project includes a JSON example in the folder `./functions/da
 Datas are stored in an array of object for better performance.<br />
 
 !!! warning "Mandatory JSON structure"
-    __It is important to respect the format of the keys in the JSON file.__
+**It is important to respect the format of the keys in the JSON file.**
 
 In case of filters usage, the category value in the highlight line must correspond to the filter `value` attributes in the HTML.
 
 ```json hl_lines="3"
-[{
+[
+  {
     "address": "34 Avenue de la Perrière",
     "category": "1",
     "city": "Lorient",
@@ -84,7 +85,8 @@ In case of filters usage, the category value in the highlight line must correspo
     "phone": "0297594071",
     "title": "Le crabe Marteau",
     "zipcode": "56100"
-}]
+  }
+]
 ```
 
 ```html
@@ -95,112 +97,130 @@ In case of filters usage, the category value in the highlight line must correspo
 
 List of available fields in the JSON. Mandatory fields are `lat` and `lng`.
 
-#### `lat`
+### `lat`
 
 `mandatory - float`
 
 The latitude of the store.
 
-```javascript
-[{
-    "lat": ""
-}]
+```js
+[
+  {
+    lat: ''
+  }
+];
 ```
 
-#### `lng`
+### `lng`
 
 `mandatory - string`
 
 The longitude of the store.
 
-```javascript
-[{
-    "lng": ""
-}]
+```js
+[
+  {
+    lng: ''
+  }
+];
 ```
 
-#### `address`
+### `address`
 
 `string`
 
 The address of the store.
 
-```javascript
-[{
-    "address": ""
-}]
+```js
+[
+  {
+    address: ''
+  }
+];
 ```
 
-#### `category`
+### `category`
 
 `string`
 
 The category of the store.
 
-```javascript
-[{
-    "category": ""
-}]
+```js
+[
+  {
+    category: ''
+  }
+];
 ```
 
-#### `city`
+### `city`
 
 `string`
 
 The city of the store.
 
-```javascript
-[{
-    "city": ""
-}]
+```js
+[
+  {
+    city: ''
+  }
+];
 ```
 
-#### `id`
+### `id`
 
 `integer`
 
 The id of the store.
 
-```javascript
-[{
-    "id": ""
-}]
+```js
+[
+  {
+    id: ''
+  }
+];
 ```
 
-#### `phone`
+### `phone`
 
 `string`
 
 The phone of the store.
 
-```javascript
-[{
-    "phone": ""
-}]
+```js
+[
+  {
+    phone: ''
+  }
+];
 ```
 
-#### `title`
+### `title`
 
 `string`
 
 The title of the store.
 
-```javascript
-[{
-    "title": ""
-}]
+```js
+[
+  {
+    title: ''
+  }
+];
 ```
 
-#### `zipcode`
+### `zipcode`
 
 `string`
 
 The zipcode of the store.
 
-```javascript
-[{
-    "zipcode": ""
-}]
+```js
+[
+  {
+    zipcode: ''
+  }
+];
 ```
 
 <script>

@@ -32,7 +32,7 @@ Storelocatorjs includes by default [Google Maps Autocomplete](https://developers
 Storelocatorjs integrate its own geolocation button `.storelocator-geolocButton` to trigger a geolocation request.
 
 !!! warning
-    Geolocation need SSL certificat with `https` on Google Chrome and somes others recents browsers. Documentation is available on [Google Developers](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only).
+Geolocation need SSL certificat with `https` on Google Chrome and somes others recents browsers. Documentation is available on [Google Developers](https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only).
 
 ### Filters
 
@@ -46,29 +46,34 @@ To use this feature, fill the option `map.markers` as below:
 
 ```json
 {
-    "map": {
-        "markers": {
-            "width": 30,
-            "height": 40,
-            "styles": [{
-                "category": "userPosition",
-                "colorBackground": "#4285f4",
-                "colorText": "#fff"
-            }, {
-                "category": "1",
-                "colorBackground": "#ec4233",
-                "colorText": "#fff"
-            },{
-                "category": "2",
-                "colorBackground": "#009925",
-                "colorText": "#fff"
-            },{
-                "category": "3",
-                "colorBackground": "#eeb211",
-                "colorText": "#fff"
-            }]
+  "map": {
+    "markers": {
+      "width": 30,
+      "height": 40,
+      "styles": [
+        {
+          "category": "userPosition",
+          "colorBackground": "#4285f4",
+          "colorText": "#fff"
+        },
+        {
+          "category": "1",
+          "colorBackground": "#ec4233",
+          "colorText": "#fff"
+        },
+        {
+          "category": "2",
+          "colorBackground": "#009925",
+          "colorText": "#fff"
+        },
+        {
+          "category": "3",
+          "colorBackground": "#eeb211",
+          "colorText": "#fff"
         }
+      ]
     }
+  }
 }
 ```
 
@@ -77,10 +82,10 @@ You can change marker dimensions (`width` and `height`) in pixel by passing an i
 `map.markers.style` contains object and each objects correspond to a marker category, with 3 parameters:
 
 !!! tip "Geolocation marker"
-    The marker category __`userPosition`__ allow you to customized the marker style of the user geolocation. Do not change the category name of this marker.<br /><br />
+The marker category **`userPosition`** allow you to customized the marker style of the user geolocation. Do not change the category name of this marker.<br /><br />
 
 !!! bug "Marker SVG on IE"
-    Internet Explorer doesn't accept custom SVG for markers. Default markers are use on this browser.
+Internet Explorer doesn't accept custom SVG for markers. Default markers are use on this browser.
 
 ### Clusters
 
@@ -90,41 +95,44 @@ With cluster option enabled, you need to load the `markerclusterer.js` library b
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 ```
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        cluster: {
-            status: true,
-            options: {
-                gridSize: 50,
-                maxZoom: 13,
-                imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-                zoomOnClick: true,
-                averageCenter: true,
-                minimumClusterSize: 2,
-                styles: []
-            }
-        }
+  options: {
+    cluster: {
+      status: true,
+      options: {
+        gridSize: 50,
+        maxZoom: 13,
+        imagePath:
+          'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+        zoomOnClick: true,
+        averageCenter: true,
+        minimumClusterSize: 2,
+        styles: []
+      }
     }
+  }
 });
 ```
 
 Default image can be changed, fill the option `cluster.options.styles` as below, to easily customized the style of the cluster image.
 
-```javascript hl_lines="6 7 8 9"
+```js hl_lines="6 7 8 9"
 new storelocatorjs({
-    options: {
-        cluster: {
-            options: {
-                styles: [{
-                    "url": "/images/cluster.png",
-                    "textColor": "#000",
-                    "width": 60,
-                    "height": 60
-                }]
-            }
-        }
+  options: {
+    cluster: {
+      options: {
+        styles: [
+          {
+            url: '/images/cluster.png',
+            textColor: '#000',
+            width: 60,
+            height: 60
+          }
+        ]
+      }
     }
+  }
 });
 ```
 
@@ -133,10 +141,10 @@ new storelocatorjs({
 Storelocatorjs auto-search allow to refresh markers on area bounds changed. Zoom or move events may trigger an auto-search if user extends the area. To use this feature, enable options `markersUpdate.status`.
 
 !!! tip "Viewport overlays"
-    Enable `debug` option to see viewport overlays above the map:
+Enable `debug` option to see viewport overlays above the map:
 
-    * `red`: list of all stores according to `maxRadius` option. User can move on this area without refresh the map.
-    * `green`: list of all stores according to the `limitInViewport` option. Map is centered on this viewport.
+- `red`: list of all stores according to `maxRadius` option. User can move on this area without refresh the map.
+- `green`: list of all stores according to the `limitInViewport` option. Map is centered on this viewport.
 
 ### Info window
 
@@ -144,31 +152,35 @@ Storelocatorjs allow to show marker informations with the native Google Maps inf
 
 ```html
 <div class="storelocator-infoWindow">
-    <span class="store-picture">
-        <img src="{picture}" alt="{title}" />
+  <span class="store-picture">
+    <img src="{picture}" alt="{title}" />
+  </span>
+  <div class="storelocator-detailStore">
+    <span class="storelocator-detailStoreTitle">{title}</span>
+    <span class="storelocator-detailStoreDistance">
+      <a
+        href="http://www.google.fr/maps/dir/${origin}/${destination}"
+        title="Itinerary"
+        target="_blank"
+      >
+        {distance}km
+      </a>
     </span>
-    <div class="storelocator-detailStore">
-        <span class="storelocator-detailStoreTitle">{title}</span>
-        <span class="storelocator-detailStoreDistance">
-            <a href="http://www.google.fr/maps/dir/${origin}/${destination}" title="Itinerary" target="_blank">
-                {distance}km
-            </a>
-        </span>
-        <span class="storelocator-detailStoreAddress">{address}</span>
-        <span class="storelocator-detailStoreZipcode">{zipcode}</span>
-        <span class="storelocator-detailStoreCity">{city}</span>
-        <span class="storelocator-detailStorePhone">
-            <a href="tel:{phone}" title="Call">{phone}</a>
-        </span>
-        <span class="store-link">
-            <a href="{link}" title="Visit website" target="_blank">{link}</a>
-        </span>
-    </div>
+    <span class="storelocator-detailStoreAddress">{address}</span>
+    <span class="storelocator-detailStoreZipcode">{zipcode}</span>
+    <span class="storelocator-detailStoreCity">{city}</span>
+    <span class="storelocator-detailStorePhone">
+      <a href="tel:{phone}" title="Call">{phone}</a>
+    </span>
+    <span class="store-link">
+      <a href="{link}" title="Visit website" target="_blank">{link}</a>
+    </span>
+  </div>
 </div>
 ```
 
 !!! info "Distance"
-    You will notice that the distance information is automatically caculate with the cloud function script 👍.
+You will notice that the distance information is automatically caculate with the cloud function script 👍.
 
 <script>
   ((window.gitter = {}).chat = {}).options = {

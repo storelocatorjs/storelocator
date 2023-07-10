@@ -1,44 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Storelocatorjs - Usage basic</title>
-        <link rel="stylesheet" href="../../dist/storelocator/css/storelocator.css" />
-        <link rel="stylesheet" href="../assets/custom-style.css" />
-        </head>
-    <body>
-        <div class="storelocator">
-            <div class="storelocator-loader"></div>
-            <div class="storelocator-sidebar">
-                <form class="storelocator-formSearch">
-                    <input type="text" class="storelocator-inputSearch" placeholder="Enter a location" autocomplete="off" />
-                </form>
-                <nav class="storelocator-nav">
-                    <ul class="storelocator-navList">
-                        <li class="storelocator-navListItem active">
-                            <button class="storelocator-navButton" data-switch-view data-target="map">Map</button>
-                        </li>
-                        <li class="storelocator-navListItem">
-                            <button class="storelocator-navButton" data-switch-view data-target="list">List</button>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="storelocator-sidebarResults"></div>
-            </div>
-            <div class="storelocator-googleMaps active">
-                <div id="storelocator-googleMapsCanvas"></div>
-                <button class="storelocator-geolocButton"></button>
-            </div>
-        </div>
-
-        <script src="../../dist/storelocator/js/storelocator.js"></script>
-        <script>
-            var myStorelocator = new storelocatorjs({
-                options: {
-                    apiKey: 'CREATE_YOUR_API_KEY',
-                    webServiceUrl: 'http://localhost:5000/storelocatorjs/europe-west1/stores'
-                }
-            });
-        </script>
-    </body>
+	<head>
+		<meta charset="utf-8" />
+		<title>Storelocatorjs - Usage basic</title>
+	</head>
+	<body>
+		<div class="storelocator">
+			<div class="storelocator-loader"></div>
+			<div class="storelocator-sidebar">
+				<form class="storelocator-formSearch">
+					<input
+						type="text"
+						class="storelocator-inputSearch"
+						placeholder="Enter a location"
+						autocomplete="off"
+					/>
+				</form>
+				<nav class="storelocator-nav">
+					<ul class="storelocator-navList">
+						<li class="storelocator-navListItem active">
+							<button
+								class="storelocator-navButton"
+								data-switch-view
+								data-target="map"
+							>
+								Map
+							</button>
+						</li>
+						<li class="storelocator-navListItem">
+							<button
+								class="storelocator-navButton"
+								data-switch-view
+								data-target="list"
+							>
+								List
+							</button>
+						</li>
+					</ul>
+				</nav>
+				<div class="storelocator-sidebarResults"></div>
+			</div>
+			<div class="storelocator-googleMaps active">
+				<div id="storelocator-googleMapsCanvas"></div>
+				<button class="storelocator-geolocButton"></button>
+			</div>
+		</div>
+	</body>
 </html>

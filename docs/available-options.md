@@ -11,11 +11,11 @@ Storelocatorjs contains many options to allow you to easily configure your map a
 
 Tells storelocatorjs the API key to use Google Maps API.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        apiKey: ''
-    }
+  options: {
+    apiKey: ''
+  }
 });
 ```
 
@@ -25,11 +25,11 @@ new storelocatorjs({
 
 Tells storelocatorjs where is located the cloud function web service to get JSON store datas.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        webServiceUrl: ''
-    }
+  options: {
+    webServiceUrl: ''
+  }
 });
 ```
 
@@ -39,7 +39,7 @@ new storelocatorjs({
 
 Tells storelocatorjs marker clusters options. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/marker-clustering).
 
-```javascript
+```js
 new storelocatorjs({
     options: {
         cluster: {
@@ -65,13 +65,13 @@ new storelocatorjs({
 
 Tells storelocatorjs whether to enable the marker clustering.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        cluster: {
-            status: false
-        }
+  options: {
+    cluster: {
+      status: false
     }
+  }
 });
 ```
 
@@ -81,11 +81,11 @@ new storelocatorjs({
 
 Tells storelocatorjs whether to display the debug overlay.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        debug: false
-    }
+  options: {
+    debug: false
+  }
 });
 ```
 
@@ -95,13 +95,13 @@ new storelocatorjs({
 
 Tells storelocatorjs whether to enable an auto geolocation request on page load.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        geolocation: {
-            startOnLoad: false
-        }
+  options: {
+    geolocation: {
+      startOnLoad: false
     }
+  }
 });
 ```
 
@@ -111,13 +111,13 @@ new storelocatorjs({
 
 Tells storelocatorjs whether to enable the geolocation.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        geolocation: {
-            status: true
-        }
+  options: {
+    geolocation: {
+      status: true
     }
+  }
 });
 ```
 
@@ -127,15 +127,15 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the marker width in pixel (without unity).
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        map: {
-            markers: {
-                width: 30
-            }
-        }
+  options: {
+    map: {
+      markers: {
+        width: 30
+      }
     }
+  }
 });
 ```
 
@@ -145,15 +145,15 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the marker height in pixel (without unity).
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        map: {
-            markers: {
-                height: 40
-            }
-        }
+  options: {
+    map: {
+      markers: {
+        height: 40
+      }
     }
+  }
 });
 ```
 
@@ -163,45 +163,51 @@ new storelocatorjs({
 
 Tells storelocatorjs what are the geolocation marker styles. The category `userPosition` is reserved to identify the geolocation marker.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        map: {
-            markers: {
-                styles: [{
-                    category: 'userPosition',
-                    colorBackground: '#4285f4',
-                    colorText: '#fff'
-                }]
-            }
-        }
+  options: {
+    map: {
+      markers: {
+        styles: [
+          {
+            category: 'userPosition',
+            colorBackground: '#4285f4',
+            colorText: '#fff'
+          }
+        ]
+      }
     }
+  }
 });
 ```
 
 The array `map.markers.styles` can accept entries for each category to customize markers by category.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        map: {
-            markers: {
-                styles: [{
-                    category: '1',
-                    colorBackground: '#ff6600',
-                    colorText: '#fff'
-                },{
-                    category: '2',
-                    colorBackground: '#ffcc33',
-                    colorText: '#fff'
-                },{
-                    category: '3',
-                    colorBackground: '#ea4c89',
-                    colorText: '#fff'
-                }]
-            }
-        }
+  options: {
+    map: {
+      markers: {
+        styles: [
+          {
+            category: '1',
+            colorBackground: '#ff6600',
+            colorText: '#fff'
+          },
+          {
+            category: '2',
+            colorBackground: '#ffcc33',
+            colorText: '#fff'
+          },
+          {
+            category: '3',
+            colorBackground: '#ea4c89',
+            colorText: '#fff'
+          }
+        ]
+      }
     }
+  }
 });
 ```
 
@@ -213,24 +219,24 @@ Tells storelocatorjs marker options. Documentation is available on [Google Devel
 
 `map.options.styles` can be used to stylized the map. Documentation is available on the [feature page](https://yoriiis.github.io/storelocatorjs/features.html#maps-styles)
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        map: {
-            options: {
-                center: [46.227638, 2.213749],
-                disableDefaultUI: false,
-                fullscreenControl: true,
-                mapTypeControl: false,
-                mapTypeId: 'roadmap',
-                scaleControl: false,
-                scrollwheel: true,
-                streetViewControl: false,
-                styles: [],
-                zoom: 6
-            }
-        }
+  options: {
+    map: {
+      options: {
+        center: [46.227638, 2.213749],
+        disableDefaultUI: false,
+        fullscreenControl: true,
+        mapTypeControl: false,
+        mapTypeId: 'roadmap',
+        scaleControl: false,
+        scrollwheel: true,
+        streetViewControl: false,
+        styles: [],
+        zoom: 6
+      }
     }
+  }
 });
 ```
 
@@ -240,13 +246,13 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the search radius in kilometers, when a search is triggered by the user.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        requests: {
-            searchRadius: 50
-        }
+  options: {
+    requests: {
+      searchRadius: 50
     }
+  }
 });
 ```
 
@@ -256,13 +262,13 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the limit of results return by the request. Use `0` to return unlimited stores, according to the JSON database.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        requests: {
-            storesLimit: 20
-        }
+  options: {
+    requests: {
+      storesLimit: 20
     }
+  }
 });
 ```
 
@@ -272,21 +278,21 @@ new storelocatorjs({
 
 Tells storelocatorjs what are HTML identifier (class or data attribute) for each elements. You can personalize them.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        selectors: {
-            container: '.storelocator',
-            formSearch: '.storelocator-formSearch',
-            geolocButton: '.storelocator-geolocButton',
-            inputSearch: '.storelocator-inputSearch',
-            loader: '.storelocator-loader',
-            nav: '.storelocator-nav',
-            searchFilters: '[data-filter]',
-            sidebar: '.storelocator-sidebar',
-            sidebarResults: '.storelocator-sidebarResults'
-        }
+  options: {
+    selectors: {
+      container: '.storelocator',
+      formSearch: '.storelocator-formSearch',
+      geolocButton: '.storelocator-geolocButton',
+      inputSearch: '.storelocator-inputSearch',
+      loader: '.storelocator-loader',
+      nav: '.storelocator-nav',
+      searchFilters: '[data-filter]',
+      sidebar: '.storelocator-sidebar',
+      sidebarResults: '.storelocator-sidebarResults'
     }
+  }
 });
 ```
 
@@ -296,13 +302,13 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the maximum of results in the main viewport when an auto-search is triggered. Zoom or move events may trigger an auto-search if user extends the area.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        markersUpdate: {
-            limitInViewport: 30
-        }
+  options: {
+    markersUpdate: {
+      limitInViewport: 30
     }
+  }
 });
 ```
 
@@ -312,13 +318,13 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the maximum search radius in kilometers during an auto-search.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        markersUpdate: {
-            maxRadius: 150
-        }
+  options: {
+    markersUpdate: {
+      maxRadius: 150
     }
+  }
 });
 ```
 
@@ -328,13 +334,13 @@ new storelocatorjs({
 
 Tells storelocatorjs whether to enable auto-search to refresh markers on area bounds changed. Zoom or move events may trigger an auto-search if user extends the area.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        markersUpdate: {
-            status: true
-        }
+  options: {
+    markersUpdate: {
+      status: true
     }
+  }
 });
 ```
 
@@ -344,13 +350,13 @@ new storelocatorjs({
 
 Tells storelocatorjs what is the search radius when the default search limit of 30 kilometers is exceeded. Zoom or move events may trigger an auto-search if user extends the area.
 
-```javascript
+```js
 new storelocatorjs({
-    options: {
-        markersUpdate: {
-            stepRadius: 50
-        }
+  options: {
+    markersUpdate: {
+      stepRadius: 50
     }
+  }
 });
 ```
 

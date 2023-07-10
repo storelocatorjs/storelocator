@@ -40,6 +40,7 @@ The library is available as the `storelocatorjs` package name on [npm](https://w
 ```
 npm i --save-dev storelocatorjs
 ```
+
 ```
 yarn add --dev storelocatorjs
 ```
@@ -62,49 +63,50 @@ The extended usage of the Storelocatorjs with filters and store categories used 
 
 ```html
 <div class="storelocator">
-    <div class="storelocator-loader"></div>
-    <div class="storelocator-sidebar">
-        <form class="storelocator-formSearch" name="form-search">
-            <input type="text" class="storelocator-inputSearch" placeholder="Enter a location" autocomplete="off" />
-            <div class="storelocator-formFilters">
-                <div class="storelocator-formFiltersRow">
-                    <div class="storelocator-formCheckbox">
-                        <input type="checkbox" id="cat-1" data-filter checked="checked" value="1" />
-                        <label for="cat-1" class="category-1">Categorie 1</label>
-                    </div>
-                    <div class="storelocator-formCheckbox">
-                        <input type="checkbox" id="cat-2" data-filter checked="checked" value="2" />
-                        <label for="cat-2" class="category-2">Categorie 2</label>
-                    </div>
-                </div>
-                <div class="storelocator-formFiltersRow">
-                    <div class="storelocator-formCheckbox">
-                        <input type="checkbox" id="cat-3" data-filter value="3" />
-                        <label for="cat-3" class="category-3">Categorie 3</label>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <nav class="storelocator-nav">
-            <ul class="storelocator-navList">
-                <li class="storelocator-navListItem active">
-                    <button class="storelocator-navButton" data-switch-view data-target="map">
-                        Map
-                    </button>
-                </li>
-                <li class="storelocator-navListItem">
-                    <button class="storelocator-navButton" data-switch-view data-target="list">
-                        List
-                    </button>
-                </li>
-            </ul>
-        </nav>
-        <div class="storelocator-sidebarResults"></div>
-    </div>
-    <div class="storelocator-googleMaps active">
-        <div id="storelocator-googleMapsCanvas"></div>
-        <button class="storelocator-geolocButton"></button>
-    </div>
+  <div class="storelocator-loader"></div>
+  <div class="storelocator-sidebar">
+    <form class="storelocator-formSearch" name="form-search">
+      <input
+        type="text"
+        class="storelocator-inputSearch"
+        placeholder="Enter a location"
+        autocomplete="off"
+      />
+      <div class="storelocator-formFilters">
+        <div class="storelocator-formFiltersRow">
+          <div class="storelocator-formCheckbox">
+            <input type="checkbox" id="cat-1" data-filter checked="checked" value="1" />
+            <label for="cat-1" class="category-1">Categorie 1</label>
+          </div>
+          <div class="storelocator-formCheckbox">
+            <input type="checkbox" id="cat-2" data-filter checked="checked" value="2" />
+            <label for="cat-2" class="category-2">Categorie 2</label>
+          </div>
+        </div>
+        <div class="storelocator-formFiltersRow">
+          <div class="storelocator-formCheckbox">
+            <input type="checkbox" id="cat-3" data-filter value="3" />
+            <label for="cat-3" class="category-3">Categorie 3</label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <nav class="storelocator-nav">
+      <ul class="storelocator-navList">
+        <li class="storelocator-navListItem active">
+          <button class="storelocator-navButton" data-switch-view data-target="map">Map</button>
+        </li>
+        <li class="storelocator-navListItem">
+          <button class="storelocator-navButton" data-switch-view data-target="list">List</button>
+        </li>
+      </ul>
+    </nav>
+    <div class="storelocator-sidebarResults"></div>
+  </div>
+  <div class="storelocator-googleMaps active">
+    <div id="storelocator-googleMapsCanvas"></div>
+    <button class="storelocator-geolocButton"></button>
+  </div>
 </div>
 ```
 
@@ -116,7 +118,7 @@ Storelocatorjs contains many options to allow you to easily configure your map a
 
 The `onReady` function expose the Google Maps instance as `map` variable and is called when the map is instantiated and ready. With the example below, an automatic search is triggered with location coordinates passed in parameters.
 
-```javascript
+```js
 new Storelocator({
     apiKey: '',
     webServiceUrl: ''

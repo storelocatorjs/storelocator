@@ -1,36 +1,18 @@
-/**
- * @name Storelocatorjs/CloudFunction
- * @version 1.0.0
- * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
- * @author: Joris DANIEL aka Yoriiis
- * @description: Storelocatorjs cloud function
- * {@link https://yoriiis.github.io/storelocatorjs}
- * @copyright 2019 Joris DANIEL aka Yoriiis <https://yoriiis.github.io/storelocatorjs>
- */
-
-'use strict'
-
 const storesDB = require('./database.json')
 const Stores = require('./stores.js')
-const functions = require('firebase-functions')
-const express = require('express')
-const app = express()
+const app = require('express')()
 const bodyParser = require('body-parser')
 const cors = require('cors')
-require('dotenv').config()
 
-// CORS configuration (add whitelist domain)
-app.use(
-	cors({
-		origin: process.env.CLOUD_FUNCTION_DOMAIN
-	})
-)
+const port = 8000
+
+app.use(cors())
 
 // Enable JSON parser
 app.use(bodyParser.json())
 
 // Set the default route
-app.post('/', (request, response) => {
+app.get('/', (request, response) => {
 	response.header('Content-type', 'application/json')
 
 	// Get request parameters
@@ -58,10 +40,8 @@ app.post('/', (request, response) => {
 	response.status(200).json(results)
 })
 
-// Set the cloud function
-const stores = functions.region('europe-west1').https.onRequest(app)
+app.listen(port, () => {
+	console.log(`Example app listening on port ${port}`)
+})
 
-// Export the cloud function
-module.exports = {
-	stores
-}
+// module.exports = app
