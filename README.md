@@ -5,8 +5,8 @@
 Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a store locator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
 
 <p align="center">
-    <a href="https://yoriiis.github.io/storelocatorjs/demo" title="Storelocatorjs demo">
-        <img src="https://yoriiis.github.io/storelocatorjs/images/desktop.jpg" alt="Storelocatorjs on desktop" width="650px" />
+    <a href="https://storelocatorjs.github.io/demo" title="Storelocatorjs demo">
+        <img src="https://storelocatorjs.github.io/images/desktop.jpg" alt="Storelocatorjs on desktop" width="650px" />
     </a>
 </p>
 
@@ -24,7 +24,7 @@ yarn add storelocatorjs --dev
 
 ## Demo
 
-Online demo is available on [yoriiis.github.io/storelocatorjs/demo.html](https://yoriiis.github.io/storelocatorjs/demo.html).
+Online demo is available on [yoriiis.github.io/storelocatorjs/demo.html](https://storelocatorjs.github.io/demo.html).
 
 Storelocatorjs includes also several examples of storelocatorjs implementation.
 
@@ -89,7 +89,7 @@ The extended usage of the Storelocatorjs with filters and store categories used 
 
 ### Options
 
-Storelocatorjs contains many options to allow you to easily configure your map according to your needs. Options are available on the [Storelocatorjs website](https://yoriiis.github.io/storelocatorjs/available-options.html).
+Storelocatorjs contains many options to allow you to easily configure your map according to your needs. Options are available on the [Storelocatorjs website](https://storelocatorjs.github.io/available-options.html).
 
 #### Example with the onReady function
 
@@ -116,7 +116,7 @@ The project is fully compatible with the most popular web browsers. More informa
 ### Commercial license
 
 If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License on the [license page](https://yoriiis.github.io/storelocatorjs/licenses.html#purchasing).
+Purchase a Storelocatorjs Commercial License on the [license page](https://storelocatorjs.github.io/licenses.html#purchasing).
 
 ### Open source license
 

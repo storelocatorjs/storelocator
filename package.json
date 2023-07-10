@@ -16,11 +16,14 @@
 		"responsive design",
 		"store locator"
 	],
-	"homepage": "https://yoriiis.github.io/storelocatorjs",
+	"homepage": "https://storelocatorjs.github.io",
 	"bugs": "https://github.com/yoriiis/storelocatorjs/issues",
 	"repository": "https://github.com/yoriiis/storelocatorjs.git",
 	"author": "Joris DANIEL",
 	"main": "dist/storelocator.js",
+	"files": [
+		"./src"
+	],
 	"scripts": {
 		"build": "rm -rf ./dist/ && webpack --mode=production --config=./config/webpack.config.js",
 		"build:example": "rm -rf ./examples/dist/ && webpack --mode=production --config=./examples/webpack.config.js",
