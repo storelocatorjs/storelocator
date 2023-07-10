@@ -9,7 +9,8 @@ export default {
 		options: {
 			averageCenter: true,
 			gridSize: 50,
-			imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+			imagePath:
+				'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
 			maxZoom: 13,
 			minimumClusterSize: 2,
 			styles: [],
@@ -26,11 +27,13 @@ export default {
 		markers: {
 			width: 30,
 			height: 40,
-			styles: [{
-				category: 'userPosition',
-				colorBackground: '#4285f4',
-				colorText: '#fff'
-			}]
+			styles: [
+				{
+					category: 'userPosition',
+					colorBackground: '#4285f4',
+					colorText: '#fff'
+				}
+			]
 		},
 		options: {
 			center: [46.227638, 2.213749],

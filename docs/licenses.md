@@ -3,8 +3,6 @@ title: Licenses - Storelocatorjs
 description: Informations about open source and commercial licenses to use the Storelocatorjs.
 ---
 
-# Storelocatorjs Licenses
-
 Storelocatorjs has three kinds of licenses: open-source, commercial, and OEM.
 
 ## Open source license
@@ -47,7 +45,7 @@ Read the Storelocatorjs Commercial License Agreement below for complete terms an
 
 ## Commercial OEM license
 
-If you want to include Storelocatorjs as part of a commercial interface builder, SDK, or toolkit, choose the Commercial OEM license. Commercial OEM licenses are customized for each customer. Please contact me by email: [joris.daniel@gmail.com](joris.daniel@gmail.com).
+If you want to include Storelocatorjs as part of a commercial interface builder, SDK, or toolkit, choose the Commercial OEM license. Commercial OEM licenses are customized for each customer. Please contact me by email: [joris.daniel@gmail.com](mailto:joris.daniel@gmail.com).
 
 !!! info
 Below are the official Storelocatorjs Commercial License terms, as well as a plain English summary of the terms. These summaries are provided for your convenience, but are not binding; your use of Storelocatorjs is governed by the full license terms.

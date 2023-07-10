@@ -23,14 +23,7 @@ const Stores = class Stores {
 	 * @param {Integer} radius Radius of the request
 	 * @param {Integer} limit Limit of results of the request
 	 */
-	constructor ({
-		database,
-		lat,
-		lng,
-		categories = [],
-		radius = 50,
-		limit = 0
-	}) {
+	constructor({ database, lat, lng, categories = [], radius = 50, limit = 0 }) {
 		this.database = database
 		this.lat = lat
 		this.lng = lng
@@ -43,9 +36,12 @@ const Stores = class Stores {
 	 * Filter stores according to request options
 	 * @return {Object} List of stores filtered (JSON)
 	 */
-	filter () {
+	filter() {
 		// Check if the request is filtered by category
-		let stores = this.categories.length === 0 ? this.database : this.filterStoreByCategory(this.categories)
+		const stores =
+			this.categories.length === 0
+				? this.database
+				: this.filterStoreByCategory(this.categories)
 
 		// Filter store by geoposition
 		return this.filterStoreByGeoPosition(stores)
@@ -56,12 +52,12 @@ const Stores = class Stores {
 	 * @param {Array} categories Array of selected categories
 	 * @return {Object} Stores filtered by categories
 	 */
-	filterStoreByCategory (categories) {
-		let storesFiltered = []
+	filterStoreByCategory(categories) {
+		const storesFiltered = []
 
 		// Loop on all stores, with filter
 		for (let i = 0, lengthStores = this.database.length; i < lengthStores; i++) {
-			let currentStore = this.database[i]
+			const currentStore = this.database[i]
 			if (categories.indexOf(currentStore.category) !== -1) {
 				storesFiltered.push(currentStore)
 			}
@@ -75,8 +71,8 @@ const Stores = class Stores {
 	 * @param {Object} stores Stores filtered by categories
 	 * @return {Object} Stores filtered by geoposition
 	 */
-	filterStoreByGeoPosition (stores) {
-		let listStores = []
+	filterStoreByGeoPosition(stores) {
+		const listStores = []
 		let currentStore
 		let storesByDistance
 
@@ -107,7 +103,7 @@ const Stores = class Stores {
 			}
 		})
 
-		let storesFiltered = []
+		const storesFiltered = []
 		for (let i = 0, lengthStores = listStores.length; i < lengthStores; i++) {
 			if (listStores[i].distance > this.radius) {
 				break
@@ -143,20 +139,14 @@ const Stores = class Stores {
 	// Official Web site: http://www.geodatasource.com
 	//
 	// GeoDataSource.com (C) All Rights Reserved 2015
-	getDistanceBetweenCoordinate ({
-		lat1,
-		lng1,
-		lat2,
-		lng2,
-		unit
-	}) {
-		let theta = lng1 - lng2
-		let dist =
+	getDistanceBetweenCoordinate({ lat1, lng1, lat2, lng2, unit }) {
+		const theta = lng1 - lng2
+		const dist =
 			Math.sin(this.deg2rad(lat1)) * Math.sin(this.deg2rad(lat2)) +
 			Math.cos(this.deg2rad(lat1)) *
-			Math.cos(this.deg2rad(lat2)) *
-			Math.cos(this.deg2rad(theta))
-		let miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
+				Math.cos(this.deg2rad(lat2)) *
+				Math.cos(this.deg2rad(theta))
+		const miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
 		unit = unit.toUpperCase()
 
 		if (unit === 'K') {
@@ -173,7 +163,7 @@ const Stores = class Stores {
 	 * @param {Float} x Number
 	 * @return Radius number
 	 */
-	deg2rad (x) {
+	deg2rad(x) {
 		return x * (Math.PI / 180)
 	}
 
@@ -182,7 +172,7 @@ const Stores = class Stores {
 	 * @param {Float} x Number
 	 * @return Degree number
 	 */
-	rad2deg (x) {
+	rad2deg(x) {
 		return x * (180 / Math.PI)
 	}
 }

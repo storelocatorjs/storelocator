@@ -1,0 +1,17 @@
+name: Publish Node.js Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  lint:
+    uses: yoriiis/storelocatorjs/.github/workflows/lint.yml@main
+
+  npm:
+    needs: lint
+    uses: yoriiis/actions/.github/workflows/npm-publish.yml@main
+    with:
+      node-version: 16
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

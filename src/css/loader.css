@@ -1,5 +1,5 @@
 @keyframes loading {
-	0 {
+	0% {
 		left: 50%;
 		width: 0;
 		z-index: 100;

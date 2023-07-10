@@ -32,7 +32,7 @@
 
 		&::before {
 			content: '';
-			background-image: url(//maps.gstatic.com/tactile/mylocation/mylocation-sprite-2x.png);
+			background-image: url('//maps.gstatic.com/tactile/mylocation/mylocation-sprite-2x.png');
 			background-size: 180px 18px;
 			display: block;
 			position: absolute;

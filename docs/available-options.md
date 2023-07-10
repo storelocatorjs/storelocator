@@ -215,7 +215,7 @@ new storelocatorjs({
 
 `default: object`
 
-Tells storelocatorjs marker options. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/reference/3.37/map#MapOptions).
+Tells storelocatorjs marker options. Documentation is available on [Google Developers](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions).
 
 `map.options.styles` can be used to stylized the map. Documentation is available on the [feature page](https://yoriiis.github.io/storelocatorjs/features.html#maps-styles)
 

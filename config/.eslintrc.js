@@ -34,5 +34,5 @@ module.exports = {
 		window: false
 	},
 
-	ignorePatterns: ['node_modules']
+	ignorePatterns: ['node_modules', 'dist']
 }

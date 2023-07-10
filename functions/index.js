@@ -16,22 +16,22 @@ app.get('/', (request, response) => {
 	response.header('Content-type', 'application/json')
 
 	// Get request parameters
-	const lat = request.body['lat'] || null
-	const lng = request.body['lng'] || null
-	const categories = request.body['categories'] || []
-	const radius = request.body['radius'] || null
-	const limit = request.body['limit'] || null
+	const lat = request.body.lat || null
+	const lng = request.body.lng || null
+	const categories = request.body.categories || []
+	const radius = request.body.radius || null
+	const limit = request.body.limit || null
 	let results = null
 
 	// Filter stores if parameters are valid
 	if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
 		const appStores = new Stores({
 			database: storesDB,
-			lat: lat,
-			lng: lng,
-			categories: categories,
-			radius: radius,
-			limit: limit
+			lat,
+			lng,
+			categories,
+			radius,
+			limit
 		})
 		results = appStores.filter()
 	}
