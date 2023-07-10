@@ -1,29 +1,6 @@
-<p>
-    <a href="https://yoriiis.github.io/storelocatorjs" title="storelocatorjs">
-        <h2 align=center>Storelocatorjs <small>with Google Maps</small></h2>
-    </a>
-</p><br />
-<p align="center">
-    <img src="https://img.shields.io/badge/storelocatorjs-v2.1.0-546e7a.svg?style=for-the-badge">
-    <img alt="Github Action" src="https://img.shields.io/github/actions/workflow/status/yoriiis/storelocatorjs/ci.yml?branch=master&style=for-the-badge">
-    <img alt="npm" src="https://img.shields.io/npm/v/storelocatorjs?style=for-the-badge">
-    <img alt="Node.js" src="https://img.shields.io/node/v/storelocatorjs?style=for-the-badge">
-    <a href="https://gitter.im/storelocatorjs/storelocator">
-        <img alt="Support" src="https://img.shields.io/gitter/room/yoriiis/storelocatorjs?color=%2345cba1&style=for-the-badge">
-    </a>
-    <a href="https://bundlephobia.com/result?p=fela@latest">
-        <img alt="Bundlephobia" src="https://img.shields.io/bundlephobia/minzip/storelocatorjs?style=for-the-badge">
-    </a>
-    <a href="https://npmjs.com/package/storelocatorjs">
-        <img alt="Npm downloads" src="https://img.shields.io/npm/dm/storelocatorjs?color=fb3e44&label=npm%20downloads&style=for-the-badge">
-    </a>
-</p>
+# Storelocatorjs
 
-<p align="center">
-    <strong>Visit <a href="https://yoriiis.github.io/storelocatorjs" title="yoriiis.github.io/storelocatorjs">yoriiis.github.io/storelocatorjs</a> to get started with storelocatorjs.</strong>
-</p>
-
----
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/yoriiis/storelocatorjs/build.yml?branch=main&style=for-the-badge)](https://github.com/yoriiis/storelocatorjs/actions/workflows/build.yml) [![jsDelivr](https://img.shields.io/jsdelivr/npm/hm/vlitejs?color=%23ff5627&style=for-the-badge)](https://www.jsdelivr.com/package/npm/vlitejs)
 
 Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a store locator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
 
@@ -147,5 +124,4 @@ If you are creating an open source application under a license compatible with t
 
 ## Contributors
 
-Created with ♥ by [@yoriiis](http://github.com/yoriiis).<br />
-Many thanks to Cyril CAMBOURNAC for its contribution.
+Created with ♥ by [@yoriiis](http://github.com/yoriiis)
