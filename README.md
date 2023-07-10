@@ -1,6 +1,6 @@
 # Storelocatorjs
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/yoriiis/storelocatorjs/build.yml?branch=main&style=for-the-badge)](https://github.com/yoriiis/storelocatorjs/actions/workflows/build.yml) [![jsDelivr](https://img.shields.io/jsdelivr/npm/hm/vlitejs?color=%23ff5627&style=for-the-badge)](https://www.jsdelivr.com/package/npm/vlitejs)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/yoriiis/storelocatorjs/build.yml?branch=main&style=for-the-badge)](https://github.com/yoriiis/storelocatorjs/actions/workflows/build.yml) [![jsDelivr](https://img.shields.io/jsdelivr/npm/hm/storelocatorjs?color=%23ff5627&style=for-the-badge)](https://www.jsdelivr.com/package/npm/storelocatorjs)
 
 Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a store locator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
 
