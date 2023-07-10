@@ -32,5 +32,7 @@ module.exports = {
 		document: false,
 		navigator: false,
 		window: false
-	}
+	},
+
+	ignorePatterns: ['node_modules']
 }
