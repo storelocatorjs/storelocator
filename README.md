@@ -14,12 +14,12 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
 
 The library is available as the `storelocatorjs` package name on [npm](https://www.npmjs.com/package/storelocatorjs).
 
-```
-npm i --save-dev storelocatorjs
+```bash
+npm install storelocatorjs --save-dev
 ```
 
-```
-yarn add --dev storelocatorjs
+```bash
+yarn add storelocatorjs --dev
 ```
 
 ## Demo
