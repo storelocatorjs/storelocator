@@ -10,7 +10,7 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
     </a>
 </p>
 
-### Examples
+## Examples
 
 The project includes several examples of `storelocatorjs` implementation in the directory `examples`. Run the following commands to build the assets for the examples:
 
