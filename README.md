@@ -10,6 +10,14 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
     </a>
 </p>
 
+### Examples
+
+The project includes several examples of `storelocatorjs` implementation in the directory `examples`. Run the following commands to build the assets for the examples:
+
+```bash
+npm run build && npm run build:example
+```
+
 ## Installation
 
 The library is available as the `storelocatorjs` package name on [npm](https://www.npmjs.com/package/storelocatorjs).
@@ -25,8 +33,6 @@ yarn add storelocatorjs --dev
 ## Demo
 
 Online demo is available on [https://storelocatorjs.github.io/demo](https://storelocatorjs.github.io/demo).
-
-Storelocatorjs includes also several examples of storelocatorjs implementation.
 
 ## How it works
 
