@@ -1,4 +1,4 @@
-name: Deploy to Vercel Functions
+name: Deploy Vercel Functions
 
 on:
   workflow_call:
@@ -16,4 +16,4 @@ jobs:
     with:
       node-version: 18
     secrets:
-      VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
