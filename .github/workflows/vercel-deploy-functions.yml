@@ -1,0 +1,19 @@
+name: Deploy to Vercel Functions
+
+on:
+  workflow_call:
+  merge_group:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: yoriiis/actions/.github/workflows/vercel-deploy-functions.yml@main
+    with:
+      node-version: 18
+    secrets:
+      VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
