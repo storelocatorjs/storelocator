@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
 	const config = {
 		context: appDirectory,
 		entry: {
-			'usage-basic': resolveApp('examples/usage-basic/config.js')
+			demo: resolveApp('examples/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -70,9 +70,9 @@ module.exports = (env, argv) => {
 			}),
 			new webpack.optimize.ModuleConcatenationPlugin(),
 			new HtmlWebpackPlugin({
-				filename: 'usage-basic/index.html',
-				template: resolveApp('examples/usage-basic/index.html'),
-				chunks: ['usage-basic'],
+				filename: 'index.html',
+				template: resolveApp('examples/index.html'),
+				chunks: ['demo'],
 				publicPath: '../'
 			})
 		],

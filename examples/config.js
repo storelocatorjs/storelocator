@@ -1,5 +1,5 @@
-import '../../dist/storelocator.css'
-import Storelocator from '../../dist/storelocator.js'
+import '../dist/storelocator.css'
+import Storelocator from '../dist/storelocator.js'
 
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
