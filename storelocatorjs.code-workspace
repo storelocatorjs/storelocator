@@ -3,9 +3,9 @@
 		{
 			"path": "."
 		}
-    ],
-    "settings": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
+	],
+	"settings": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"[javascript][typescript][postcss][html][markdown][json]": {
 			"editor.formatOnSave": true,
 			"editor.tabSize": 4,

@@ -15,7 +15,6 @@ module.exports = (env, argv) => {
 	const config = {
 		context: appDirectory,
 		entry: {
-			home: resolveApp('examples/home/config.js'),
 			'usage-basic': resolveApp('examples/usage-basic/config.js')
 		},
 		watchOptions: {
@@ -70,11 +69,6 @@ module.exports = (env, argv) => {
 				chunkFilename: 'styles/[name].css'
 			}),
 			new webpack.optimize.ModuleConcatenationPlugin(),
-			new HtmlWebpackPlugin({
-				filename: 'index.html',
-				template: resolveApp('examples/home/index.html'),
-				chunks: ['home']
-			}),
 			new HtmlWebpackPlugin({
 				filename: 'usage-basic/index.html',
 				template: resolveApp('examples/usage-basic/index.html'),

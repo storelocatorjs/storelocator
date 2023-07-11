@@ -116,7 +116,9 @@ const Stores = class Stores {
 		const theta = lng1 - lng2
 		const dist =
 			Math.sin(this.deg2rad(lat1)) * Math.sin(this.deg2rad(lat2)) +
-			Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * Math.cos(this.deg2rad(theta))
+			Math.cos(this.deg2rad(lat1)) *
+				Math.cos(this.deg2rad(lat2)) *
+				Math.cos(this.deg2rad(theta))
 		const miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
 		unit = unit.toUpperCase()
 

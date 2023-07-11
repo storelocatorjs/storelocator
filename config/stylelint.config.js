@@ -22,5 +22,6 @@ module.exports = {
 				message: 'Expected id selector to be FUN-case'
 			}
 		]
-	}
+	},
+	ignoreFiles: ['../src/css/leaflet.css']
 }

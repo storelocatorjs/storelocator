@@ -52,7 +52,9 @@ export default class Storelocator {
 		this.inputSearch = this.containerStorelocator.querySelector('.storelocator-inputSearch')
 		this.nav = this.containerStorelocator.querySelector('.storelocator-nav')
 		this.sidebar = this.containerStorelocator.querySelector('.storelocator-sidebar')
-		this.sidebarResults = this.containerStorelocator.querySelector('.storelocator-sidebarResults')
+		this.sidebarResults = this.containerStorelocator.querySelector(
+			'.storelocator-sidebarResults'
+		)
 		this.geolocButton = this.containerStorelocator.querySelector('.storelocator-geolocButton')
 		this.loader = this.containerStorelocator.querySelector('.storelocator-loader')
 
@@ -61,7 +63,8 @@ export default class Storelocator {
 	}
 
 	render() {
-		this.target.append(<TemplateMap />)
+		const template = <TemplateMap />
+		this.target.appendChild(template)
 	}
 
 	/**
@@ -160,7 +163,7 @@ export default class Storelocator {
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
 				// Clone object before to prevent reference
-				const cloneClusterOptions = extend(true, this.options.cluster.options)
+				// const cloneClusterOptions = extend(true, this.options.cluster.options)
 				// this.markerCluster = new window.MarkerClusterer(
 				// 	this.map,
 				// 	this.markers,
@@ -493,7 +496,7 @@ export default class Storelocator {
 		}
 
 		// Get lat/lng from searchData
-		const origin = this.searchData.position
+		// const origin = this.searchData.position
 		this.markersGroup = Leaflet.markerClusterGroup({
 			showCoverageOnHover: false,
 			removeOutsideVisibleBounds: true,
@@ -564,7 +567,8 @@ export default class Storelocator {
 	createViewportWithLimitMarker(options) {
 		const { features } = options
 		const maxMarkersInViewport = this.options.markersUpdate.limitInViewport
-		const maxLoop = features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
+		const maxLoop =
+			features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {

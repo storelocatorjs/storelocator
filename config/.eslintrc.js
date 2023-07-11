@@ -1,12 +1,13 @@
 module.exports = {
 	parser: '@babel/eslint-parser',
 	parserOptions: {
-		requireConfigFile: false,
 		ecmaVersion: 6,
 		ecmaFeatures: {
 			impliedStrict: true,
-			experimentalObjectRestSpread: true
+			experimentalObjectRestSpread: true,
+			jsx: true
 		},
+		babelOptions: { configFile: './config/babel.config.js' },
 		sourceType: 'module'
 	},
 
