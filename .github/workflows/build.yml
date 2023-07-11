@@ -16,4 +16,6 @@ jobs:
       node-version: 18
       command-build: |
         npm run build && npm run build:example
-        cd functions && npm install && npm run deploy
+        cd functions && npm install
+        npx vercel --prod --token ${{ secrets.VERCEL_ACCESS_TOKEN }}
+        cd ../
