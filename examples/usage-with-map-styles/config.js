@@ -6,7 +6,7 @@ import Storelocatorjs from '../../dist/storelocator.js'
 const myStorelocator = new Storelocatorjs({
 	options: {
 		apiKey: 'CREATE_YOUR_API_KEY',
-		webServiceUrl: 'http://localhost:8000/',
+		webServiceUrl: 'https://storelocator-functions.vercel.app',
 		map: {
 			options: {
 				center: [46.227638, 2.213749],
