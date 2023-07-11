@@ -1,5 +1,3 @@
-import '../assets/reset.css'
-import '../assets/demo.css'
 import '../assets/custom-style.css'
 import '../../dist/storelocator.css'
 import Storelocatorjs from '../../dist/storelocator.js'
