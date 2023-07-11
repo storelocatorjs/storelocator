@@ -1,5 +1,3 @@
-import { createElement } from 'jsx-dom'
-
 export default function TemplateMap() {
 	return (
 		<div class="storelocator">

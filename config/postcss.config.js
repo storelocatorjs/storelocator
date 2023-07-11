@@ -2,19 +2,33 @@ const path = require('path')
 
 module.exports = {
 	plugins: [
-		require('postcss-import')({
-			path: path.resolve(__dirname, `./src`)
-		}),
-		require('postcss-preset-env')({
-			stage: 2,
-			features: {
-				'custom-properties': {
-					warnings: true,
-					preserve: false
+		[
+			'@csstools/postcss-global-data',
+			{
+				files: [path.resolve(__dirname, '../src/css/vars.css')]
+			}
+		],
+		'postcss-import',
+		'postcss-url',
+		'postcss-nested',
+		[
+			'postcss-preset-env',
+			{
+				stage: 2,
+				features: {
+					'nesting-rules': false,
+					'custom-properties': {
+						warnings: true,
+						preserve: true
+					}
 				}
 			}
-		}),
-		require('postcss-nested')(),
-		require('postcss-custom-media')()
+		],
+		[
+			'postcss-custom-media',
+			{
+				preserve: false
+			}
+		]
 	]
 }

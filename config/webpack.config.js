@@ -11,12 +11,11 @@ const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production'
 
-	return {
+	const config = {
 		context: appDirectory,
 		watch: !isProduction,
 		entry: {
-			storelocator: resolveApp('src/storelocator/config.js'),
-			demo: resolveApp('src/demo/config.js')
+			storelocator: resolveApp('src/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -25,11 +24,12 @@ module.exports = (env, argv) => {
 		output: {
 			path: resolveApp('dist'),
 			publicPath: '/dist/',
-			filename: '[name]/js/[name].js',
-			library: 'storelocatorjs',
-			libraryTarget: 'umd',
-			sourceMapFilename: '[file].map',
-			libraryExport: 'default'
+			filename: '[name].js',
+			library: {
+				name: 'storelocatorjs',
+				type: 'umd',
+				export: 'default'
+			}
 		},
 		module: {
 			rules: [
@@ -71,8 +71,8 @@ module.exports = (env, argv) => {
 		},
 		plugins: [
 			new MiniCssExtractPlugin({
-				filename: `[name]/css/[name].css`,
-				chunkFilename: `[name]/css/[name].css`
+				filename: '[name].css',
+				chunkFilename: '[name].css'
 			}),
 			new webpack.optimize.ModuleConcatenationPlugin()
 		],
@@ -112,4 +112,10 @@ module.exports = (env, argv) => {
 			splitChunks: false
 		}
 	}
+
+	if (!isProduction) {
+		config.plugins.push(new webpack.ProgressPlugin())
+	}
+
+	return config
 }

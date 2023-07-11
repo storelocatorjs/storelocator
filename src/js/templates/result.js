@@ -1,5 +1,3 @@
-import { createElement } from 'jsx-dom'
-
 /**
  * storelocatorjs result template
  */
