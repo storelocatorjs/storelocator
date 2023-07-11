@@ -161,12 +161,21 @@ export default class Storelocator {
 		if (typeof window.MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
 				// Clone object before to prevent reference
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 				const cloneClusterOptions = extend(true, this.options.cluster.options)
 				// this.markerCluster = new window.MarkerClusterer(
 				// 	this.map,
 				// 	this.markers,
 				// 	cloneClusterOptions
 				// )
+=======
+				const cloneClusterOptions = this.extend(true, this.options.cluster.options)
+				this.markerCluster = new window.MarkerClusterer(
+					this.map,
+					this.markers,
+					cloneClusterOptions
+				)
+>>>>>>> origin/main:src/js/storelocator.js
 			}
 		}
 	}
@@ -234,6 +243,7 @@ export default class Storelocator {
 	 * Initialize the user geolocation
 	 */
 	initGeolocation() {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		if (
 			navigator.geolocation &&
 			this.options.geolocation.startOnLoad &&
@@ -241,6 +251,16 @@ export default class Storelocator {
 		) {
 			this.loading(true)
 			this.map.locate({ setView: true, maxZoom: 6, enableHighAccuracy: true })
+=======
+		// Check the browser support
+		if (navigator.geolocation) {
+			// Start geolocation on page load
+			if (this.options.geolocation.startOnLoad) {
+				if (window.location.protocol === 'https:') {
+					this.checkUserPosition()
+				}
+			}
+>>>>>>> origin/main:src/js/storelocator.js
 		}
 	}
 
@@ -269,7 +289,11 @@ export default class Storelocator {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarNav(e) {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		const mapView = this.containerStorelocator.querySelector('.storelocator-map')
+=======
+		const mapView = this.containerStorelocator.querySelector('.storelocator-googleMaps')
+>>>>>>> origin/main:src/js/storelocator.js
 
 		e.preventDefault()
 
@@ -306,8 +330,53 @@ export default class Storelocator {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarResultItem(e) {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		const target = e.target
 		const markerId = target.getAttribute('data-marker-id')
+=======
+		if (e.target && e.target.parentNode.classList.contains('store-center-marker-js')) {
+			e.preventDefault()
+
+			const currentLink = e.target.parentNode
+			const markerIndex = currentLink.getAttribute('data-marker-index')
+			const currentMarker = this.markers[markerIndex]
+
+			this.map.panTo(currentMarker.getPosition())
+			this.map.setZoom(16)
+			this.openInfoWindow(currentMarker)
+			this.containerStorelocator
+				.querySelector('[data-switch-view][data-target="map"]')
+				.click()
+			window.google.maps.event.trigger(this.map, 'resize')
+		}
+	}
+
+	/**
+	 * Check user position with Google Maps geolocation API
+	 * Get the user current position if available
+	 */
+	checkUserPosition() {
+		navigator.geolocation.getCurrentPosition(
+			(position) => {
+				const lat = position.coords.latitude
+				const lng = position.coords.longitude
+				let markerGeoloc = null
+				const positionGeoloc = new window.google.maps.LatLng(lat, lng)
+
+				const options = {
+					position: positionGeoloc,
+					map: this.map
+				}
+
+				// Disable SVG for IE, they don't works
+				if (!this.isBrowserIE()) {
+					options.icon = this.options.map.markers.styles.length
+						? this.getIconMarkerByCategory('userPosition').url
+						: ''
+				}
+
+				markerGeoloc = new window.google.maps.Marker(options)
+>>>>>>> origin/main:src/js/storelocator.js
 
 		if (target && markerId) {
 			e.preventDefault()
@@ -319,14 +388,31 @@ export default class Storelocator {
 					// 	.querySelector('[data-switch-view][data-target="map"]')
 					// 	.click()
 				}
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 			})
 		}
+=======
+
+				this.triggerRequest({
+					lat,
+					lng
+				})
+			},
+			(response) => {
+				this.loading(false)
+			}
+		)
+>>>>>>> origin/main:src/js/storelocator.js
 	}
 
 	/**
 	 * Function called on user map moved event
 	 */
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 	onMoveEnd() {
+=======
+	boundsChanged() {
+>>>>>>> origin/main:src/js/storelocator.js
 		if (this.markers.length) {
 			clearTimeout(this.boundsChangeTimer)
 			this.boundsChangeTimer = setTimeout(() => {
@@ -371,7 +457,12 @@ export default class Storelocator {
 		} else if (increaseRadius) {
 			;({ lat, lng } = this.searchData)
 
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 			this.currentRadius += this.options.markersUpdate.stepRadius
+=======
+			// Increase currentRadius
+			this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius
+>>>>>>> origin/main:src/js/storelocator.js
 		}
 
 		this.triggerRequest({
@@ -382,6 +473,46 @@ export default class Storelocator {
 	}
 
 	/**
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
+=======
+	 * Initialize Google Maps Autocomplete
+	 * @documentation https://developers.google.com/maps/documentation/javascript/places-autocomplete
+	 */
+	initAutocomplete() {
+		const autocomplete = new window.google.maps.places.Autocomplete(this.inputSearch, {})
+
+		this.inputSearch.focus()
+		autocomplete.bindTo('bounds', this.map)
+
+		autocomplete.addListener('place_changed', () => {
+			this.loading(true)
+			const place = autocomplete.getPlace()
+
+			if (place.geometry) {
+				this.autocompleteRequest({
+					lat: place.geometry.location.lat(),
+					lng: place.geometry.location.lng()
+				})
+			} else {
+				this.geocoder.geocode(
+					{
+						address: place.name
+					},
+					(results, status) => {
+						if (status === window.google.maps.GeocoderStatus.OK) {
+							this.autocompleteRequest({
+								lat: results[0].geometry.location.lat(),
+								lng: results[0].geometry.location.lng()
+							})
+						}
+					}
+				)
+			}
+		})
+	}
+
+	/**
+>>>>>>> origin/main:src/js/storelocator.js
 	 * Function called on autocomplete changes
 	 * Trigger a request with the new user research
 	 * @param {String} lat Latitude of the research
@@ -422,7 +553,11 @@ export default class Storelocator {
 
 		// Fecth configuration
 		const fetchConf = {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 			method: 'GET',
+=======
+			method: 'POST',
+>>>>>>> origin/main:src/js/storelocator.js
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -438,12 +573,28 @@ export default class Storelocator {
 				return response
 			})
 			.then((res) => res.json())
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 			.then((features) => {
 				features &&
 					this.parseStores({
 						features,
 						fitBounds
 					})
+=======
+			.then((jsonResponse) => {
+				const data = jsonResponse
+
+				if (data !== null) {
+					this.parseStores({
+						stores: data,
+						fitBounds
+					})
+				}
+			})
+			.catch((error) => {
+				this.loading(false)
+				throw new Error(error)
+>>>>>>> origin/main:src/js/storelocator.js
 			})
 		// .catch((error) => {
 		// 	this.loading(false)
@@ -459,6 +610,18 @@ export default class Storelocator {
 	 */
 	serializeForm({ lat = false, lng = false }) {
 		const formDatas = {}
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
+=======
+		const categories = []
+
+		// Get all selected categories
+		this.searchFilters.forEach((filter, index) => {
+			if (filter.checked) {
+				categories.push(filter.value)
+			}
+		})
+		formDatas.categories = categories
+>>>>>>> origin/main:src/js/storelocator.js
 
 		if (lat && lng) {
 			formDatas.lat = lat
@@ -477,10 +640,31 @@ export default class Storelocator {
 	 * Create all store results
 	 * @param {Object} options Store datas from the web service
 	 */
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 	parseStores({ features, fitBounds }) {
 		this.sidebar.classList.add('active')
 		this.sidebarResults.replaceChildren()
 		this.boundsGlobal = Leaflet.latLngBounds()
+=======
+	parseStores(options) {
+		let noResult = true
+		const { stores } = options
+		const { fitBounds } = options
+		let hmlListResult = `
+			<p class="storelocator-sidebarIntro">
+				${stores.length} results sorted by distance correspond to your research
+			</p>
+			<ul class="storelocator-sidebarResultsList">`
+
+		// Destroy old markers before parse new stores
+		this.destroyMarkers()
+
+		// Reset infoWindow status
+		this.infoWindowOpened = false
+
+		// Re-declare bounds on new research, it's important else zoom bug after one request
+		this.boundsGlobal = new window.google.maps.LatLngBounds()
+>>>>>>> origin/main:src/js/storelocator.js
 
 		if (this.options.markersUpdate.status) {
 			this.boundsWithLimit = Leaflet.latLngBounds()
@@ -495,17 +679,34 @@ export default class Storelocator {
 
 		// Get lat/lng from searchData
 		const origin = this.searchData.position
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		this.markersGroup = Leaflet.markerClusterGroup({
 			showCoverageOnHover: false,
 			removeOutsideVisibleBounds: true,
 			spiderfyOnMaxZoom: true,
 			zoomToBoundsOnClick: true
 		})
+=======
+
+		// Loop on all stores by category
+		stores.forEach((store, index) => {
+			noResult = false
+			store.index = index
+			store.position = new window.google.maps.LatLng(store.lat, store.lng)
+>>>>>>> origin/main:src/js/storelocator.js
 
 		this.addMarkertoMap({ features })
 
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		// this.map.addLayer(this.markersGroup)
 		// this.map.fitBounds(new Leaflet.featureGroup(this.markers).getBounds())
+=======
+			hmlListResult += templateSidebarItemResult.call(this, {
+				store,
+				origin
+			})
+		})
+>>>>>>> origin/main:src/js/storelocator.js
 
 		if (features.length) {
 			this.sidebarResults.appendChild(
@@ -529,10 +730,17 @@ export default class Storelocator {
 
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
 			if (this.options.markersUpdate.status) {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 				// this.createViewportWithLimitMarker({
 				// 	features,
 				// 	fitBounds
 				// })
+=======
+				this.createViewportWithLimitMarker({
+					stores,
+					fitBounds
+				})
+>>>>>>> origin/main:src/js/storelocator.js
 			} else {
 				// Else, and if requested, fitbounds the boundsGlobal
 				// if (fitBounds) {
@@ -563,9 +771,15 @@ export default class Storelocator {
 	 * @param {Object} options Datas to create the custom viewport
 	 */
 	createViewportWithLimitMarker(options) {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		const { features } = options
 		const maxMarkersInViewport = this.options.markersUpdate.limitInViewport
 		const maxLoop = features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
+=======
+		const { stores } = options
+		const maxMarkersInViewport = this.options.markersUpdate.limitInViewport
+		const maxLoop = stores.length < maxMarkersInViewport ? stores.length : maxMarkersInViewport
+>>>>>>> origin/main:src/js/storelocator.js
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {
@@ -591,7 +805,235 @@ export default class Storelocator {
 	 * overlayLimit: list of all stores according to the limitInViewport option
 	 */
 	createOverlays() {
+<<<<<<< HEAD:src/storelocator/js/storelocator.js
 		Leaflet.rectangle(this.boundsGlobal, { color: '#ff0000', weight: 1 }).addTo(this.map)
 		Leaflet.rectangle(this.boundsWithLimit, { color: '#54ff00', weight: 1 }).addTo(this.map)
+=======
+		if (this.overlayGlobal !== null) {
+			this.overlayGlobal.setMap(null)
+		}
+		this.overlayGlobal = new window.google.maps.Rectangle({
+			bounds: this.boundsGlobal,
+			strokeColor: null,
+			strokeOpacity: 0,
+			fillColor: '#ff0000',
+			fillOpacity: 0.35,
+			map: this.map
+		})
+
+		if (this.overlayLimit !== null) {
+			this.overlayLimit.setMap(null)
+		}
+		this.overlayLimit = new window.google.maps.Rectangle({
+			bounds: this.boundsWithLimit,
+			strokeColor: null,
+			strokeOpacity: 0,
+			fillColor: '#54ff00',
+			fillOpacity: 0.35,
+			map: this.map
+		})
+	}
+
+	/**
+	 * Open the Google Maps native InfoWindow
+	 * @param {Object} currentMarker Marker data display inside the infoWindow
+	 */
+	openInfoWindow(currentMarker) {
+		// Get lat/lng from searchData
+		const origin = this.searchData.position
+
+		const hmlinfoWindow = templateInfoWindow({
+			store: currentMarker.store,
+			origin
+		})
+
+		this.infoWindow.setContent(hmlinfoWindow)
+
+		// Change infoWindow status
+		window.google.maps.event.addListener(this.infoWindow, 'closeclick', () => {
+			this.infoWindowOpened = false
+		})
+
+		// Close previous infoWindow open
+		if (this.currentInfoWindow !== null) {
+			this.currentInfoWindow.close()
+		}
+
+		// Store marker info for next infoWindow
+		this.currentInfoWindow = this.infoWindow
+
+		// Open infoWindow
+		this.infoWindow.open(this.map, currentMarker)
+	}
+
+	/**
+	 * Destroy all created Google Map markers
+	 */
+	destroyMarkers() {
+		// Destroy all maskers references in cluster is enabled
+		if (typeof MarkerClusterer !== 'undefined') {
+			if (this.options.cluster.status) {
+				this.markerCluster.clearMarkers()
+			}
+		}
+
+		// Loop backwards on markers and remove them
+		for (let i = this.markers.length - 1; i >= 0; i--) {
+			const currentMarker = this.markers[i]
+
+			// Remove listener from marker instance
+			window.google.maps.event.clearInstanceListeners(currentMarker)
+
+			// Remove the marker
+			currentMarker.setMap(null)
+		}
+
+		this.markers = []
+	}
+
+	/**
+	 * Create a Google Maps markers
+	 * @param {Object} data Marker datas
+	 */
+	createMarkers(data) {
+		const markerStyle = this.markerStyles[data.category]
+		const options = {
+			position: data.position,
+			map: this.map,
+			optimized: true,
+			label: {
+				text: (data.index + 1).toString(),
+				fontFamily: 'inherit',
+				fontSize: '13px',
+				fontWeight: '500',
+				color: markerStyle ? markerStyle.colorText : '#000'
+			}
+		}
+
+		// Disable SVG for IE, they don't works
+		if (!this.isBrowserIE()) {
+			options.icon = this.options.map.markers.styles.length
+				? this.getIconMarkerByCategory(data.category)
+				: ''
+		}
+
+		const marker = new window.google.maps.Marker(options)
+
+		// Push marker data in marker
+		marker.store = data
+
+		this.markers.push(marker)
+
+		// Click on marker to show infoWindow
+		window.google.maps.event.addListener(marker, 'click', () => {
+			this.infoWindowOpened = true
+			this.openInfoWindow(marker)
+		})
+	}
+
+	/**
+	 * Get marker styles by category, from options
+	 * @return {Object} Formatted object with category name into key and marker styles datas
+	 */
+	getMarkerStylesByCategory() {
+		const styles = {}
+		this.options.map.markers.styles.forEach((marker) => {
+			styles[marker.category] = {
+				colorBackground: marker.colorBackground,
+				colorText: marker.colorText
+			}
+		})
+		return styles
+	}
+
+	/**
+	 * Get SVG icon by category styles
+	 * @param {String} category Marker category
+	 * @return {Object} Icon datas to generate a Google Maps markers
+	 */
+	getIconMarkerByCategory(category) {
+		const offsetXLabel = this.options.map.markers.width / 2 - 0.9
+		const offsetYLabel = this.options.map.markers.height / 2 - 3
+		const colorBackground = this.markerStyles[category]
+			? this.markerStyles[category].colorBackground
+			: '#e5454c'
+
+		return {
+			url: this.generateMarkerSVG({
+				colorBackground,
+				width: this.options.map.markers.width,
+				height: this.options.map.markers.height
+			}),
+			labelOrigin: new window.google.maps.Point(offsetXLabel, offsetYLabel)
+		}
+	}
+
+	/**
+	 * Generate SVG from the associated SVG file
+	 * @param {Object} Style datas to customize the SVG
+	 * @return {Object} Custom SVG to generate a Google Maps marker icons
+	 */
+	generateMarkerSVG(options) {
+		// Create DOMParser from SVG string
+		const parser = new DOMParser()
+		const parserSvg = parser.parseFromString(markerSvg, 'text/html')
+		const elementMarkerSvg = parserSvg.querySelector('svg')
+
+		// Change SVG attributes
+		elementMarkerSvg.setAttribute('width', `${options.width}px`)
+		elementMarkerSvg.setAttribute('height', `${options.height}px`)
+		elementMarkerSvg.querySelectorAll('path').forEach((path) => {
+			path.setAttribute('fill', options.colorBackground)
+		})
+
+		// Create Serializer from element
+		const serializer = new XMLSerializer()
+		const stringMarkerSvg = serializer.serializeToString(elementMarkerSvg)
+
+		// Format SVG to generate an icon on the map
+		const customSVG = {
+			mimetype: 'data:image/svg+xml;base64,',
+			scaledSize: new window.google.maps.Size(options.width, options.height)
+		}
+		return customSVG.mimetype + btoa(stringMarkerSvg)
+	}
+
+	/**
+	 * Check if browser is an old Internet Explorer
+	 */
+	isBrowserIE() {
+		return !!(document.documentMode && document.documentMode >= 9)
+	}
+
+	/**
+	 * Extends multiple object into one
+	 * @param {Boolean} deep Enable extend for deep object properties
+	 * @param {Array} objects List of objects to merged
+	 * @return {Object} Objects merged into one
+	 */
+	extend(deep = false, ...objects) {
+		const extended = {}
+
+		// Merge the object into the extended object
+		const merge = (obj) => {
+			for (const prop in obj) {
+				if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+					// If deep merge and property is an object, merge properties
+					if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
+						extended[prop] = this.extend(true, extended[prop], obj[prop])
+					} else {
+						extended[prop] = obj[prop]
+					}
+				}
+			}
+		}
+
+		// Loop through each object and conduct a merge
+		objects.forEach((object) => {
+			merge(object)
+		})
+
+		return extended
+>>>>>>> origin/main:src/js/storelocator.js
 	}
 }

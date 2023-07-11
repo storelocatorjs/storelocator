@@ -1,16 +1,29 @@
-## Description
+<!--
+  Please place an x (without) in all [ ] that apply
+-->
 
-Please describe the change as necessary.
-If it's a feature or enhancement please be as detailed as possible.
-If it's a bug fix, please link the issue that it fixes or describe the bug in as much detail.
+This PR contains a:
 
-## Specific Changes proposed
-Please list the specific changes involved in this pull request.
+- [ ] **bugfix**
+- [ ] new **feature**
+- [ ] **code refactor**
+- [ ] **test update** <!-- if bug or feature is checked, this should be too -->
+- [ ] **typo fix**
+- [ ] **metadata update**
 
-## Requirements Checklist
-- [ ] Feature implemented / Bug fixed
-- [ ] If necessary, more likely in a feature request than a bug fix
-  - [ ] Change has been verified in an actual browser (Chome, Firefox, IE)
-  - [ ] Docs/guides updated
-  - [ ] Example created on CodePen
-- [ ] Reviewed by contributors
+### Motivation / Use-Case
+
+<!--
+  Please explain the motivation or use-case for your change.
+  What existing problem does the PR solve?
+  If this PR addresses an issue, please link to the issue.
+-->
+
+### Breaking Changes
+
+<!--
+  If this PR introduces a breaking change, please describe the impact and a
+  migration path for existing applications.
+-->
+
+### Additional Info

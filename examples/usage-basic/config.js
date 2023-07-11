@@ -1,7 +1,8 @@
-import '../../dist/storelocator/css/storelocator.css'
-import Storelocator from '../../dist/storelocator/js/storelocator'
-import { createElement, Fragment } from 'jsx-dom'
+import '../assets/custom-style.css'
+import '../../dist/storelocator.css'
+import Storelocatorjs from '../../dist/storelocator.js'
 
+/* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
 	options: {
 		webServiceUrl: 'http://localhost:3001',

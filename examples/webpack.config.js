@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -11,9 +12,10 @@ const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production'
 
-	return {
+	const config = {
 		context: appDirectory,
 		entry: {
+			home: resolveApp('examples/home/config.js'),
 			'usage-basic': resolveApp('examples/usage-basic/config.js')
 		},
 		watchOptions: {
@@ -55,25 +57,14 @@ module.exports = (env, argv) => {
 							}
 						}
 					]
+				},
+				{
+					test: /\.svg$/,
+					loader: 'svg-inline-loader'
 				}
 			]
 		},
-		resolve: {
-			extensions: ['.js', '.css']
-		},
-		devServer: {
-			static: {
-				directory: resolveApp('./')
-			},
-			historyApiFallback: true,
-			port: 3000,
-			compress: true,
-			hot: true,
-			https: true
-		},
-		context: appDirectory,
 		plugins: [
-			new webpack.ProgressPlugin(),
 			new MiniCssExtractPlugin({
 				filename: 'styles/[name].css',
 				chunkFilename: 'styles/[name].css'
@@ -81,13 +72,14 @@ module.exports = (env, argv) => {
 			new webpack.optimize.ModuleConcatenationPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',
+				template: resolveApp('examples/home/index.html'),
+				chunks: ['home']
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'usage-basic/index.html',
 				template: resolveApp('examples/usage-basic/index.html'),
 				chunks: ['usage-basic'],
-				publicPath: './',
-				port: 3000,
-				hot: true,
-				// host: '0.0.0.0',
-				https: true
+				publicPath: '../'
 			})
 		],
 		stats: {
@@ -113,10 +105,10 @@ module.exports = (env, argv) => {
 							// Drop console.log|console.info|console.debug
 							// Keep console.warn|console.error
 							pure_funcs: ['console.log', 'console.info', 'console.debug']
-						},
-						mangle: true
+						}
 					}
-				})
+				}),
+				new CssMinimizerPlugin()
 			],
 			chunkIds: 'deterministic', // or 'named'
 			removeAvailableModules: true,
@@ -126,4 +118,19 @@ module.exports = (env, argv) => {
 			splitChunks: false
 		}
 	}
+
+	if (!isProduction) {
+		config.plugins.push(new webpack.ProgressPlugin())
+		config.devServer = {
+			static: {
+				directory: resolveApp('examples')
+			},
+			historyApiFallback: true,
+			port: 3000,
+			compress: true,
+			hot: true
+		}
+	}
+
+	return config
 }

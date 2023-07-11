@@ -5,6 +5,7 @@ module.exports = {
 	trailingComma: 'none',
 	singleQuote: true,
 	arrowParens: 'always',
+	endOfLine: 'lf',
 	overrides: [
 		{
 			files: '*.md',
@@ -14,12 +15,6 @@ module.exports = {
 				useTabs: false,
 				singleQuote: true,
 				semi: true
-			}
-		},
-		{
-			files: '*.html',
-			options: {
-				printWidth: 500
 			}
 		}
 	]

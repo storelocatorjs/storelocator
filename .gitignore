@@ -1,11 +1,2 @@
-.DS_STORE
-node_modules/
+node_modules
 dist
-docs/demo/dist/
-site/
-
-# Logs
-logs
-*.log
-npm-debug.log*
-firebase-debug.log*

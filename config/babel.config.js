@@ -1,18 +1,18 @@
 module.exports = function (api) {
-	const presets = [['@babel/preset-env']]
-
-	api.cache(true)
-
-	const plugins = [
-		'@babel/plugin-transform-modules-commonjs',
+	const presets = [
+		'@babel/preset-env',
 		[
-			'@babel/plugin-transform-react-jsx',
+			'@babel/preset-react',
 			{
-				pragma: 'createElement',
-				pragmaFrag: 'Fragment'
+				runtime: 'automatic',
+				importSource: 'jsx-dom-cjs'
 			}
 		]
 	]
+
+	api.cache(true)
+
+	const plugins = ['@babel/plugin-proposal-class-properties']
 
 	return {
 		presets,

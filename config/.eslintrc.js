@@ -1,13 +1,12 @@
 module.exports = {
-	parser: '@typescript-eslint/parser',
+	parser: '@babel/eslint-parser',
 	parserOptions: {
+		requireConfigFile: false,
 		ecmaVersion: 6,
 		ecmaFeatures: {
 			impliedStrict: true,
-			experimentalObjectRestSpread: true,
-			jsx: true
+			experimentalObjectRestSpread: true
 		},
-		babelOptions: { configFile: './config/babel.config.js' },
 		sourceType: 'module'
 	},
 
@@ -17,10 +16,10 @@ module.exports = {
 		es6: true
 	},
 
-	extends: ['standard', 'plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended'],
+	extends: ['standard', 'plugin:prettier/recommended'],
 
 	rules: {
-		indent: ['error', 'tab', { ignoredNodes: ['TemplateLiteral *'] }],
+		indent: ['error', 'tab', { ignoredNodes: ['TemplateLiteral *'], SwitchCase: 1 }],
 		'no-tabs': 0,
 		'space-before-function-paren': [
 			'error',
@@ -28,7 +27,8 @@ module.exports = {
 		],
 		'react/prop-types': 0,
 		'react/display-name': 0,
-		'react/jsx-key': 0
+		'react/jsx-key': 0,
+		'linebreak-style': ['error', 'unix']
 	},
 
 	globals: {
@@ -37,11 +37,5 @@ module.exports = {
 		window: false
 	},
 
-	settings: {
-		react: {
-			pragma: 'createElement',
-			fragment: 'Fragment',
-			version: '0' // Remove the warning of the missing React package
-		}
-	}
+	ignorePatterns: ['node_modules', 'dist']
 }
