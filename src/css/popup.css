@@ -1,0 +1,38 @@
+.storelocator {
+	&-popup {
+		padding: 10px 0 10px 10px;
+
+		.storelocator-pictureStore {
+			margin-bottom: 20px;
+			display: block;
+			max-width: 250px;
+
+			img {
+				display: block;
+				width: 100%;
+				height: auto;
+			}
+		}
+
+		.storelocator-detailStore {
+			max-width: 250px;
+		}
+
+		.storelocator-detailStoreAddress {
+			padding-right: 0;
+		}
+
+		.storelocator-detailStoreTitle {
+			padding-right: 90px;
+		}
+
+		.storelocator-detailStoreDistance {
+			top: 0;
+			transform: none;
+		}
+
+		.storelocator-detailStoreUrl {
+			color: #000;
+		}
+	}
+}

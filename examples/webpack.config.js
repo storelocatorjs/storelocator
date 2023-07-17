@@ -15,12 +15,7 @@ module.exports = (env, argv) => {
 	const config = {
 		context: appDirectory,
 		entry: {
-			home: resolveApp('examples/home/config.js'),
-			'usage-basic': resolveApp('examples/usage-basic/config.js'),
-			'usage-with-callback': resolveApp('examples/usage-with-callback/config.js'),
-			'usage-with-categories': resolveApp('examples/usage-with-categories/config.js'),
-			'usage-with-clusters': resolveApp('examples/usage-with-clusters/config.js'),
-			'usage-with-map-styles': resolveApp('examples/usage-with-map-styles/config.js')
+			demo: resolveApp('examples/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -76,37 +71,8 @@ module.exports = (env, argv) => {
 			new webpack.optimize.ModuleConcatenationPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',
-				template: resolveApp('examples/home/index.html'),
-				chunks: ['home']
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'usage-basic/index.html',
-				template: resolveApp('examples/usage-basic/index.html'),
-				chunks: ['usage-basic'],
-				publicPath: '../'
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'usage-with-callback/index.html',
-				template: resolveApp('examples/usage-with-callback/index.html'),
-				chunks: ['usage-with-callback'],
-				publicPath: '../'
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'usage-with-categories/index.html',
-				template: resolveApp('examples/usage-with-categories/index.html'),
-				chunks: ['usage-with-categories'],
-				publicPath: '../'
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'usage-with-clusters/index.html',
-				template: resolveApp('examples/usage-with-clusters/index.html'),
-				chunks: ['usage-with-clusters'],
-				publicPath: '../'
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'usage-with-map-styles/index.html',
-				template: resolveApp('examples/usage-with-map-styles/index.html'),
-				chunks: ['usage-with-map-styles'],
+				template: resolveApp('examples/index.html'),
+				chunks: ['demo'],
 				publicPath: '../'
 			})
 		],

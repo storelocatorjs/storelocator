@@ -23,11 +23,10 @@ const Stores = class Stores {
 	 * @param {Integer} radius Radius of the request
 	 * @param {Integer} limit Limit of results of the request
 	 */
-	constructor({ database, lat, lng, categories = [], radius = 50, limit = 0 }) {
+	constructor({ database, lat, lng, radius = 50, limit = 0 }) {
 		this.database = database
 		this.lat = lat
 		this.lng = lng
-		this.categories = categories
 		this.radius = parseInt(radius)
 		this.limit = parseInt(limit)
 	}
@@ -37,48 +36,21 @@ const Stores = class Stores {
 	 * @return {Object} List of stores filtered (JSON)
 	 */
 	filter() {
-		// Check if the request is filtered by category
-		const stores =
-			this.categories.length === 0
-				? this.database
-				: this.filterStoreByCategory(this.categories)
-
-		// Filter store by geoposition
-		return this.filterStoreByGeoPosition(stores)
-	}
-
-	/**
-	 * Filter store by categories in the database
-	 * @param {Array} categories Array of selected categories
-	 * @return {Object} Stores filtered by categories
-	 */
-	filterStoreByCategory(categories) {
-		const storesFiltered = []
-
-		// Loop on all stores, with filter
-		for (let i = 0, lengthStores = this.database.length; i < lengthStores; i++) {
-			const currentStore = this.database[i]
-			if (categories.indexOf(currentStore.category) !== -1) {
-				storesFiltered.push(currentStore)
-			}
-		}
-
-		return storesFiltered
+		return this.filterStoreByGeoPosition()
 	}
 
 	/**
 	 * Filter store by geoposition
-	 * @param {Object} stores Stores filtered by categories
 	 * @return {Object} Stores filtered by geoposition
 	 */
-	filterStoreByGeoPosition(stores) {
+	filterStoreByGeoPosition() {
 		const listStores = []
 		let currentStore
 		let storesByDistance
 
 		// Loop on all store and calculate distance between point
-		for (let i = 0, lengthStores = stores.length; i < lengthStores; i++) {
-			currentStore = stores[i]
+		for (let i = 0, lengthStores = this.database.length; i < lengthStores; i++) {
+			currentStore = this.database[i]
 
 			// Calculate the distance between store coordinate and request coordinate
 			storesByDistance = this.getDistanceBetweenCoordinate({

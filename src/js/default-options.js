@@ -24,17 +24,6 @@ export default {
 		status: true
 	},
 	map: {
-		markers: {
-			width: 30,
-			height: 40,
-			styles: [
-				{
-					category: 'userPosition',
-					colorBackground: '#4285f4',
-					colorText: '#fff'
-				}
-			]
-		},
 		options: {
 			center: [46.227638, 2.213749],
 			disableDefaultUI: false,
@@ -51,17 +40,6 @@ export default {
 	requests: {
 		searchRadius: 50,
 		storesLimit: 20
-	},
-	selectors: {
-		container: '.storelocator',
-		formSearch: '.storelocator-formSearch',
-		geolocButton: '.storelocator-geolocButton',
-		inputSearch: '.storelocator-inputSearch',
-		loader: '.storelocator-loader',
-		nav: '.storelocator-nav',
-		searchFilters: '[data-filter]',
-		sidebar: '.storelocator-sidebar',
-		sidebarResults: '.storelocator-sidebarResults'
 	},
 	markersUpdate: {
 		limitInViewport: 30,
