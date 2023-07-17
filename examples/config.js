@@ -4,7 +4,7 @@ import Storelocator from '../dist/storelocator.js'
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
 	options: {
-		webServiceUrl: 'http://localhost:3001',
+		webServiceUrl: 'http://localhost:8000',
 		geolocation: {
 			startOnLoad: false,
 			status: true

@@ -424,7 +424,7 @@ export default class Storelocator {
 
 		// Fecth configuration
 		const fetchConf = {
-			method: 'GET',
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -497,12 +497,12 @@ export default class Storelocator {
 
 		// Get lat/lng from searchData
 		// const origin = this.searchData.position
-		this.markersGroup = Leaflet.markerClusterGroup({
-			showCoverageOnHover: false,
-			removeOutsideVisibleBounds: true,
-			spiderfyOnMaxZoom: true,
-			zoomToBoundsOnClick: true
-		})
+		// this.markersGroup = Leaflet.markerClusterGroup({
+		// 	showCoverageOnHover: false,
+		// 	removeOutsideVisibleBounds: true,
+		// 	spiderfyOnMaxZoom: true,
+		// 	zoomToBoundsOnClick: true
+		// })
 
 		this.addMarkertoMap({ features })
 
