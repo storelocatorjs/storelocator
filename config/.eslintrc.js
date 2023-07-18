@@ -8,6 +8,7 @@ module.exports = {
 			experimentalObjectRestSpread: true,
 			jsx: true
 		},
+		babelOptions: { configFile: './config/babel.config.js' },
 		sourceType: 'module'
 	},
 
