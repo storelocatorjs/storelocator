@@ -18,6 +18,6 @@ if (process.env.GOOGLE_MAPS_API_KEY) {
 			console.log('Credentials file created')
 		}
 	})
-} else {
+} else if (!process.env.CI) {
 	throw new Error('Environment variable "GOOGLE_MAPS_API_KEY" is missing in .env')
 }
