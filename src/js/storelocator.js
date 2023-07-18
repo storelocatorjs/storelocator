@@ -1,5 +1,3 @@
-import templateInfoWindow from './templates/info-window'
-import markerSvg from '../svg/marker.svg'
 import defaultOptions from './default-options'
 import { registerProvider, getProviderInstance } from './providers/provider'
 import Map from './map'

@@ -29,10 +29,6 @@ export default function GoogleMapsProvider(Map, options) {
 	}
 
 	return class MapGoogle extends Map {
-		constructor(props) {
-			super(props)
-		}
-
 		init() {
 			this.waitUntilApiIsReady().then(() => {
 				super.onReady()
