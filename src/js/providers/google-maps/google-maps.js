@@ -1,4 +1,5 @@
 import { extend } from '../../utils'
+import markerSvg from '../../../svg/marker.svg'
 
 export default function GoogleMapsProvider(Map, options) {
 	const providerObjectName = 'google'
@@ -91,10 +92,24 @@ export default function GoogleMapsProvider(Map, options) {
 			return this.instance
 		}
 
+		methodGetPosition({ lat, lng }) {
+			return new window.google.maps.LatLng(lat, lng)
+		}
+
 		/**
 		 * Play method of the player
 		 */
-		methodPlay() {}
+		methodCreateMarker({ feature }) {
+			return new window.google.maps.Marker({
+				position: feature.position,
+				map: this.instance,
+				icon: {
+					url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
+					scaledSize: new google.maps.Size(30, 40)
+				},
+				properties: feature.properties
+			})
+		}
 
 		/**
 		 * Pause method of the player

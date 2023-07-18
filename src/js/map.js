@@ -529,12 +529,12 @@ export default class Map {
 				<ul class="storelocator-sidebarResultsList">
 					{features.map((feature, index) => {
 						feature.index = index
-						feature.position = new window.google.maps.LatLng(
-							feature.geometry.coordinates[1],
-							feature.geometry.coordinates[0]
-						)
+						feature.position = this.methodGetPosition({
+							lat: feature.geometry.coordinates[1],
+							lng: feature.geometry.coordinates[0]
+						})
 						this.boundsGlobal.extend(feature.position)
-						this.createMarkers(feature)
+						this.createMarker(feature)
 
 						return <TemplateResult feature={feature} />
 					})}
@@ -696,22 +696,10 @@ export default class Map {
 
 	/**
 	 * Create a Google Maps markers
-	 * @param {Object} data Marker datas
 	 */
-	createMarkers(data) {
-		const marker = new window.google.maps.Marker({
-			position: data.position,
-			map: this.instance,
-			icon: {
-				url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
-				scaledSize: new google.maps.Size(30, 40)
-			},
-			store: data
-		})
-
+	createMarker(feature) {
+		const marker = this.methodCreateMarker({ feature })
 		this.markers.push(marker)
-
-		// Click on marker to show infoWindow
 		window.google.maps.event.addListener(marker, 'click', () => {
 			this.infoWindowOpened = true
 			this.openInfoWindow(marker)
