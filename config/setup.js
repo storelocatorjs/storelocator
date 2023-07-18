@@ -2,7 +2,13 @@ const fs = require('fs')
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../examples/.env') })
 
-if (process.env.GOOGLE_MAPS_API_KEY) {
+let apiKey = process.env.GOOGLE_MAPS_API_KEY
+
+if (process.env.CI) {
+	apiKey = 'xxxx'
+}
+
+if (apiKey) {
 	const data = JSON.stringify(
 		{
 			GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
@@ -18,6 +24,6 @@ if (process.env.GOOGLE_MAPS_API_KEY) {
 			console.log('Credentials file created')
 		}
 	})
-} else if (!process.env.CI) {
+} else {
 	throw new Error('Environment variable "GOOGLE_MAPS_API_KEY" is missing in .env')
 }
