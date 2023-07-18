@@ -101,7 +101,7 @@ export default function GoogleMapsProvider(Map, options) {
 				map: this.instance,
 				icon: {
 					url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
-					scaledSize: new google.maps.Size(30, 40)
+					scaledSize: new window.google.maps.Size(30, 40)
 				},
 				properties: feature.properties
 			})

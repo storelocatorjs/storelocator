@@ -17,3 +17,5 @@ jobs:
       command-build: npm run build && npm run build:example
       env-variables: |
         echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_OUTPUT
+    secrets:
+      GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
