@@ -274,23 +274,20 @@ export default class Map {
 	 */
 	checkUserPosition() {
 		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				const lat = position.coords.latitude
-				const lng = position.coords.longitude
-				const positionGeoloc = new window.google.maps.LatLng(lat, lng)
-
-				const marker = new window.google.maps.Marker({
-					position: positionGeoloc,
-					map: this.instance,
-					icon: {
-						url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
-						scaledSize: new google.maps.Size(30, 40)
+			({ coords: { latitude: lat, longitude: lng } }) => {
+				const position = this.methodGetPosition({
+					lat,
+					lng
+				})
+				const marker = this.methodCreateMarker({
+					feature: {
+						position
 					}
 				})
 
 				// Store geolocation data
 				this.geolocationData.userPositionChecked = true
-				this.geolocationData.position = positionGeoloc
+				this.geolocationData.position = position
 				this.geolocationData.marker = marker
 
 				if (this.inputSearch.value !== '') {
@@ -302,7 +299,7 @@ export default class Map {
 					lng
 				})
 			},
-			(response) => {
+			() => {
 				this.loading(false)
 			}
 		)

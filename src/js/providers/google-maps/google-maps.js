@@ -103,7 +103,7 @@ export default function GoogleMapsProvider(Map, options) {
 					url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
 					scaledSize: new window.google.maps.Size(30, 40)
 				},
-				properties: feature.properties
+				properties: feature?.properties
 			})
 		}
 
