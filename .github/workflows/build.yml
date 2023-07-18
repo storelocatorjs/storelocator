@@ -10,12 +10,20 @@ on:
       - main
 
 jobs:
+  print:
+    runs-on: ubuntu-latest
+    outputs:
+      GOOGLE_MAPS_API_KEY: ${{ steps.set-output-defaults.outputs.GOOGLE_MAPS_API_KEY }}
+    steps:
+      - name: Print inputs passed to the reusable workflow
+        id: set-output-defaults
+        run: |
+          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_OUTPUT
+
   build:
+    needs: print
     uses: yoriiis/actions/.github/workflows/test-and-build.yml@main
     with:
       node-version: 18
       command-build: npm run build && npm run build:example
-      env-variables: |
-        echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_OUTPUT
-    secrets:
-      GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+      GOOGLE_MAPS_API_KEY: ${{ needs.print.outputs.GOOGLE_MAPS_API_KEY }}
