@@ -1,7 +1,7 @@
 import { extend } from './utils'
 import markerSvg from '../svg/marker.svg'
 import TemplateResult from './templates/result'
-import templateInfoWindow from './templates/info-window'
+import TemplateInfoWindow from './templates/info-window'
 
 export default class Map {
 	constructor({ Storelocatorjs }) {
@@ -465,20 +465,17 @@ export default class Map {
 				return response
 			})
 			.then((res) => res.json())
-			.then((jsonResponse) => {
-				const data = jsonResponse
-
-				if (data !== null) {
+			.then((features) => {
+				features !== null &&
 					this.parseStores({
-						stores: data,
+						features,
 						fitBounds
 					})
-				}
 			})
-			.catch((error) => {
-				this.loading(false)
-				throw new Error(error)
-			})
+		// .catch((error) => {
+		// 	this.loading(false)
+		// 	throw new Error(error)
+		// })
 	}
 
 	/**
@@ -507,10 +504,7 @@ export default class Map {
 	 * Create all store results
 	 * @param {Object} options Store datas from the web service
 	 */
-	parseStores(options) {
-		const { stores } = options
-		const { fitBounds } = options
-
+	parseStores({ features, fitBounds }) {
 		// Destroy old markers before parse new stores
 		this.destroyMarkers()
 
@@ -530,16 +524,19 @@ export default class Map {
 			this.boundsGlobal.extend(this.geolocationData.position)
 		}
 
-		if (stores.length) {
+		if (features.length) {
 			this.sidebarResults.replaceChildren(
 				<ul class="storelocator-sidebarResultsList">
-					{stores.map((store, index) => {
-						store.index = index
-						store.position = new window.google.maps.LatLng(store.lat, store.lng)
-						this.boundsGlobal.extend(store.position)
-						this.createMarkers(store)
+					{features.map((feature, index) => {
+						feature.index = index
+						feature.position = new window.google.maps.LatLng(
+							feature.geometry.coordinates[1],
+							feature.geometry.coordinates[0]
+						)
+						this.boundsGlobal.extend(feature.position)
+						this.createMarkers(feature)
 
-						return <TemplateResult store={store} />
+						return <TemplateResult feature={feature} />
 					})}
 				</ul>
 			)
@@ -554,14 +551,12 @@ export default class Map {
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
 			if (this.options.markersUpdate.status) {
 				this.createViewportWithLimitMarker({
-					stores,
+					features,
 					fitBounds
 				})
 			} else {
 				// Else, and if requested, fitbounds the boundsGlobal
-				if (fitBounds) {
-					this.instance.fitBounds(this.boundsGlobal)
-				}
+				fitBounds && this.instance.fitBounds(this.boundsGlobal)
 			}
 		} else {
 			this.sidebarResults.replaceChildren(
@@ -588,10 +583,10 @@ export default class Map {
 	 * Display a minimal list of markers according to the limitInViewport option
 	 * @param {Object} options Datas to create the custom viewport
 	 */
-	createViewportWithLimitMarker(options) {
-		const { stores } = options
+	createViewportWithLimitMarker({ features, fitBounds }) {
 		const maxMarkersInViewport = this.options.markersUpdate.limitInViewport
-		const maxLoop = stores.length < maxMarkersInViewport ? stores.length : maxMarkersInViewport
+		const maxLoop =
+			features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {
@@ -599,10 +594,10 @@ export default class Map {
 		}
 
 		for (let i = 0; i < maxLoop; i++) {
-			this.boundsWithLimit.extend(stores[i].position)
+			this.boundsWithLimit.extend(features[i].position)
 		}
 
-		if (options.fitBounds) {
+		if (fitBounds) {
 			this.instance.fitBounds(this.boundsWithLimit)
 		}
 
@@ -650,7 +645,7 @@ export default class Map {
 		// Get lat/lng from searchData
 		const origin = this.searchData.position
 
-		const hmlinfoWindow = templateInfoWindow({
+		const hmlinfoWindow = TemplateInfoWindow({
 			store: currentMarker.store,
 			origin
 		})

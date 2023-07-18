@@ -2,7 +2,7 @@
  * storelocatorjs info window template
  * @module storelocatorjs/templateInfoIndow
  */
-export default function ({ feature }) {
+export default function TemplatePopup({ feature }) {
 	return (
 		<div className="storelocator-popup">
 			<div className="storelocator-detailStore">

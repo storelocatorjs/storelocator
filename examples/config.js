@@ -10,7 +10,7 @@ Storelocator.registerProvider('google-maps', GoogleMaps, {
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
 	options: {
-		webServiceUrl: 'https://storelocator-functions.vercel.app',
+		webServiceUrl: 'https://storelocatorjs-functions.vercel.app',
 		debug: true
 	},
 	provider: 'google-maps',

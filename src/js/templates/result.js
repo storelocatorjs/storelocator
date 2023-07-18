@@ -1,18 +1,25 @@
-export default function TemplateResult({ store }) {
+export default function TemplateResult({ feature }) {
 	return (
 		<li className="storelocator-resultsListItem">
 			<div className="storelocator-detailStore">
-				{store.title && (
-					<button className="storelocator-detailStoreTitle" data-marker-id={store.id}>
-						{store.title}
+				{feature.properties.title && (
+					<button
+						className="storelocator-detailStoreTitle"
+						data-marker-id={feature.properties.id}
+					>
+						{feature.properties.title}
 					</button>
 				)}
 				<span className="storelocator-detailStoreAddress">
-					{store?.address} {store?.zipcode} {store?.city}
+					{feature.properties?.address} {feature.properties?.zipcode}{' '}
+					{feature.properties?.city}
 				</span>
-				{store.phone && (
-					<a href="tel:{store.phone}" class="storelocator-detailStorePhone">
-						{store.phone}
+				{feature.properties.phone && (
+					<a
+						href={`tel:${feature.properties.phone}`}
+						class="storelocator-detailStorePhone"
+					>
+						{feature.properties.phone}
 					</a>
 				)}
 			</div>
