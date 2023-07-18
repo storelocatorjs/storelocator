@@ -26,9 +26,10 @@
 	],
 	"scripts": {
 		"build": "rm -rf ./dist/ && webpack --mode=production --config=./config/webpack.config.js",
-		"build:example": "rm -rf ./examples/dist/ && webpack --mode=production --config=./examples/webpack.config.js",
+		"build:example": "rm -rf ./examples/dist/ && npm run credentials && webpack --mode=production --config=./examples/webpack.config.js",
 		"dev": "rm -rf ./dist/ && webpack --mode=development --config=./config/webpack.config.js",
-		"start:example": "rm -rf ./examples/dist/ && webpack serve --mode=development --config=./examples/webpack.config.js",
+		"credentials": "node ./config/setup.js",
+		"start:example": "rm -rf ./examples/dist/ && npm run credentials && webpack serve --mode=development --config=./examples/webpack.config.js",
 		"test": "echo \"No test specified\" && exit 0"
 	},
 	"prettier": "./config/prettier.config.js",
@@ -41,6 +42,7 @@
 		"babel-loader": "^9.1.2",
 		"css-loader": "^6.7.3",
 		"css-minimizer-webpack-plugin": "^5.0.0",
+		"dotenv": "^16.3.1",
 		"html-webpack-plugin": "^5.5.1",
 		"jsx-dom-cjs": "^8.0.7",
 		"mini-css-extract-plugin": "^2.7.5",
