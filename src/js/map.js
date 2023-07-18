@@ -1,5 +1,4 @@
 import { extend } from './utils'
-import markerSvg from '../svg/marker.svg'
 import TemplateResult from './templates/result'
 import TemplateInfoWindow from './templates/info-window'
 
