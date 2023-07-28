@@ -6,6 +6,9 @@ export default class Map {
 	constructor({ Storelocatorjs }) {
 		this.Storelocatorjs = Storelocatorjs
 		this.options = this.Storelocatorjs.options
+
+		this.autocompleteSelection = this.autocompleteSelection.bind(this)
+		this.onClickOnMarker = this.onClickOnMarker.bind(this)
 	}
 
 	/**
@@ -67,10 +70,11 @@ export default class Map {
 
 		this.buildLoader()
 
-		this.initGeolocation()
+		// this.initGeolocation()
 		this.initMap()
-		// 	this.addGoogleMapsEvents()
+		this.addGoogleMapsEvents()
 		this.initAutocomplete()
+		this.inputSearch.focus()
 
 		this.addEvents()
 
@@ -142,23 +146,18 @@ export default class Map {
 	 */
 	initMap() {
 		// Create global variables for Google Maps
-		this.overlayGlobal = null
-		this.overlayLimit = null
 		this.markers = []
 		this.currentInfoWindow = null
 		this.infoWindowOpened = false
 		this.boundsChangeTimer = null
 
-		this.serviceDistanceMatrix = new window.google.maps.DistanceMatrixService()
-		this.boundsGlobal = new window.google.maps.LatLngBounds()
+		this.boundsGlobal = this.latLngBounds()
 		this.currentRadius = this.options.requests.searchRadius
 
 		if (this.options.markersUpdate.status) {
-			this.boundsWithLimit = new window.google.maps.LatLngBounds()
+			this.boundsWithLimit = this.latLngBounds()
 		}
 
-		this.infoWindow = new window.google.maps.InfoWindow()
-		this.geocoder = new window.google.maps.Geocoder()
 		this.searchData = {
 			position: null
 		}
@@ -184,12 +183,12 @@ export default class Map {
 
 		// Detect zoom changed and bounds changed to refresh marker on the map
 		if (this.options.markersUpdate.status) {
-			this.instance.addListener('bounds_changed', () => {
-				// Prevent multiple event triggered when loading and infoWindow opened
-				if (!this.isLoading && !this.infoWindowOpened) {
-					this.boundsChanged()
-				}
-			})
+			// this.instance.addListener('bounds_changed', () => {
+			// 	// Prevent multiple event triggered when loading
+			// 	if (!this.isLoading) {
+			// 		this.boundsChanged()
+			// 	}
+			// })
 		}
 
 		// Called the user callback if available
@@ -240,7 +239,7 @@ export default class Map {
 		if (e.target.getAttribute('data-target') === 'map') {
 			mapView.classList.add('active')
 			this.sidebar.classList.remove('active')
-			window.google.maps.event.trigger(this.instance, 'resize')
+			this.resize()
 		} else {
 			this.sidebar.classList.add('active')
 			mapView.classList.remove('active')
@@ -263,7 +262,7 @@ export default class Map {
 			this.instance.setZoom(16)
 			this.openInfoWindow(currentMarker)
 			this.container.querySelector('[data-switch-view][data-target="map"]').click()
-			window.google.maps.event.trigger(this.instance, 'resize')
+			this.resize()
 		}
 	}
 
@@ -274,15 +273,16 @@ export default class Map {
 	checkUserPosition() {
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude: lat, longitude: lng } }) => {
-				const position = this.methodGetPosition({
+				const position = this.latLng({
 					lat,
 					lng
 				})
-				const marker = this.methodCreateMarker({
+				const marker = this.createMarker({
 					feature: {
 						position
 					}
 				})
+				this.markers.push(marker)
 
 				// Store geolocation data
 				this.geolocationData.userPositionChecked = true
@@ -367,40 +367,12 @@ export default class Map {
 		})
 	}
 
-	/**
-	 * Initialize Google Maps Autocomplete
-	 * @documentation https://developers.google.com/maps/documentation/javascript/places-autocomplete
-	 */
-	initAutocomplete() {
-		const autocomplete = new window.google.maps.places.Autocomplete(this.inputSearch, {})
+	autocompleteSelection({ lat, lng }) {
+		this.loading(true)
 
-		this.inputSearch.focus()
-		autocomplete.bindTo('bounds', this.instance)
-
-		autocomplete.addListener('place_changed', () => {
-			this.loading(true)
-			const place = autocomplete.getPlace()
-
-			if (place.geometry) {
-				this.autocompleteRequest({
-					lat: place.geometry.location.lat(),
-					lng: place.geometry.location.lng()
-				})
-			} else {
-				this.geocoder.geocode(
-					{
-						address: place.name
-					},
-					(results, status) => {
-						if (status === window.google.maps.GeocoderStatus.OK) {
-							this.autocompleteRequest({
-								lat: results[0].geometry.location.lat(),
-								lng: results[0].geometry.location.lng()
-							})
-						}
-					}
-				)
-			}
+		this.autocompleteRequest({
+			lat,
+			lng
 		})
 	}
 
@@ -441,7 +413,7 @@ export default class Map {
 		// Update search data stored
 		this.searchData.lat = lat
 		this.searchData.lng = lng
-		this.searchData.position = new window.google.maps.LatLng(lat, lng)
+		this.searchData.position = this.latLng({ lat, lng })
 
 		// Fecth configuration
 		const fetchConf = {
@@ -504,20 +476,20 @@ export default class Map {
 		// Destroy old markers before parse new stores
 		this.destroyMarkers()
 
-		// Reset infoWindow status
-		this.infoWindowOpened = false
-
 		// Re-declare bounds on new research, it's important else zoom bug after one request
-		this.boundsGlobal = new window.google.maps.LatLngBounds()
+		this.boundsGlobal = this.latLngBounds()
 
 		if (this.options.markersUpdate.status) {
-			this.boundsWithLimit = new window.google.maps.LatLngBounds()
+			this.boundsWithLimit = this.latLngBounds()
 		}
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
 			this.markers.push(this.geolocationData.marker)
-			this.boundsGlobal.extend(this.geolocationData.position)
+			this.latLngBoundsExtend({
+				latLngBounds: this.boundsGlobal,
+				latLng: this.geolocationData.position
+			})
 		}
 
 		if (features.length) {
@@ -525,12 +497,17 @@ export default class Map {
 				<ul class="storelocator-sidebarResultsList">
 					{features.map((feature, index) => {
 						feature.index = index
-						feature.position = this.methodGetPosition({
+						feature.position = this.latLng({
 							lat: feature.geometry.coordinates[1],
 							lng: feature.geometry.coordinates[0]
 						})
-						this.boundsGlobal.extend(feature.position)
-						this.createMarker(feature)
+						this.latLngBoundsExtend({
+							latLngBounds: this.boundsGlobal,
+							latLng: feature.position
+						})
+
+						const marker = this.createMarker({ feature })
+						this.markers.push(marker)
 
 						return <TemplateResult feature={feature} />
 					})}
@@ -540,7 +517,7 @@ export default class Map {
 			// Add all maskers to cluster if option is enabled
 			if (typeof MarkerClusterer !== 'undefined') {
 				if (this.options.cluster.status) {
-					this.markerCluster.addMarkers(this.markers)
+					// this.markerCluster.addMarkers(this.markers)
 				}
 			}
 
@@ -552,7 +529,7 @@ export default class Map {
 				})
 			} else {
 				// Else, and if requested, fitbounds the boundsGlobal
-				fitBounds && this.instance.fitBounds(this.boundsGlobal)
+				fitBounds && this.fitBounds({ latLngBounds: this.boundsGlobal })
 			}
 		} else {
 			this.sidebarResults.replaceChildren(
@@ -586,83 +563,41 @@ export default class Map {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {
-			this.boundsWithLimit.extend(this.geolocationData.position)
+			this.latLngBoundsExtend({
+				latLngBounds: this.boundsWithLimit,
+				latLng: this.geolocationData.position
+			})
 		}
 
 		for (let i = 0; i < maxLoop; i++) {
-			this.boundsWithLimit.extend(features[i].position)
+			this.latLngBoundsExtend({
+				latLngBounds: this.boundsWithLimit,
+				latLng: features[i].position
+			})
 		}
 
-		if (fitBounds) {
-			this.instance.fitBounds(this.boundsWithLimit)
-		}
+		fitBounds && this.fitBounds({ latLngBounds: this.boundsWithLimit })
 
 		if (this.options.debug) {
-			this.createOverlays()
+			this.createOverlay({
+				boundsGlobal: this.boundsGlobal,
+				boundsWithLimit: this.boundsWithLimit
+			})
 		}
-	}
-
-	/**
-	 * Create custom overlay on the map for the debug mode
-	 * overlayGlobal: list of all stores according to maxRadius option
-	 * overlayLimit: list of all stores according to the limitInViewport option
-	 */
-	createOverlays() {
-		if (this.overlayGlobal !== null) {
-			this.overlayGlobal.setMap(null)
-		}
-		this.overlayGlobal = new window.google.maps.Rectangle({
-			bounds: this.boundsGlobal,
-			strokeColor: null,
-			strokeOpacity: 0,
-			fillColor: '#ff0000',
-			fillOpacity: 0.35,
-			map: this.instance
-		})
-
-		if (this.overlayLimit !== null) {
-			this.overlayLimit.setMap(null)
-		}
-		this.overlayLimit = new window.google.maps.Rectangle({
-			bounds: this.boundsWithLimit,
-			strokeColor: null,
-			strokeOpacity: 0,
-			fillColor: '#54ff00',
-			fillOpacity: 0.35,
-			map: this.instance
-		})
 	}
 
 	/**
 	 * Open the Google Maps native InfoWindow
 	 * @param {Object} currentMarker Marker data display inside the infoWindow
 	 */
-	openInfoWindow(currentMarker) {
-		// Get lat/lng from searchData
-		const origin = this.searchData.position
-
-		const hmlinfoWindow = TemplateInfoWindow({
-			store: currentMarker.store,
-			origin
+	openInfoWindow(marker) {
+		this.openPopup({
+			template: TemplateInfoWindow({
+				store: marker.store,
+				origin: this.searchData.position
+			}),
+			marker
 		})
-
-		this.infoWindow.setContent(hmlinfoWindow)
-
-		// Change infoWindow status
-		window.google.maps.event.addListener(this.infoWindow, 'closeclick', () => {
-			this.infoWindowOpened = false
-		})
-
-		// Close previous infoWindow open
-		if (this.currentInfoWindow !== null) {
-			this.currentInfoWindow.close()
-		}
-
-		// Store marker info for next infoWindow
-		this.currentInfoWindow = this.infoWindow
-
-		// Open infoWindow
-		this.infoWindow.open(this.instance, currentMarker)
 	}
 
 	/**
@@ -672,33 +607,20 @@ export default class Map {
 		// Destroy all maskers references in cluster is enabled
 		if (typeof MarkerClusterer !== 'undefined') {
 			if (this.options.cluster.status) {
-				this.markerCluster.clearMarkers()
+				// this.markerCluster.clearMarkers()
 			}
 		}
 
 		// Loop backwards on markers and remove them
 		for (let i = this.markers.length - 1; i >= 0; i--) {
-			const currentMarker = this.markers[i]
-
-			// Remove listener from marker instance
-			window.google.maps.event.clearInstanceListeners(currentMarker)
-
-			// Remove the marker
-			currentMarker.setMap(null)
+			this.removeMarker(this.markers[i])
 		}
 
 		this.markers = []
 	}
 
-	/**
-	 * Create a Google Maps markers
-	 */
-	createMarker(feature) {
-		const marker = this.methodCreateMarker({ feature })
-		this.markers.push(marker)
-		window.google.maps.event.addListener(marker, 'click', () => {
-			this.infoWindowOpened = true
-			this.openInfoWindow(marker)
-		})
+	onClickOnMarker() {
+		this.infoWindowOpened = true
+		this.openInfoWindow(marker)
 	}
 }

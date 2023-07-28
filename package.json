@@ -27,12 +27,17 @@
 	"scripts": {
 		"build": "rm -rf ./dist/ && webpack --mode=production --config=./config/webpack.config.js",
 		"build:example": "rm -rf ./examples/dist/ && npm run credentials && webpack --mode=production --config=./examples/webpack.config.js",
-		"dev": "rm -rf ./dist/ && webpack --mode=development --config=./config/webpack.config.js",
 		"credentials": "node ./config/setup.js",
+		"dev": "rm -rf ./dist/ && webpack --mode=development --config=./config/webpack.config.js",
 		"start:example": "rm -rf ./examples/dist/ && npm run credentials && webpack serve --mode=development --config=./examples/webpack.config.js",
 		"test": "echo \"No test specified\" && exit 0"
 	},
 	"prettier": "./config/prettier.config.js",
+	"dependencies": {
+		"leaflet": "^1.9.3",
+		"leaflet-geosearch": "^3.8.0",
+		"leaflet.markercluster": "^1.5.3"
+	},
 	"devDependencies": {
 		"@babel/core": "^7.22.1",
 		"@babel/plugin-proposal-class-properties": "^7.18.6",

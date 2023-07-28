@@ -15,7 +15,9 @@ module.exports = (env, argv) => {
 	const config = {
 		context: appDirectory,
 		entry: {
-			demo: resolveApp('examples/config.js')
+			home: resolveApp('examples/home/config.js'),
+			'google-maps': resolveApp('examples/google-maps/config.js'),
+			leaflet: resolveApp('examples/leaflet/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -41,7 +43,7 @@ module.exports = (env, argv) => {
 				},
 				{
 					test: /\.css$/,
-					include: [resolveApp('examples'), resolveApp('dist')],
+					include: [resolveApp('examples'), resolveApp('dist'), resolveApp('src')],
 					use: [
 						MiniCssExtractPlugin.loader,
 						{
@@ -71,8 +73,19 @@ module.exports = (env, argv) => {
 			new webpack.optimize.ModuleConcatenationPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',
-				template: resolveApp('examples/index.html'),
-				chunks: ['demo'],
+				template: resolveApp('examples/home/index.html'),
+				chunks: ['home']
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'google-maps/index.html',
+				template: resolveApp('examples/google-maps/index.html'),
+				chunks: ['google-maps'],
+				publicPath: '../'
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'leaflet/index.html',
+				template: resolveApp('examples/leaflet/index.html'),
+				chunks: ['leaflet'],
 				publicPath: '../'
 			})
 		],

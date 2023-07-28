@@ -29,6 +29,11 @@ export default function GoogleMapsProvider(Map, options) {
 	}
 
 	return class MapGoogle extends Map {
+		constructor(props) {
+			super(props)
+
+			this.currentInfoWindow = null
+		}
 		init() {
 			this.waitUntilApiIsReady().then(() => {
 				super.onReady()
@@ -72,10 +77,10 @@ export default function GoogleMapsProvider(Map, options) {
 					this.Storelocatorjs.options.map.options
 				)
 
-				mapOptions.center = new window.google.maps.LatLng(
-					mapOptions.center[0],
-					mapOptions.center[1]
-				)
+				mapOptions.center = this.latLng({
+					lat: mapOptions.center[0],
+					lng: mapOptions.center[1]
+				})
 
 				const googleMapsCanvas = document.querySelector('#storelocator-googleMapsCanvas')
 				this.instance = new window.google.maps.Map(googleMapsCanvas, mapOptions)
@@ -84,19 +89,60 @@ export default function GoogleMapsProvider(Map, options) {
 			})
 		}
 
+		initAutocomplete() {
+			const autocomplete = new window.google.maps.places.Autocomplete(this.inputSearch, {})
+			autocomplete.bindTo('bounds', this.instance)
+			autocomplete.addListener('place_changed', () => {
+				const { geometry, name } = autocomplete.getPlace()
+
+				if (geometry) {
+					this.autocompleteSelection({
+						lat: geometry.location.lat(),
+						lng: geometry.location.lng()
+					})
+				} else {
+					new window.google.maps.Geocoder().geocode(
+						{
+							address: name
+						},
+						(results, status) => {
+							if (status === window.google.maps.GeocoderStatus.OK) {
+								const {
+									geometry: { location }
+								} = results[0]
+								this.autocompleteRequest({
+									lat: location.lat(),
+									lng: location.lng()
+								})
+							}
+						}
+					)
+				}
+			})
+		}
+
 		getInstance() {
 			return this.instance
 		}
 
-		methodGetPosition({ lat, lng }) {
+		latLngBounds() {
+			return new window.google.maps.LatLngBounds()
+		}
+
+		latLngBoundsExtend({ latLngBounds, latLng }) {
+			latLngBounds.extend(latLng)
+		}
+
+		fitBounds({ latLngBounds }) {
+			this.instance.fitBounds(latLngBounds)
+		}
+
+		latLng({ lat, lng }) {
 			return new window.google.maps.LatLng(lat, lng)
 		}
 
-		/**
-		 * Play method of the player
-		 */
-		methodCreateMarker({ feature }) {
-			return new window.google.maps.Marker({
+		createMarker({ feature }) {
+			const marker = new window.google.maps.Marker({
 				position: feature.position,
 				map: this.instance,
 				icon: {
@@ -105,16 +151,60 @@ export default function GoogleMapsProvider(Map, options) {
 				},
 				properties: feature?.properties
 			})
+
+			window.google.maps.event.addListener(marker, 'click', this.onClickOnMarker)
+
+			return marker
 		}
 
-		/**
-		 * Pause method of the player
-		 */
-		methodPause() {}
+		removeMarker(marker) {
+			window.google.maps.event.clearInstanceListeners(marker)
+			marker.setMap(null)
+		}
 
-		/**
-		 * Remove the Youtube player (instance, timer)
-		 */
+		openPopup({ template, marker }) {
+			const infoWindow = new window.google.maps.InfoWindow()
+			infoWindow.setContent(template)
+
+			if (this.currentInfoWindow !== null) {
+				this.currentInfoWindow.close()
+			}
+
+			this.currentInfoWindow = infoWindow
+
+			infoWindow.open(this.instance, marker)
+		}
+
+		createOverlay({ boundsGlobal, boundsWithLimit }) {
+			// if (this.overlayGlobal !== null) {
+			// 	this.overlayGlobal.setMap(null)
+			// }
+			new window.google.maps.Rectangle({
+				bounds: boundsGlobal,
+				strokeColor: null,
+				strokeOpacity: 0,
+				fillColor: '#ff0000',
+				fillOpacity: 0.35,
+				map: this.instance
+			})
+
+			// if (this.overlayLimit !== null) {
+			// 	this.overlayLimit.setMap(null)
+			// }
+			new window.google.maps.Rectangle({
+				bounds: boundsWithLimit,
+				strokeColor: null,
+				strokeOpacity: 0,
+				fillColor: '#54ff00',
+				fillOpacity: 0.35,
+				map: this.instance
+			})
+		}
+
+		resize() {
+			window.google.maps.event.trigger(this.instance, 'resize')
+		}
+
 		destroy() {}
 	}
 }

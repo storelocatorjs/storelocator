@@ -1,7 +1,7 @@
-import '../dist/storelocator.css'
-import Storelocator from '../dist/storelocator.js'
-import GoogleMaps from '../src/js/providers/google-maps/google-maps'
-import credentials from './credentials.json'
+import '../../dist/storelocator.css'
+import Storelocator from '../../dist/storelocator.js'
+import GoogleMaps from '../../src/js/providers/google-maps/google-maps'
+import credentials from '../credentials.json'
 
 Storelocator.registerProvider('google-maps', GoogleMaps, {
 	apiKey: credentials.GOOGLE_MAPS_API_KEY,
