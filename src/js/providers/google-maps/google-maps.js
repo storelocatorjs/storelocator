@@ -34,6 +34,7 @@ export default function GoogleMapsProvider(Map, options) {
 
 			this.currentInfoWindow = null
 		}
+
 		init() {
 			this.waitUntilApiIsReady().then(() => {
 				super.onReady()
@@ -179,7 +180,7 @@ export default function GoogleMapsProvider(Map, options) {
 			// if (this.overlayGlobal !== null) {
 			// 	this.overlayGlobal.setMap(null)
 			// }
-			new window.google.maps.Rectangle({
+			const overlayGlobal = new window.google.maps.Rectangle({
 				bounds: boundsGlobal,
 				strokeColor: null,
 				strokeOpacity: 0,
@@ -191,7 +192,7 @@ export default function GoogleMapsProvider(Map, options) {
 			// if (this.overlayLimit !== null) {
 			// 	this.overlayLimit.setMap(null)
 			// }
-			new window.google.maps.Rectangle({
+			const overlayWithLimit = new window.google.maps.Rectangle({
 				bounds: boundsWithLimit,
 				strokeColor: null,
 				strokeOpacity: 0,

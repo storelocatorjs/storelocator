@@ -1,5 +1,5 @@
 import { extend } from '../../utils'
-import markerSvg from '../../../svg/marker.svg'
+// import markerSvg from '../../../svg/marker.svg'
 import Leaflet from 'leaflet'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 
@@ -10,6 +10,7 @@ export default function LeafletProvider(Map, options) {
 
 			this.currentPopup = null
 		}
+
 		init() {
 			this.waitUntilApiIsReady().then(() => {
 				super.onReady()
