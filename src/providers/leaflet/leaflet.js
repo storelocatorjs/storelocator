@@ -1,7 +1,9 @@
-import { extend } from '../../utils'
-// import markerSvg from '../../../svg/marker.svg'
+import 'leaflet/dist/leaflet.css'
+
+import { extend } from 'shared/utils/utils'
+import markerSvg from 'shared/assets/svgs/marker.svg'
 import Leaflet from 'leaflet'
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
+import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
 export default function LeafletProvider(Map, options) {
 	return class MapLeaflet extends Map {
@@ -56,31 +58,23 @@ export default function LeafletProvider(Map, options) {
 					lng: mapOptions.center[1]
 				})
 
-				this.instance = Leaflet.map('storelocator-googleMapsCanvas', {
+				this.instance = Leaflet.map('storelocator-mapCanvas', {
 					center: mapOptions.center,
 					zoomControl: false,
-					zoom: 1
+					zoom: 6
 				})
+
+				Leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?', {
+					maxZoom: 19,
+					attribution: '© OpenStreetMap'
+				}).addTo(this.instance)
 
 				resolve()
 			})
 		}
 
-		initAutocomplete() {
-			this.instance.addControl(
-				new GeoSearchControl({
-					provider: new OpenStreetMapProvider(),
-					style: 'bar',
-					updateMap: false,
-					showMarker: false
-				})
-			)
-			this.instance.on('geosearch/showlocation', ({ x, y }) => {
-				this.autocompleteRequest({
-					lat: y,
-					lng: x
-				})
-			})
+		setCenter({ lat, lng }) {
+			this.instance.setView(this.latLng({ lat, lng }))
 		}
 
 		getInstance() {
@@ -88,7 +82,7 @@ export default function LeafletProvider(Map, options) {
 		}
 
 		latLngBounds() {
-			return Leaflet.latLngBounds
+			return Leaflet.latLngBounds()
 		}
 
 		latLngBoundsExtend({ latLngBounds, latLng }) {
@@ -100,21 +94,19 @@ export default function LeafletProvider(Map, options) {
 		}
 
 		latLng({ lat, lng }) {
-			return Leaflet.latLng(lng, lat)
+			return Leaflet.latLng(lat, lng)
 		}
 
-		createMarker({ feature }) {
-			// const marker = new window.google.maps.Marker({
-			// 	position: feature.position,
-			// 	map: this.instance,
-			// 	icon: {
-			// 		url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
-			// 		scaledSize: new window.google.maps.Size(30, 40)
-			// 	},
-			// 	properties: feature?.properties
-			// })
+		createMarker({ feature, type }) {
+			const svgData = this.options.map.markers[type]
 
-			const marker = Leaflet.marker([50.5, 30.5]).addTo(this.instance)
+			const marker = Leaflet.marker(feature.position, {
+				icon: Leaflet.divIcon({
+					html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="${svgData.path}"/></svg>`,
+					iconSize: [svgData.width, svgData.height],
+					iconAnchor: [12, 40]
+				})
+			}).addTo(this.instance)
 
 			// window.google.maps.event.addListener(marker, 'click', this.onClickOnMarker)
 

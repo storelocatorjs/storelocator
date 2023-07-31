@@ -1,5 +1,5 @@
 export default function TemplateMap() {
-	return (
+	return `
 		<div class="storelocator">
 			<div class="storelocator-loader">
 				<div class="storelocator-loaderBar"></div>
@@ -7,6 +7,14 @@ export default function TemplateMap() {
 				<div class="storelocator-loaderBar"></div>
 			</div>
 			<div class="storelocator-sidebar">
+				<form class="storelocator-formSearch">
+					<input
+						type="text"
+						class="storelocator-inputSearch"
+						placeholder="Enter a location"
+					/>
+				</form>
+                <ul class="storelocator-autocomplete"></ul>
 				<nav class="storelocator-nav">
 					<ul class="storelocator-navList">
 						<li class="storelocator-navListItem active">
@@ -40,5 +48,5 @@ export default function TemplateMap() {
 				</button>
 			</div>
 		</div>
-	)
+	`
 }

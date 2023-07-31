@@ -87,7 +87,7 @@ The extended usage of the Storelocatorjs with filters and store categories used 
     <div class="storelocator-sidebarResults"></div>
   </div>
   <div class="storelocator-googleMaps active">
-    <div id="storelocator-googleMapsCanvas"></div>
+    <div id="storelocator-mapCanvas"></div>
     <button class="storelocator-geolocButton"></button>
   </div>
 </div>

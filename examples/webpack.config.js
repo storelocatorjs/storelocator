@@ -43,7 +43,7 @@ module.exports = (env, argv) => {
 				},
 				{
 					test: /\.css$/,
-					include: [resolveApp('examples'), resolveApp('dist'), resolveApp('src')],
+					include: [resolveApp('examples'), resolveApp('dist')],
 					use: [
 						MiniCssExtractPlugin.loader,
 						{
@@ -89,6 +89,30 @@ module.exports = (env, argv) => {
 				publicPath: '../'
 			})
 		],
+		resolve: {
+			alias: {
+				'images/layers.png$': path.resolve(
+					__dirname,
+					'../node_modules/leaflet/dist/images/layers.png'
+				),
+				'images/layers-2x.png$': path.resolve(
+					__dirname,
+					'../node_modules/leaflet/dist/images/layers-2x.png'
+				),
+				'images/marker-icon.png$': path.resolve(
+					__dirname,
+					'../node_modules/leaflet/dist/images/marker-icon.png'
+				),
+				'images/marker-icon-2x.png$': path.resolve(
+					__dirname,
+					'../node_modules/leaflet/dist/images/marker-icon-2x.png'
+				),
+				'images/marker-shadow.png$': path.resolve(
+					__dirname,
+					'../node_modules/leaflet/dist/images/marker-shadow.png'
+				)
+			}
+		},
 		stats: {
 			assets: true,
 			colors: true,
@@ -133,9 +157,10 @@ module.exports = (env, argv) => {
 				directory: resolveApp('examples')
 			},
 			historyApiFallback: true,
-			port: 3000,
+			port: 3001,
 			compress: true,
-			hot: true
+			hot: true,
+			https: true
 		}
 	}
 

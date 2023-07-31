@@ -1,5 +1,5 @@
-import { extend } from '../../utils'
-import markerSvg from '../../../svg/marker.svg'
+import { extend } from 'shared/utils/utils'
+import markerSvg from 'shared/assets/svgs/marker.svg'
 
 export default function GoogleMapsProvider(Map, options) {
 	const providerObjectName = 'google'
@@ -11,10 +11,6 @@ export default function GoogleMapsProvider(Map, options) {
 		script.async = true
 		script.type = 'text/javascript'
 		script.src = `https://maps.googleapis.com/maps/api/js?key=${options.apiKey}&callback=window.googleMapLoaded`
-
-		if (options.libraries) {
-			script.src += `&libraries=${options.libraries.join(',')}`
-		}
 
 		// Run the queue when the provider API is ready
 		window.googleMapLoaded = () => {
@@ -32,7 +28,7 @@ export default function GoogleMapsProvider(Map, options) {
 		constructor(props) {
 			super(props)
 
-			this.currentInfoWindow = null
+			this.currentPopup = null
 		}
 
 		init() {
@@ -83,47 +79,19 @@ export default function GoogleMapsProvider(Map, options) {
 					lng: mapOptions.center[1]
 				})
 
-				const googleMapsCanvas = document.querySelector('#storelocator-googleMapsCanvas')
+				const googleMapsCanvas = document.querySelector('#storelocator-mapCanvas')
 				this.instance = new window.google.maps.Map(googleMapsCanvas, mapOptions)
 
 				resolve()
 			})
 		}
 
-		initAutocomplete() {
-			const autocomplete = new window.google.maps.places.Autocomplete(this.inputSearch, {})
-			autocomplete.bindTo('bounds', this.instance)
-			autocomplete.addListener('place_changed', () => {
-				const { geometry, name } = autocomplete.getPlace()
-
-				if (geometry) {
-					this.autocompleteSelection({
-						lat: geometry.location.lat(),
-						lng: geometry.location.lng()
-					})
-				} else {
-					new window.google.maps.Geocoder().geocode(
-						{
-							address: name
-						},
-						(results, status) => {
-							if (status === window.google.maps.GeocoderStatus.OK) {
-								const {
-									geometry: { location }
-								} = results[0]
-								this.autocompleteRequest({
-									lat: location.lat(),
-									lng: location.lng()
-								})
-							}
-						}
-					)
-				}
-			})
-		}
-
 		getInstance() {
 			return this.instance
+		}
+
+		setCenter({ lat, lng }) {
+			this.instance.setCenter(this.latLng({ lat, lng }))
 		}
 
 		latLngBounds() {
@@ -142,13 +110,21 @@ export default function GoogleMapsProvider(Map, options) {
 			return new window.google.maps.LatLng(lat, lng)
 		}
 
-		createMarker({ feature }) {
+		createMarker({ feature, type }) {
+			const svgData = this.options.map.markers[type]
 			const marker = new window.google.maps.Marker({
 				position: feature.position,
 				map: this.instance,
+				// icon: {
+				// 	url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
+				// 	scaledSize: new window.google.maps.Size(30, 40)
+				// },
 				icon: {
-					url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
-					scaledSize: new window.google.maps.Size(30, 40)
+					path: svgData.path,
+					fillColor: svgData.fillColor,
+					fillOpacity: 1,
+					anchor: new google.maps.Point(svgData.width, svgData.height),
+					scale: 0.075
 				},
 				properties: feature?.properties
 			})
@@ -167,11 +143,11 @@ export default function GoogleMapsProvider(Map, options) {
 			const infoWindow = new window.google.maps.InfoWindow()
 			infoWindow.setContent(template)
 
-			if (this.currentInfoWindow !== null) {
-				this.currentInfoWindow.close()
+			if (this.currentPopup !== null) {
+				this.currentPopup.close()
 			}
 
-			this.currentInfoWindow = infoWindow
+			this.currentPopup = infoWindow
 
 			infoWindow.open(this.instance, marker)
 		}

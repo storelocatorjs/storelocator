@@ -3,47 +3,13 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Storelocatorjs - Leaflet</title>
+		<style>
+			#app {
+				height: 100%;
+			}
+		</style>
 	</head>
 	<body>
-		<div class="storelocator">
-			<div class="storelocator-loader"></div>
-			<div class="storelocator-sidebar">
-				<form class="storelocator-formSearch" name="form-search">
-					<input
-						type="text"
-						class="storelocator-inputSearch"
-						placeholder="Enter a location"
-						autocomplete="off"
-					/>
-				</form>
-				<nav class="storelocator-nav">
-					<ul class="storelocator-navList">
-						<li class="storelocator-navListItem active">
-							<button
-								class="storelocator-navButton"
-								data-switch-view
-								data-target="map"
-							>
-								Map
-							</button>
-						</li>
-						<li class="storelocator-navListItem">
-							<button
-								class="storelocator-navButton"
-								data-switch-view
-								data-target="list"
-							>
-								List
-							</button>
-						</li>
-					</ul>
-				</nav>
-				<div class="storelocator-sidebarResults"></div>
-			</div>
-			<div class="storelocator-googleMaps active">
-				<div id="storelocator-googleMapsCanvas"></div>
-				<button class="storelocator-geolocButton"></button>
-			</div>
-		</div>
+		<div id="app"></div>
 	</body>
 </html>

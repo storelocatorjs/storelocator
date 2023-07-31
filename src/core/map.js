@@ -1,6 +1,10 @@
-import { extend } from './utils'
+import { extend } from 'shared/utils/utils'
 import TemplateResult from './templates/result'
 import TemplateInfoWindow from './templates/info-window'
+import validateTarget from 'validate-target'
+import mapBoxGeocode from './geocoding/mapbox'
+import googleMapsGeocode from './geocoding/google-maps'
+import openStreetMapGeocode from './geocoding/open-street-map'
 
 export default class Map {
 	constructor({ Storelocatorjs }) {
@@ -67,13 +71,12 @@ export default class Map {
 		this.sidebar = this.container.querySelector('.storelocator-sidebar')
 		this.sidebarResults = this.container.querySelector('.storelocator-sidebarResults')
 		this.geolocButton = this.container.querySelector('.storelocator-geolocButton')
+		this.autocomplete = this.sidebar.querySelector('.storelocator-autocomplete')
 
 		this.buildLoader()
 
 		// this.initGeolocation()
 		this.initMap()
-		this.addGoogleMapsEvents()
-		this.initAutocomplete()
 		this.inputSearch.focus()
 
 		this.addEvents()
@@ -105,23 +108,68 @@ export default class Map {
 
 		// Event listener on search form
 		// Prevent native form submit, managed by autocomplete
+		this.inputSearch.addEventListener('keyup', (e) => {
+			e.preventDefault()
+			this.onFormSearchSubmit()
+		})
+
 		this.formSearch.addEventListener('submit', (e) => {
 			e.preventDefault()
 		})
 
 		this.geolocButton.addEventListener('click', this.onClickGeolocationButton.bind(this))
-	}
 
-	/**
-	 * Create Google Maps event listeners
-	 */
-	addGoogleMapsEvents() {
-		// Event listener on search form input
-		this.inputSearch.addEventListener('keydown', (e) => {
-			if (e.keyCode === 13) {
-				e.preventDefault()
+		this.autocomplete.addEventListener('click', (e) => {
+			const target = e.target
+			const item = validateTarget({
+				target,
+				selectorString: '.autocomplete-item',
+				nodeName: 'li'
+			})
+
+			if (item) {
+				this.autocompleteRequest({
+					lat: parseFloat(target.getAttribute('data-lat')),
+					lng: parseFloat(target.getAttribute('data-lng'))
+				})
 			}
 		})
+	}
+
+	onFormSearchSubmit() {
+		console.log('onFormSearchSubmit')
+
+		mapBoxGeocode({
+			value: this.inputSearch.value,
+			token: this.Storelocatorjs.mapBoxToken
+		}).then((results) => {
+			this.renderAutocomplete({
+				results
+			})
+		})
+
+		// googleMapsGeocode({ value: this.inputSearch.value }).then((results) => {
+		// 	this.renderAutocomplete({
+		// 		results
+		// 	})
+		// })
+
+		// openStreetMapGeocode({
+		// 	value: this.inputSearch.value
+		// }).then((results) => {
+		// 	this.renderAutocomplete({
+		// 		results
+		// 	})
+		// })
+	}
+
+	renderAutocomplete({ results }) {
+		const html = results
+			.map(({ text, lat, lng }) => {
+				return `<li class="autocomplete-item" data-lat="${lat}" data-lng="${lng}">${text}</li>`
+			})
+			.join('')
+		this.sidebar.querySelector('.storelocator-autocomplete').innerHTML = html
 	}
 
 	/**
@@ -280,7 +328,8 @@ export default class Map {
 				const marker = this.createMarker({
 					feature: {
 						position
-					}
+					},
+					type: 'geolocation'
 				})
 				this.markers.push(marker)
 
@@ -293,10 +342,10 @@ export default class Map {
 					this.inputSearch.value = ''
 				}
 
-				this.triggerRequest({
-					lat,
-					lng
-				})
+				// this.triggerRequest({
+				// 	lat,
+				// 	lng
+				// })
 			},
 			() => {
 				this.loading(false)
@@ -493,26 +542,26 @@ export default class Map {
 		}
 
 		if (features.length) {
-			this.sidebarResults.replaceChildren(
-				<ul class="storelocator-sidebarResultsList">
-					{features.map((feature, index) => {
-						feature.index = index
-						feature.position = this.latLng({
-							lat: feature.geometry.coordinates[1],
-							lng: feature.geometry.coordinates[0]
-						})
-						this.latLngBoundsExtend({
-							latLngBounds: this.boundsGlobal,
-							latLng: feature.position
-						})
+			let html = '<ul class="storelocator-sidebarResultsList">'
+			features.forEach((feature, index) => {
+				feature.index = index
+				feature.position = this.latLng({
+					lat: feature.geometry.coordinates[1],
+					lng: feature.geometry.coordinates[0]
+				})
+				this.latLngBoundsExtend({
+					latLngBounds: this.boundsGlobal,
+					latLng: feature.position
+				})
 
-						const marker = this.createMarker({ feature })
-						this.markers.push(marker)
+				const marker = this.createMarker({ feature, type: 'search' })
+				this.markers.push(marker)
 
-						return <TemplateResult feature={feature} />
-					})}
-				</ul>
-			)
+				html += TemplateResult({ feature })
+			})
+			html += '</ul>'
+
+			this.sidebarResults.innerHTML = html
 
 			// Add all maskers to cluster if option is enabled
 			if (typeof MarkerClusterer !== 'undefined') {
@@ -532,13 +581,8 @@ export default class Map {
 				fitBounds && this.fitBounds({ latLngBounds: this.boundsGlobal })
 			}
 		} else {
-			this.sidebarResults.replaceChildren(
-				<p class="storelocator-sidebarNoResults">
-					No results for your request.
-					<br />
-					Please try a new search with differents choices.
-				</p>
-			)
+			this.sidebarResults.innerHTML =
+				'<p class="storelocator-sidebarNoResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 
 			if (this.overlayLimit !== null) {
 				// this.overlayLimit.setMap(null)

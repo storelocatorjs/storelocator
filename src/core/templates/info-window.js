@@ -1,4 +1,4 @@
-import svgRoute from '../../svg/route.svg'
+import svgRoute from 'shared/assets/svgs/route.svg'
 
 /**
  * storelocatorjs info window template

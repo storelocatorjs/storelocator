@@ -3,6 +3,7 @@ const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../examples/.env') })
 
 let apiKey = process.env.GOOGLE_MAPS_API_KEY
+let mapBoxToken = process.env.MAPBOX_TOKEN
 
 if (process.env.CI) {
 	apiKey = 'xxxx'
@@ -11,7 +12,8 @@ if (process.env.CI) {
 if (apiKey) {
 	const data = JSON.stringify(
 		{
-			GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+			GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+			MAPBOX_TOKEN: process.env.MAPBOX_TOKEN
 		},
 		null,
 		'\t'
