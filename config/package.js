@@ -8,4 +8,4 @@ export const banner =
 	` * @copyright ${new Date().getUTCFullYear()} ${author}\n` +
 	' */'
 
-export const providers = ['google-maps', 'leaflet']
+export const providers = ['google-maps', 'leaflet', 'mapbox']

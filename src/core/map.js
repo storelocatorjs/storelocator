@@ -1,6 +1,5 @@
 import { extend } from 'shared/utils/utils'
 import TemplateResult from './templates/result'
-import TemplateInfoWindow from './templates/info-window'
 import validateTarget from 'validate-target'
 import mapBoxGeocode from './geocoding/mapbox'
 import googleMapsGeocode from './geocoding/google-maps'
@@ -11,8 +10,9 @@ export default class Map {
 		this.Storelocatorjs = Storelocatorjs
 		this.options = this.Storelocatorjs.options
 
+		this.timerAutocomplete = null
+
 		this.autocompleteSelection = this.autocompleteSelection.bind(this)
-		this.onClickOnMarker = this.onClickOnMarker.bind(this)
 	}
 
 	/**
@@ -72,12 +72,14 @@ export default class Map {
 		this.sidebarResults = this.container.querySelector('.storelocator-sidebarResults')
 		this.geolocButton = this.container.querySelector('.storelocator-geolocButton')
 		this.autocomplete = this.sidebar.querySelector('.storelocator-autocomplete')
+		this.searchAreaButton = this.container.querySelector('.storelocator-searchArea')
 
 		this.buildLoader()
 
 		// this.initGeolocation()
 		this.initMap()
 		this.inputSearch.focus()
+		this.boundsChanged()
 
 		this.addEvents()
 
@@ -106,11 +108,12 @@ export default class Map {
 			button.addEventListener('click', this.onClickSidebarNav.bind(this))
 		})
 
-		// Event listener on search form
-		// Prevent native form submit, managed by autocomplete
 		this.inputSearch.addEventListener('keyup', (e) => {
 			e.preventDefault()
-			this.onFormSearchSubmit()
+			window.clearTimeout(this.timerAutocomplete)
+			this.timerAutocomplete = window.setTimeout(() => {
+				this.onFormSearchSubmit()
+			}, 200)
 		})
 
 		this.formSearch.addEventListener('submit', (e) => {
@@ -134,11 +137,20 @@ export default class Map {
 				})
 			}
 		})
+
+		this.searchAreaButton.addEventListener('click', (e) => {
+			e.preventDefault()
+			this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius
+			const { lat, lng } = this.getCenter()
+			this.triggerRequest({
+				lat,
+				lng,
+				fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
+			})
+		})
 	}
 
 	onFormSearchSubmit() {
-		console.log('onFormSearchSubmit')
-
 		mapBoxGeocode({
 			value: this.inputSearch.value,
 			token: this.Storelocatorjs.mapBoxToken
@@ -195,8 +207,6 @@ export default class Map {
 	initMap() {
 		// Create global variables for Google Maps
 		this.markers = []
-		this.currentInfoWindow = null
-		this.infoWindowOpened = false
 		this.boundsChangeTimer = null
 
 		this.boundsGlobal = this.latLngBounds()
@@ -217,17 +227,7 @@ export default class Map {
 			position: null
 		}
 
-		if (typeof window.MarkerClusterer !== 'undefined') {
-			if (this.options.cluster.status) {
-				// Clone object before to prevent reference
-				const cloneClusterOptions = extend(true, this.options.cluster.options)
-				this.markerCluster = new window.MarkerClusterer(
-					this.instance,
-					this.markers,
-					cloneClusterOptions
-				)
-			}
-		}
+		// this.createCluster()
 
 		// Detect zoom changed and bounds changed to refresh marker on the map
 		if (this.options.markersUpdate.status) {
@@ -308,7 +308,7 @@ export default class Map {
 
 			this.instance.panTo(currentMarker.getPosition())
 			this.instance.setZoom(16)
-			this.openInfoWindow(currentMarker)
+			this.openPopup(currentMarker)
 			this.container.querySelector('[data-switch-view][data-target="map"]').click()
 			this.resize()
 		}
@@ -325,13 +325,19 @@ export default class Map {
 					lat,
 					lng
 				})
+
+				// this.latLngBoundsExtend({
+				// 	latLngBounds: this.boundsWithLimit,
+				// 	latLng: position
+				// })
+
 				const marker = this.createMarker({
 					feature: {
 						position
 					},
 					type: 'geolocation'
 				})
-				this.markers.push(marker)
+				// this.markers.push(marker)
 
 				// Store geolocation data
 				this.geolocationData.userPositionChecked = true
@@ -342,10 +348,11 @@ export default class Map {
 					this.inputSearch.value = ''
 				}
 
-				// this.triggerRequest({
-				// 	lat,
-				// 	lng
-				// })
+				this.triggerRequest({
+					lat,
+					lng
+				})
+				this.loading(false)
 			},
 			() => {
 				this.loading(false)
@@ -554,20 +561,15 @@ export default class Map {
 					latLng: feature.position
 				})
 
-				const marker = this.createMarker({ feature, type: 'search' })
-				this.markers.push(marker)
-
+				this.markers.push(this.createMarker({ feature, type: 'search' }))
 				html += TemplateResult({ feature })
 			})
 			html += '</ul>'
 
 			this.sidebarResults.innerHTML = html
 
-			// Add all maskers to cluster if option is enabled
-			if (typeof MarkerClusterer !== 'undefined') {
-				if (this.options.cluster.status) {
-					// this.markerCluster.addMarkers(this.markers)
-				}
+			if (this.options.cluster.status) {
+				this.updateCluster()
 			}
 
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
@@ -584,12 +586,7 @@ export default class Map {
 			this.sidebarResults.innerHTML =
 				'<p class="storelocator-sidebarNoResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 
-			if (this.overlayLimit !== null) {
-				// this.overlayLimit.setMap(null)
-			}
-			if (this.overlayGlobal !== null) {
-				// this.overlayGlobal.setMap(null)
-			}
+			this.removeOverlay()
 		}
 
 		this.loading(false)
@@ -607,10 +604,10 @@ export default class Map {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {
-			this.latLngBoundsExtend({
-				latLngBounds: this.boundsWithLimit,
-				latLng: this.geolocationData.position
-			})
+			// this.latLngBoundsExtend({
+			// 	latLngBounds: this.boundsWithLimit,
+			// 	latLng: this.geolocationData.position
+			// })
 		}
 
 		for (let i = 0; i < maxLoop; i++) {
@@ -623,6 +620,8 @@ export default class Map {
 		fitBounds && this.fitBounds({ latLngBounds: this.boundsWithLimit })
 
 		if (this.options.debug) {
+			this.removeOverlay()
+
 			this.createOverlay({
 				boundsGlobal: this.boundsGlobal,
 				boundsWithLimit: this.boundsWithLimit
@@ -631,28 +630,12 @@ export default class Map {
 	}
 
 	/**
-	 * Open the Google Maps native InfoWindow
-	 * @param {Object} currentMarker Marker data display inside the infoWindow
-	 */
-	openInfoWindow(marker) {
-		this.openPopup({
-			template: TemplateInfoWindow({
-				store: marker.store,
-				origin: this.searchData.position
-			}),
-			marker
-		})
-	}
-
-	/**
 	 * Destroy all created Google Map markers
 	 */
 	destroyMarkers() {
 		// Destroy all maskers references in cluster is enabled
-		if (typeof MarkerClusterer !== 'undefined') {
-			if (this.options.cluster.status) {
-				// this.markerCluster.clearMarkers()
-			}
+		if (this.options.cluster.status) {
+			this.clearCluster()
 		}
 
 		// Loop backwards on markers and remove them
@@ -661,10 +644,5 @@ export default class Map {
 		}
 
 		this.markers = []
-	}
-
-	onClickOnMarker() {
-		this.infoWindowOpened = true
-		this.openInfoWindow(marker)
 	}
 }

@@ -17,7 +17,8 @@ module.exports = (env, argv) => {
 		entry: {
 			home: resolveApp('examples/home/config.js'),
 			'google-maps': resolveApp('examples/google-maps/config.js'),
-			leaflet: resolveApp('examples/leaflet/config.js')
+			leaflet: resolveApp('examples/leaflet/config.js'),
+			mapbox: resolveApp('examples/mapbox/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -86,6 +87,12 @@ module.exports = (env, argv) => {
 				filename: 'leaflet/index.html',
 				template: resolveApp('examples/leaflet/index.html'),
 				chunks: ['leaflet'],
+				publicPath: '../'
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'mapbox/index.html',
+				template: resolveApp('examples/mapbox/index.html'),
+				chunks: ['mapbox'],
 				publicPath: '../'
 			})
 		],
@@ -157,7 +164,7 @@ module.exports = (env, argv) => {
 				directory: resolveApp('examples')
 			},
 			historyApiFallback: true,
-			port: 3001,
+			port: 3000,
 			compress: true,
 			hot: true,
 			https: true

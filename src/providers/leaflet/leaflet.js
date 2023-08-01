@@ -3,14 +3,12 @@ import 'leaflet/dist/leaflet.css'
 import { extend } from 'shared/utils/utils'
 import markerSvg from 'shared/assets/svgs/marker.svg'
 import Leaflet from 'leaflet'
-import { OpenStreetMapProvider } from 'leaflet-geosearch'
+import TemplatePopup from 'components/popup/templates/popup.js'
 
 export default function LeafletProvider(Map, options) {
 	return class MapLeaflet extends Map {
 		constructor(props) {
 			super(props)
-
-			this.currentPopup = null
 		}
 
 		init() {
@@ -73,10 +71,6 @@ export default function LeafletProvider(Map, options) {
 			})
 		}
 
-		setCenter({ lat, lng }) {
-			this.instance.setView(this.latLng({ lat, lng }))
-		}
-
 		getInstance() {
 			return this.instance
 		}
@@ -99,16 +93,21 @@ export default function LeafletProvider(Map, options) {
 
 		createMarker({ feature, type }) {
 			const svgData = this.options.map.markers[type]
-
 			const marker = Leaflet.marker(feature.position, {
-				icon: Leaflet.divIcon({
-					html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="${svgData.path}"/></svg>`,
-					iconSize: [svgData.width, svgData.height],
-					iconAnchor: [12, 40]
+				icon: L.icon({
+					iconUrl: `${'data:image/svg+xml;charset=utf-8,'}${encodeURIComponent(
+						svgData.svg
+					)}`
 				})
 			}).addTo(this.instance)
 
-			// window.google.maps.event.addListener(marker, 'click', this.onClickOnMarker)
+			if (type !== 'geolocation') {
+				marker.bindPopup(
+					TemplatePopup({
+						feature
+					})
+				)
+			}
 
 			return marker
 		}
@@ -117,23 +116,17 @@ export default function LeafletProvider(Map, options) {
 			this.instance.removeLayer(marker)
 		}
 
-		openPopup({ template, marker }) {
-			const popup = marker.bindPopup(template, {
-				offset: Leaflet.point(0, -35)
-			})
-
-			if (this.currentPopup !== null) {
-				this.closePopup.close()
-			}
-
-			this.currentPopup = popup
-
-			popup.openPopup()
-		}
-
 		createOverlay({ boundsGlobal, boundsWithLimit }) {
-			Leaflet.rectangle(boundsGlobal, { color: '#ff0000', weight: 1 }).addTo(this.instance)
-			Leaflet.rectangle(boundsWithLimit, { color: '#54ff00', weight: 1 }).addTo(this.instance)
+			Leaflet.rectangle(boundsGlobal, {
+				color: '#ff0000',
+				weight: 1,
+				fillOpacity: 0.35
+			}).addTo(this.instance)
+			Leaflet.rectangle(boundsWithLimit, {
+				color: '#54ff00',
+				weight: 1,
+				fillOpacity: 0.35
+			}).addTo(this.instance)
 		}
 
 		resize() {

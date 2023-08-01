@@ -53,6 +53,23 @@
 	.markerIcon {
 		position: relative;
 	}
+
+	&-marker {
+		width: 20px;
+		height: 20px;
+	}
+
+	&-searchArea {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 10000;
+		opacity: 0.5;
+
+		&.active {
+			opacity: 1;
+		}
+	}
 }
 
 @media (--media-tablet) {

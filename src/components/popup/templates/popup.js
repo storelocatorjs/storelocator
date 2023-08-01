@@ -1,7 +1,3 @@
-/**
- * storelocatorjs info window template
- * @module storelocatorjs/templateInfoIndow
- */
 export default function TemplatePopup({ feature }) {
 	return `
 		<div class="storelocator-popup">
@@ -18,8 +14,7 @@ export default function TemplatePopup({ feature }) {
 						? `<span class="storelocator-detailStoreAddress">
 							${feature.properties?.address} ${feature.properties?.zipcode} $
 							${feature.properties?.city}
-						</span>
-					`
+						</span>`
 						: ''
 				}
 				${
@@ -27,10 +22,7 @@ export default function TemplatePopup({ feature }) {
 						? `<a
 							href="tel:${feature.properties.phone}"
 							class="storelocator-detailStorePhone"
-						>
-							${feature.properties.phone}
-						</a>
-					`
+						>${feature.properties.phone}</a>`
 						: ''
 				}
 			</div>

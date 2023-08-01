@@ -1,5 +1,6 @@
 import { extend } from 'shared/utils/utils'
-import markerSvg from 'shared/assets/svgs/marker.svg'
+import TemplatePopup from 'components/popup/templates/popup.js'
+import { MarkerClusterer } from '@googlemaps/markerclusterer'
 
 export default function GoogleMapsProvider(Map, options) {
 	const providerObjectName = 'google'
@@ -86,12 +87,42 @@ export default function GoogleMapsProvider(Map, options) {
 			})
 		}
 
-		getInstance() {
-			return this.instance
+		boundsChanged() {
+			this.instance.addListener('bounds_changed', () => {
+				// Prevent multiple event triggered when loading and infoWindow opened
+				if (!this.isLoading && this.markers.length) {
+					this.searchAreaButton.classList.add('active')
+				}
+			})
 		}
 
-		setCenter({ lat, lng }) {
-			this.instance.setCenter(this.latLng({ lat, lng }))
+		getCenter() {
+			return {
+				lat: this.instance.getCenter().lat(),
+				lng: this.instance.getCenter().lng()
+			}
+		}
+
+		createCluster() {
+			this.cluster = new MarkerClusterer({ map: this.instance })
+
+			// 	this.instance,
+			// 	this.markers,
+			// 	this.Storelocatorjs.options.cluster.options
+			// )
+			// }
+		}
+
+		updateCluster() {
+			this.cluster?.addMarkers(this.markers)
+		}
+
+		clearCluster() {
+			this.cluster?.removeMarkers()
+		}
+
+		getInstance() {
+			return this.instance
 		}
 
 		latLngBounds() {
@@ -115,21 +146,16 @@ export default function GoogleMapsProvider(Map, options) {
 			const marker = new window.google.maps.Marker({
 				position: feature.position,
 				map: this.instance,
-				// icon: {
-				// 	url: 'data:image/svg+xml;base64,' + btoa(markerSvg),
-				// 	scaledSize: new window.google.maps.Size(30, 40)
-				// },
 				icon: {
-					path: svgData.path,
-					fillColor: svgData.fillColor,
-					fillOpacity: 1,
-					anchor: new google.maps.Point(svgData.width, svgData.height),
-					scale: 0.075
-				},
-				properties: feature?.properties
+					url: `${'data:image/svg+xml;charset=utf-8,'}${encodeURIComponent(svgData.svg)}`
+				}
 			})
 
-			window.google.maps.event.addListener(marker, 'click', this.onClickOnMarker)
+			if (type !== 'geolocation') {
+				marker.addListener('click', () => {
+					this.openPopup({ feature, marker })
+				})
+			}
 
 			return marker
 		}
@@ -139,24 +165,22 @@ export default function GoogleMapsProvider(Map, options) {
 			marker.setMap(null)
 		}
 
-		openPopup({ template, marker }) {
+		openPopup({ feature, marker }) {
 			const infoWindow = new window.google.maps.InfoWindow()
-			infoWindow.setContent(template)
+			infoWindow.setContent(
+				TemplatePopup({
+					feature
+				})
+			)
 
-			if (this.currentPopup !== null) {
-				this.currentPopup.close()
-			}
-
+			this.currentPopup && this.currentPopup.close()
 			this.currentPopup = infoWindow
 
 			infoWindow.open(this.instance, marker)
 		}
 
 		createOverlay({ boundsGlobal, boundsWithLimit }) {
-			// if (this.overlayGlobal !== null) {
-			// 	this.overlayGlobal.setMap(null)
-			// }
-			const overlayGlobal = new window.google.maps.Rectangle({
+			this.overlayGlobal = new window.google.maps.Rectangle({
 				bounds: boundsGlobal,
 				strokeColor: null,
 				strokeOpacity: 0,
@@ -165,10 +189,7 @@ export default function GoogleMapsProvider(Map, options) {
 				map: this.instance
 			})
 
-			// if (this.overlayLimit !== null) {
-			// 	this.overlayLimit.setMap(null)
-			// }
-			const overlayWithLimit = new window.google.maps.Rectangle({
+			this.overlayWithLimit = new window.google.maps.Rectangle({
 				bounds: boundsWithLimit,
 				strokeColor: null,
 				strokeOpacity: 0,
@@ -176,6 +197,11 @@ export default function GoogleMapsProvider(Map, options) {
 				fillOpacity: 0.35,
 				map: this.instance
 			})
+		}
+
+		removeOverlay() {
+			this.overlayGlobal?.setMap(null)
+			this.overlayLimit?.setMap(null)
 		}
 
 		resize() {

@@ -33,6 +33,7 @@ const createConfig = ({ input, outputFile }) => {
 			}),
 			alias({
 				entries: [
+					{ find: 'core', replacement: resolve('src/core') },
 					{ find: 'shared', replacement: resolve('src/shared') },
 					{ find: 'components', replacement: resolve('src/components') },
 					{ find: 'providers', replacement: resolve('src/providers') }
