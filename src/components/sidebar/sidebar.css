@@ -1,0 +1,53 @@
+.sidebar {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	z-index: 1;
+	background: #fff;
+
+	&.active {
+		.storelocator-sidebarResults {
+			display: block;
+		}
+	}
+
+	&-results {
+		display: none;
+		overflow: auto;
+		height: 100%;
+		border-top: 1px solid #e7e7e7;
+	}
+
+	&-resultsList {
+		padding: 0;
+		margin: 0;
+	}
+
+	&-noResults {
+		margin: 0;
+		padding: 20px;
+		font-size: 13px;
+		line-height: 20px;
+		color: var(--grey);
+		font-style: italic;
+	}
+}
+
+@media (--media-tablet) {
+	.sidebar {
+		position: absolute;
+		top: var(--offsetSidebar);
+		left: var(--offsetSidebar);
+		width: var(--widthFormSearch);
+		height: auto;
+		max-height: calc(100% - calc(var(--offsetSidebar) * 2));
+		z-index: 5;
+		border-radius: 0 0 5px 5px;
+		background-color: #fff;
+		box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+
+		&-results {
+			display: block;
+		}
+	}
+}

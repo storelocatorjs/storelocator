@@ -5,8 +5,6 @@ export default function openStreetMapGeocode({ value }) {
 		new OpenStreetMapProvider()
 			.search({ query: value })
 			.then((response) => {
-				console.log('openStreetMapGeocode', response)
-
 				const results = response.map((result) => {
 					return {
 						text: result.label,

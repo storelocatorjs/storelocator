@@ -1,11 +1,18 @@
-.storelocator {
-	&-detailStore {
-		position: relative;
-		font-size: 13px;
-		color: #000;
+.sidebarResult {
+	display: block;
+	padding: 20px;
+	border-top: 1px solid #e7e7e7;
+	cursor: pointer;
+
+	* {
+		pointer-events: none;
 	}
 
-	&-detailStoreTitle {
+	/* &:first-child {
+		border-top: none;
+	} */
+
+	&-title {
 		margin-bottom: 10px;
 		font-weight: 600;
 		font-size: 16px;
@@ -16,15 +23,9 @@
 		cursor: pointer;
 	}
 
-	&-detailStoreAddress {
+	&-adress {
 		display: block;
 		padding-bottom: 12px;
 		padding-right: 90px;
-	}
-
-	&-detailStorePhone {
-		display: block;
-		text-decoration: none;
-		color: #000;
 	}
 }

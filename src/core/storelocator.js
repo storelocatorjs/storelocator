@@ -1,18 +1,14 @@
 import './css/vars.css'
-import './css/loader.css'
-import './css/detail-store.css'
-import './css/form-search.css'
-import './css/info-window.css'
-import './css/nav.css'
-import './css/sidebar.css'
-import './css/map.css'
 import './css/storelocator.css'
+
+import 'components/map/map.css'
+import 'components/sidebar/sidebar.css'
 
 import defaultOptions from './default-options'
 import { registerProvider, getProviderInstance } from 'providers/provider'
 import Map from './map'
 import { extend } from 'shared/utils/utils'
-import TemplateMap from './templates/map'
+import TemplateMap from 'components/map/templates/map'
 
 /**
  * storelocatorjs

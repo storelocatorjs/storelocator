@@ -3,7 +3,6 @@ export default function googleMapsGeocode({ value }) {
 		new window.google.maps.Geocoder()
 			.geocode({ address: value })
 			.then((response) => {
-				console.log('googleMapsGeocode', response)
 				const results = response.results.map((result) => {
 					return {
 						text: result.formatted_address,

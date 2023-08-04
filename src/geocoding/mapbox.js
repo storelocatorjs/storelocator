@@ -17,7 +17,6 @@ export default function mapBoxGeocode({ value, token }) {
 			})
 			.then((res) => res.json())
 			.then((response) => {
-				console.log('mapBoxGeocode', response)
 				const results = response.features.map(
 					({ place_name, geometry: { coordinates } }) => {
 						return {

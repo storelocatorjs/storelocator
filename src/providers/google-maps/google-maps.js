@@ -87,30 +87,9 @@ export default function GoogleMapsProvider(Map, options) {
 			})
 		}
 
-		boundsChanged() {
-			this.instance.addListener('bounds_changed', () => {
-				// Prevent multiple event triggered when loading and infoWindow opened
-				if (!this.isLoading && this.markers.length) {
-					this.searchAreaButton.classList.add('active')
-				}
-			})
-		}
-
-		getCenter() {
-			return {
-				lat: this.instance.getCenter().lat(),
-				lng: this.instance.getCenter().lng()
-			}
-		}
-
 		createCluster() {
 			this.cluster = new MarkerClusterer({ map: this.instance })
-
-			// 	this.instance,
-			// 	this.markers,
-			// 	this.Storelocatorjs.options.cluster.options
-			// )
-			// }
+			// this.Storelocatorjs.options.cluster.options
 		}
 
 		updateCluster() {
@@ -118,11 +97,23 @@ export default function GoogleMapsProvider(Map, options) {
 		}
 
 		clearCluster() {
-			this.cluster?.removeMarkers()
+			this.cluster?.removeMarkers(this.markers)
 		}
 
 		getInstance() {
 			return this.instance
+		}
+
+		getMarkerLatLng(marker) {
+			return marker.getPosition()
+		}
+
+		panTo(latLng) {
+			this.instance.panTo(latLng)
+		}
+
+		setZoom(value) {
+			this.instance.setZoom(value)
 		}
 
 		latLngBounds() {
@@ -151,9 +142,11 @@ export default function GoogleMapsProvider(Map, options) {
 				}
 			})
 
+			marker.feature = feature
+
 			if (type !== 'geolocation') {
 				marker.addListener('click', () => {
-					this.openPopup({ feature, marker })
+					this.openPopup(marker)
 				})
 			}
 
@@ -165,11 +158,11 @@ export default function GoogleMapsProvider(Map, options) {
 			marker.setMap(null)
 		}
 
-		openPopup({ feature, marker }) {
+		openPopup(marker) {
 			const infoWindow = new window.google.maps.InfoWindow()
 			infoWindow.setContent(
 				TemplatePopup({
-					feature
+					feature: marker.feature
 				})
 			)
 
@@ -179,18 +172,9 @@ export default function GoogleMapsProvider(Map, options) {
 			infoWindow.open(this.instance, marker)
 		}
 
-		createOverlay({ boundsGlobal, boundsWithLimit }) {
+		createOverlay({ boundsGlobal }) {
 			this.overlayGlobal = new window.google.maps.Rectangle({
 				bounds: boundsGlobal,
-				strokeColor: null,
-				strokeOpacity: 0,
-				fillColor: '#ff0000',
-				fillOpacity: 0.35,
-				map: this.instance
-			})
-
-			this.overlayWithLimit = new window.google.maps.Rectangle({
-				bounds: boundsWithLimit,
 				strokeColor: null,
 				strokeOpacity: 0,
 				fillColor: '#54ff00',
@@ -200,8 +184,7 @@ export default function GoogleMapsProvider(Map, options) {
 		}
 
 		removeOverlay() {
-			this.overlayGlobal?.setMap(null)
-			this.overlayLimit?.setMap(null)
+			this.overlayGlobal && this.overlayGlobal.setMap(null)
 		}
 
 		resize() {

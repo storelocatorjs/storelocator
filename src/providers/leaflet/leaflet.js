@@ -4,6 +4,9 @@ import { extend } from 'shared/utils/utils'
 import markerSvg from 'shared/assets/svgs/marker.svg'
 import Leaflet from 'leaflet'
 import TemplatePopup from 'components/popup/templates/popup.js'
+import 'leaflet.markercluster'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 export default function LeafletProvider(Map, options) {
 	return class MapLeaflet extends Map {
@@ -71,8 +74,38 @@ export default function LeafletProvider(Map, options) {
 			})
 		}
 
+		createCluster() {
+			// this.Storelocatorjs.options.cluster.options
+			this.cluster = Leaflet.markerClusterGroup({
+				showCoverageOnHover: false,
+				zoomToBoundsOnClick: true
+			})
+		}
+
+		updateCluster() {
+			this.cluster?.addLayers(this.markers)
+			this.instance.addLayer(this.cluster)
+		}
+
+		clearCluster() {
+			this.cluster?.clearLayers()
+			this.cluster?.removeLayers(this.markers)
+		}
+
 		getInstance() {
 			return this.instance
+		}
+
+		getMarkerLatLng(marker) {
+			return marker.getLatLng()
+		}
+
+		panTo(latLng) {
+			this.instance.panTo(latLng)
+		}
+
+		setZoom(value) {
+			this.instance.setZoom(value)
 		}
 
 		latLngBounds() {
@@ -101,10 +134,12 @@ export default function LeafletProvider(Map, options) {
 				})
 			}).addTo(this.instance)
 
+			marker.feature = feature
+
 			if (type !== 'geolocation') {
 				marker.bindPopup(
 					TemplatePopup({
-						feature
+						feature: marker.feature
 					})
 				)
 			}
@@ -112,21 +147,24 @@ export default function LeafletProvider(Map, options) {
 			return marker
 		}
 
+		openPopup(marker) {
+			marker.openPopup()
+		}
+
 		removeMarker(marker) {
 			this.instance.removeLayer(marker)
 		}
 
-		createOverlay({ boundsGlobal, boundsWithLimit }) {
-			Leaflet.rectangle(boundsGlobal, {
-				color: '#ff0000',
-				weight: 1,
-				fillOpacity: 0.35
-			}).addTo(this.instance)
-			Leaflet.rectangle(boundsWithLimit, {
+		createOverlay({ boundsGlobal }) {
+			this.overlayGlobal = Leaflet.rectangle(boundsGlobal, {
 				color: '#54ff00',
 				weight: 1,
 				fillOpacity: 0.35
 			}).addTo(this.instance)
+		}
+
+		removeOverlay() {
+			this.overlayGlobal && this.overlayGlobal.remove()
 		}
 
 		resize() {

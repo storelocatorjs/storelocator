@@ -1,38 +1,42 @@
-.storelocator {
-	&-popup {
-		padding: 10px 0 10px 10px;
+.popup {
+	padding: 10px 0 10px 10px;
+	max-width: 250px;
 
-		.storelocator-pictureStore {
-			margin-bottom: 20px;
+	&-picture {
+		margin-bottom: 20px;
+		display: block;
+		max-width: 250px;
+
+		img {
 			display: block;
-			max-width: 250px;
-
-			img {
-				display: block;
-				width: 100%;
-				height: auto;
-			}
+			width: 100%;
+			height: auto;
 		}
+	}
 
-		.storelocator-detailStore {
-			max-width: 250px;
-		}
+	&-title {
+		display: block;
+		font-weight: 600;
+		margin-bottom: 10px;
+	}
 
-		.storelocator-detailStoreAddress {
-			padding-right: 0;
-		}
+	&-address {
+		display: inline-block;
+		margin-bottom: 10px;
+	}
 
-		.storelocator-detailStoreTitle {
-			padding-right: 90px;
-		}
+	&-phone {
+		display: block;
+		color: #000;
 
-		.storelocator-detailStoreDistance {
-			top: 0;
-			transform: none;
+		&:focus-visible {
+			outline: none;
 		}
+	}
 
-		.storelocator-detailStoreUrl {
-			color: #000;
-		}
+	&-url {
+		margin-top: 10px;
+		display: block;
+		color: #000;
 	}
 }

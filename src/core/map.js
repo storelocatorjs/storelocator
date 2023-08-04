@@ -1,9 +1,14 @@
-import { extend } from 'shared/utils/utils'
-import TemplateResult from './templates/result'
+import 'components/loader/loader.css'
+import 'components/popup/popup.css'
+import 'components/sidebar-result/sidebar-result.css'
+
+import TemplateSidebarResult from 'components/sidebar-result/templates/sidebar-result'
+import TemplateLoader from 'components/loader/templates/loader'
+
 import validateTarget from 'validate-target'
-import mapBoxGeocode from './geocoding/mapbox'
-import googleMapsGeocode from './geocoding/google-maps'
-import openStreetMapGeocode from './geocoding/open-street-map'
+import mapBoxGeocode from '../geocoding/mapbox'
+import googleMapsGeocode from '../geocoding/google-maps'
+import openStreetMapGeocode from '../geocoding/open-street-map'
 
 export default class Map {
 	constructor({ Storelocatorjs }) {
@@ -13,6 +18,8 @@ export default class Map {
 		this.timerAutocomplete = null
 
 		this.autocompleteSelection = this.autocompleteSelection.bind(this)
+
+		window.Map = this
 	}
 
 	/**
@@ -65,13 +72,13 @@ export default class Map {
 		console.log('onReady')
 
 		this.container = document.querySelector('.storelocator')
-		this.formSearch = this.container.querySelector('.storelocator-formSearch')
-		this.inputSearch = this.container.querySelector('.storelocator-inputSearch')
-		this.nav = this.container.querySelector('.storelocator-nav')
-		this.sidebar = this.container.querySelector('.storelocator-sidebar')
-		this.sidebarResults = this.container.querySelector('.storelocator-sidebarResults')
+		this.formSearch = this.container.querySelector('.formSearch')
+		this.inputSearch = this.container.querySelector('.formSearch-input')
+		this.nav = this.container.querySelector('.nav')
+		this.sidebar = this.container.querySelector('.sidebar')
+		this.sidebarResults = this.container.querySelector('.sidebar-results')
 		this.geolocButton = this.container.querySelector('.storelocator-geolocButton')
-		this.autocomplete = this.sidebar.querySelector('.storelocator-autocomplete')
+		this.autocomplete = this.sidebar.querySelector('.autocomplete')
 		this.searchAreaButton = this.container.querySelector('.storelocator-searchArea')
 
 		this.buildLoader()
@@ -79,7 +86,6 @@ export default class Map {
 		// this.initGeolocation()
 		this.initMap()
 		this.inputSearch.focus()
-		this.boundsChanged()
 
 		this.addEvents()
 
@@ -91,11 +97,8 @@ export default class Map {
 	 * Build the loader
 	 */
 	buildLoader() {
-		this.loader = this.container.querySelector('.storelocator-loader')
-		this.loader.innerHTML = `
-			<div class="storelocator-loaderBar"></div>
-			<div class="storelocator-loaderBar"></div>
-			<div class="storelocator-loaderBar"></div>`
+		this.container.insertAdjacentHTML('afterbegin', TemplateLoader())
+		this.loader = this.container.querySelector('.loader')
 	}
 
 	addEvents() {
@@ -127,7 +130,7 @@ export default class Map {
 			const item = validateTarget({
 				target,
 				selectorString: '.autocomplete-item',
-				nodeName: 'li'
+				nodeName: 'div'
 			})
 
 			if (item) {
@@ -178,10 +181,10 @@ export default class Map {
 	renderAutocomplete({ results }) {
 		const html = results
 			.map(({ text, lat, lng }) => {
-				return `<li class="autocomplete-item" data-lat="${lat}" data-lng="${lng}">${text}</li>`
+				return `<div class="autocomplete-item" data-lat="${lat}" data-lng="${lng}">${text}</div>`
 			})
 			.join('')
-		this.sidebar.querySelector('.storelocator-autocomplete').innerHTML = html
+		this.autocomplete.innerHTML = html
 	}
 
 	/**
@@ -205,39 +208,20 @@ export default class Map {
 	 * Initialize the Google Maps
 	 */
 	initMap() {
-		// Create global variables for Google Maps
 		this.markers = []
 		this.boundsChangeTimer = null
-
-		this.boundsGlobal = this.latLngBounds()
 		this.currentRadius = this.options.requests.searchRadius
-
-		if (this.options.markersUpdate.status) {
-			this.boundsWithLimit = this.latLngBounds()
-		}
-
 		this.searchData = {
 			position: null
 		}
-
-		// Set default geolocation datas
 		this.geolocationData = {
 			userPositionChecked: false,
 			marker: null,
 			position: null
 		}
+		this.boundsGlobal = this.latLngBounds()
 
 		// this.createCluster()
-
-		// Detect zoom changed and bounds changed to refresh marker on the map
-		if (this.options.markersUpdate.status) {
-			// this.instance.addListener('bounds_changed', () => {
-			// 	// Prevent multiple event triggered when loading
-			// 	if (!this.isLoading) {
-			// 		this.boundsChanged()
-			// 	}
-			// })
-		}
 
 		// Called the user callback if available
 		if (typeof this.onReady === 'function') {
@@ -299,17 +283,22 @@ export default class Map {
 	 * @param {Object} e Event listener datas
 	 */
 	onClickSidebarResultItem(e) {
-		if (e.target && e.target.parentNode.classList.contains('store-center-marker-js')) {
+		const target = e.target
+		const isSidebarResult = validateTarget({
+			target,
+			selectorString: '.sidebarResult',
+			nodeName: 'div'
+		})
+
+		if (isSidebarResult) {
 			e.preventDefault()
 
-			const currentLink = e.target.parentNode
-			const markerIndex = currentLink.getAttribute('data-marker-index')
-			const currentMarker = this.markers[markerIndex]
+			const markerIndex = target.getAttribute('data-marker-index')
+			const marker = this.markers[markerIndex]
 
-			this.instance.panTo(currentMarker.getPosition())
-			this.instance.setZoom(16)
-			this.openPopup(currentMarker)
-			this.container.querySelector('[data-switch-view][data-target="map"]').click()
+			this.panTo(this.getMarkerLatLng(marker))
+			this.openPopup(marker)
+			// this.container.querySelector('[data-switch-view][data-target="map"]').click()
 			this.resize()
 		}
 	}
@@ -326,18 +315,12 @@ export default class Map {
 					lng
 				})
 
-				// this.latLngBoundsExtend({
-				// 	latLngBounds: this.boundsWithLimit,
-				// 	latLng: position
-				// })
-
 				const marker = this.createMarker({
 					feature: {
 						position
 					},
 					type: 'geolocation'
 				})
-				// this.markers.push(marker)
 
 				// Store geolocation data
 				this.geolocationData.userPositionChecked = true
@@ -358,69 +341,6 @@ export default class Map {
 				this.loading(false)
 			}
 		)
-	}
-
-	/**
-	 * Function called on user map moved event
-	 */
-	boundsChanged() {
-		if (this.markers.length) {
-			clearTimeout(this.boundsChangeTimer)
-			this.boundsChangeTimer = setTimeout(() => {
-				const listMarkerIndexInViewport = []
-
-				this.markers.forEach((marker, index) => {
-					if (
-						marker.getVisible() &&
-						this.instance.getBounds().contains(marker.getPosition())
-					) {
-						listMarkerIndexInViewport.push(index)
-					}
-				})
-
-				// If map has no markers visible, change map position
-				if (listMarkerIndexInViewport.length === 0) {
-					this.refreshMapOnBoundsChanged({
-						updatePosition: true
-					})
-				} else if (listMarkerIndexInViewport.length === this.markers.length) {
-					// If user see already all markers, zoom is too small, increase it until maxRadius
-					if (this.currentRadius < this.options.markersUpdate.maxRadius) {
-						this.refreshMapOnBoundsChanged({
-							increaseRadius: true
-						})
-					}
-				}
-			}, 600)
-		}
-	}
-
-	/**
-	 * Refresh the map on user map moved
-	 * Trigger a request with the new map position
-	 * @param {Object} options Options to refresh the map
-	 */
-	refreshMapOnBoundsChanged({ updatePosition, increaseRadius }) {
-		let lat = 0
-		let lng = 0
-
-		// If user move on the map and discover area without stores, update markers, with map center position
-		if (updatePosition) {
-			lat = this.instance.getCenter().lat()
-			lng = this.instance.getCenter().lng()
-		} else if (increaseRadius) {
-			// Get lat/lng from searchData
-			;({ lat, lng } = this.searchData)
-
-			// Increase currentRadius
-			this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius
-		}
-
-		this.triggerRequest({
-			lat,
-			lng,
-			fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
-		})
 	}
 
 	autocompleteSelection({ lat, lng }) {
@@ -532,44 +452,32 @@ export default class Map {
 		// Destroy old markers before parse new stores
 		this.destroyMarkers()
 
-		// Re-declare bounds on new research, it's important else zoom bug after one request
-		this.boundsGlobal = this.latLngBounds()
-
 		if (this.options.markersUpdate.status) {
-			this.boundsWithLimit = this.latLngBounds()
+			this.boundsGlobal = this.latLngBounds()
 		}
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
 			this.markers.push(this.geolocationData.marker)
-			this.latLngBoundsExtend({
-				latLngBounds: this.boundsGlobal,
-				latLng: this.geolocationData.position
-			})
 		}
 
 		if (features.length) {
-			let html = '<ul class="storelocator-sidebarResultsList">'
+			let html = '<ul class="sidebar-resultsList">'
 			features.forEach((feature, index) => {
 				feature.index = index
 				feature.position = this.latLng({
 					lat: feature.geometry.coordinates[1],
 					lng: feature.geometry.coordinates[0]
 				})
-				this.latLngBoundsExtend({
-					latLngBounds: this.boundsGlobal,
-					latLng: feature.position
-				})
-
 				this.markers.push(this.createMarker({ feature, type: 'search' }))
-				html += TemplateResult({ feature })
+				html += TemplateSidebarResult({ feature })
 			})
 			html += '</ul>'
 
 			this.sidebarResults.innerHTML = html
 
 			if (this.options.cluster.status) {
-				this.updateCluster()
+				// this.updateCluster({ features })
 			}
 
 			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
@@ -584,7 +492,7 @@ export default class Map {
 			}
 		} else {
 			this.sidebarResults.innerHTML =
-				'<p class="storelocator-sidebarNoResults">No results for your request.<br />Please try a new search with differents choices.</p>'
+				'<p class="sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 
 			this.removeOverlay()
 		}
@@ -604,27 +512,26 @@ export default class Map {
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
 		if (this.geolocationData.userPositionChecked) {
-			// this.latLngBoundsExtend({
-			// 	latLngBounds: this.boundsWithLimit,
-			// 	latLng: this.geolocationData.position
-			// })
+			this.latLngBoundsExtend({
+				latLngBounds: this.boundsGlobal,
+				latLng: this.geolocationData.position
+			})
 		}
 
 		for (let i = 0; i < maxLoop; i++) {
 			this.latLngBoundsExtend({
-				latLngBounds: this.boundsWithLimit,
+				latLngBounds: this.boundsGlobal,
 				latLng: features[i].position
 			})
 		}
 
-		fitBounds && this.fitBounds({ latLngBounds: this.boundsWithLimit })
+		fitBounds && this.fitBounds({ latLngBounds: this.boundsGlobal })
 
 		if (this.options.debug) {
 			this.removeOverlay()
 
 			this.createOverlay({
-				boundsGlobal: this.boundsGlobal,
-				boundsWithLimit: this.boundsWithLimit
+				boundsGlobal: this.boundsGlobal
 			})
 		}
 	}
@@ -634,8 +541,8 @@ export default class Map {
 	 */
 	destroyMarkers() {
 		// Destroy all maskers references in cluster is enabled
-		if (this.options.cluster.status) {
-			this.clearCluster()
+		if (this.markers.length && this.options.cluster.status) {
+			// this.clearCluster()
 		}
 
 		// Loop backwards on markers and remove them
