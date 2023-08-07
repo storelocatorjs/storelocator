@@ -2,7 +2,6 @@ import 'leaflet/dist/leaflet.css'
 import Map from 'core/map'
 
 import { extend } from 'shared/utils/utils'
-import markerSvg from 'shared/assets/svgs/marker.svg'
 import Leaflet from 'leaflet'
 import TemplatePopup from 'components/popup/templates/popup.js'
 
@@ -93,7 +92,7 @@ export default class MapLeaflet extends Map {
 	createMarker({ feature, type }) {
 		const svgData = this.markersOptions[type]
 		const marker = Leaflet.marker(feature.latLng, {
-			icon: L.icon({
+			icon: Leaflet.icon({
 				iconUrl: `${'data:image/svg+xml;charset=utf-8,'}${encodeURIComponent(svgData.svg)}`
 			})
 		}).addTo(this.instance)

@@ -2,7 +2,6 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import Map from 'core/map'
 
 import { extend } from 'shared/utils/utils'
-import markerSvg from 'shared/assets/svgs/marker.svg'
 import maplibregl from '!maplibre-gl'
 import TemplatePopup from 'components/popup/templates/popup.js'
 
