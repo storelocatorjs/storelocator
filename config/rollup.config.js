@@ -5,7 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import alias from '@rollup/plugin-alias'
 import { terser } from 'rollup-plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
-import { banner, providers } from './package'
+import { banner, mapProviders } from './package'
 
 const isProduction = process.env.ENV === 'production'
 const outputDirectory = resolve(__dirname, '../dist')
@@ -36,7 +36,8 @@ const createConfig = ({ input, outputFile }) => {
 					{ find: 'core', replacement: resolve('src/core') },
 					{ find: 'shared', replacement: resolve('src/shared') },
 					{ find: 'components', replacement: resolve('src/components') },
-					{ find: 'providers', replacement: resolve('src/providers') }
+					{ find: 'map', replacement: resolve('src/map') },
+					{ find: 'geocoder', replacement: resolve('src/geocoder') }
 				]
 			}),
 			...(isProduction ? [terser()] : [])
@@ -45,10 +46,10 @@ const createConfig = ({ input, outputFile }) => {
 }
 
 export default [
-	...providers.map((provider) =>
+	...mapProviders.map((name) =>
 		createConfig({
-			input: `./src/providers/${provider}/${provider}.js`,
-			outputFile: `providers/${provider}.js`
+			input: `./src/map/${name}/${name}.js`,
+			outputFile: `map/${name}.js`
 		})
 	),
 	createConfig({

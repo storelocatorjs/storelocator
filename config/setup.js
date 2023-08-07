@@ -2,18 +2,22 @@ const fs = require('fs')
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../examples/.env') })
 
-let apiKey = process.env.GOOGLE_MAPS_API_KEY
+let googleMapsToken = process.env.GOOGLEMAPS_TOKEN
 let mapBoxToken = process.env.MAPBOX_TOKEN
+let jawgToken = process.env.JAWG_TOKEN
 
 if (process.env.CI) {
-	apiKey = 'xxxx'
+	googleMapsToken = 'xxxx'
+	mapBoxToken = 'xxxx'
+	jawgToken = 'xxxx'
 }
 
-if (apiKey) {
+if (googleMapsToken && mapBoxToken && jawgToken) {
 	const data = JSON.stringify(
 		{
-			GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
-			MAPBOX_TOKEN: process.env.MAPBOX_TOKEN
+			GOOGLEMAPS_TOKEN: process.env.GOOGLEMAPS_TOKEN,
+			MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
+			JAWG_TOKEN: process.env.JAWG_TOKEN
 		},
 		null,
 		'\t'
@@ -27,5 +31,7 @@ if (apiKey) {
 		}
 	})
 } else {
-	throw new Error('Environment variable "GOOGLE_MAPS_API_KEY" is missing in .env')
+	throw new Error(
+		'Environments variables are missing in .env ("GOOGLEMAPS_TOKEN", "MAPBOX_TOKEN", "JAWG_TOKEN")'
+	)
 }

@@ -5,8 +5,6 @@ import 'components/map/map.css'
 import 'components/sidebar/sidebar.css'
 
 import defaultOptions from './default-options'
-import { registerProvider, getProviderInstance } from 'providers/provider'
-import Map from './map'
 import { extend } from 'shared/utils/utils'
 import TemplateMap from 'components/map/templates/map'
 
@@ -15,26 +13,31 @@ import TemplateMap from 'components/map/templates/map'
  * @module storelocatorjs
  */
 class Storelocator {
-	constructor({ target, mapBoxToken, options, provider, onReady }) {
+	constructor({ target, api, map, geocoder, markers, onReady }) {
 		this.target = target
-		this.mapBoxToken = mapBoxToken
-		this.options = extend(true, defaultOptions, options)
+		this.api = api
+		this.map = map
+		this.geocoder = geocoder
 		this.onReady = onReady
 
-		const ProviderInstance = getProviderInstance(provider, Map)
-		this.map = new ProviderInstance({
-			Storelocatorjs: this
+		const customMap = new map.provider({
+			api: extend(true, defaultOptions.api, api),
+			map: {
+				token: map.token,
+				options: map.options
+			},
+			geocoder,
+			markersOptions: extend(true, defaultOptions.markers, markers),
+			onReady
 		})
 
 		this.render()
-		this.map.build()
+		customMap.init()
 	}
 
 	render() {
 		this.target.insertAdjacentHTML('beforeend', TemplateMap())
 	}
 }
-
-Storelocator.registerProvider = registerProvider
 
 export default Storelocator

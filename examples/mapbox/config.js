@@ -1,22 +1,23 @@
 import '../../dist/storelocator.css'
-import '../../dist/providers/mapbox.css'
+import '../../dist/map/mapbox.css'
 import Storelocator from '../../dist/storelocator.js'
-import Mapbox from '../../dist/providers/mapbox.js'
+import Mapbox from '../../dist/map/mapbox.js'
 import credentials from '../credentials.json'
-
-Storelocator.registerProvider('mapbox', Mapbox, {
-	token: credentials.MAPBOX_TOKEN
-})
 
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
 	target: document.querySelector('#app'),
-	mapBoxToken: credentials.MAPBOX_TOKEN,
-	options: {
-		webServiceUrl: 'https://storelocatorjs-functions.vercel.app',
-		debug: true
+	api: {
+		url: 'https://storelocatorjs-functions.vercel.app'
 	},
-	provider: 'mapbox',
+	map: {
+		provider: Mapbox,
+		token: credentials.MAPBOX_TOKEN
+	},
+	geocoder: {
+		provider: 'mapbox',
+		token: credentials.MAPBOX_TOKEN
+	},
 	onReady: (map) => {
 		console.log('onReady', map)
 	}

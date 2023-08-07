@@ -4,7 +4,7 @@
  * @param {String} key Object property key inside the object
  * @returns {Boolean} Object has the property key
  */
-function hasOwn(obj, key) {
+export function hasOwn(obj, key) {
 	return Object.prototype.hasOwnProperty.call(obj, key)
 }
 
@@ -14,7 +14,7 @@ function hasOwn(obj, key) {
  * @param {Array<Object>} objects List of objects to merged
  * @returns Merged object
  */
-function extend(deep = false, ...objects) {
+export function extend(deep = false, ...objects) {
 	const extended = {}
 
 	// Merge the object into the extended object
@@ -43,4 +43,18 @@ function extend(deep = false, ...objects) {
 	return extended
 }
 
-export { extend, hasOwn }
+export function fetchFromGeocoder(url) {
+	return fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error(response)
+			}
+			return response
+		})
+		.then((res) => res.json())
+}

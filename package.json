@@ -24,6 +24,10 @@
 	"files": [
 		"./src"
 	],
+	"browserslist": [
+		"defaults",
+		"not ie 11"
+	],
 	"scripts": {
 		"build": "rm -rf ./dist/ && rollup --config ./config/rollup.config.js --environment ENV:production",
 		"build:example": "rm -rf ./examples/dist/ && npm run credentials && webpack --mode=production --config=./examples/webpack.config.js",
@@ -34,11 +38,9 @@
 	},
 	"prettier": "./config/prettier.config.js",
 	"dependencies": {
-		"@googlemaps/markerclusterer": "^2.4.0",
 		"leaflet": "^1.9.3",
-		"leaflet-geosearch": "^3.8.0",
-		"leaflet.markercluster": "^1.5.3",
 		"mapbox-gl": "^2.15.0",
+		"maplibre-gl": "^3.2.2",
 		"validate-target": "^3.1.1"
 	},
 	"devDependencies": {

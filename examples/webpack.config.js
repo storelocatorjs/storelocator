@@ -18,7 +18,8 @@ module.exports = (env, argv) => {
 			home: resolveApp('examples/home/config.js'),
 			'google-maps': resolveApp('examples/google-maps/config.js'),
 			leaflet: resolveApp('examples/leaflet/config.js'),
-			mapbox: resolveApp('examples/mapbox/config.js')
+			mapbox: resolveApp('examples/mapbox/config.js'),
+			maplibre: resolveApp('examples/maplibre/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -93,6 +94,12 @@ module.exports = (env, argv) => {
 				filename: 'mapbox/index.html',
 				template: resolveApp('examples/mapbox/index.html'),
 				chunks: ['mapbox'],
+				publicPath: '../'
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'maplibre/index.html',
+				template: resolveApp('examples/maplibre/index.html'),
+				chunks: ['maplibre'],
 				publicPath: '../'
 			})
 		],

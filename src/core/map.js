@@ -6,20 +6,24 @@ import TemplateSidebarResult from 'components/sidebar-result/templates/sidebar-r
 import TemplateLoader from 'components/loader/templates/loader'
 
 import validateTarget from 'validate-target'
-import mapBoxGeocode from '../geocoding/mapbox'
-import googleMapsGeocode from '../geocoding/google-maps'
-import openStreetMapGeocode from '../geocoding/open-street-map'
+import geocoderMapBox from '../geocoder/mapbox'
+import geocoderGoogleMaps from '../geocoder/google-maps'
+import geocoderJawg from '../geocoder/jawg'
 
-export default class Map {
-	constructor({ Storelocatorjs }) {
-		this.Storelocatorjs = Storelocatorjs
-		this.options = this.Storelocatorjs.options
+export default class _Map {
+	constructor({ api, map, geocoder, markers, onReady }) {
+		this.api = api
+		this.map = map
+		this.geocoder = geocoder
+		this.onReady = onReady
+
+		this.geocoderFunctions = {
+			mapbox: geocoderMapBox,
+			googlemaps: geocoderGoogleMaps,
+			jawg: geocoderJawg
+		}
 
 		this.timerAutocomplete = null
-
-		this.autocompleteSelection = this.autocompleteSelection.bind(this)
-
-		window.Map = this
 	}
 
 	/**
@@ -53,24 +57,10 @@ export default class Map {
 		throw new Error('You have to implement the function "getInstance".')
 	}
 
-	methodPlay() {
-		throw new Error('You have to implement the function "methodPlay".')
-	}
-
-	/**
-	 * methodPause
-	 * Extends by the provider
-	 */
-	methodPause() {
-		throw new Error('You have to implement the function "methodPause".')
-	}
-
 	/**
 	 * On the player is ready
 	 */
 	onReady() {
-		console.log('onReady')
-
 		this.container = document.querySelector('.storelocator')
 		this.formSearch = this.container.querySelector('.formSearch')
 		this.inputSearch = this.container.querySelector('.formSearch-input')
@@ -82,15 +72,10 @@ export default class Map {
 		this.searchAreaButton = this.container.querySelector('.storelocator-searchArea')
 
 		this.buildLoader()
-
-		// this.initGeolocation()
 		this.initMap()
 		this.inputSearch.focus()
-
 		this.addEvents()
-
-		// this.Storelocatorjs.onReady instanceof Function &&
-		// this.Storelocatorjs.onReady.call(this, this)
+		this.onReady instanceof Function && this.onReady(this.instance)
 	}
 
 	/**
@@ -113,10 +98,13 @@ export default class Map {
 
 		this.inputSearch.addEventListener('keyup', (e) => {
 			e.preventDefault()
-			window.clearTimeout(this.timerAutocomplete)
-			this.timerAutocomplete = window.setTimeout(() => {
-				this.onFormSearchSubmit()
-			}, 200)
+
+			if (e.target.value !== '') {
+				window.clearTimeout(this.timerAutocomplete)
+				this.timerAutocomplete = window.setTimeout(() => {
+					this.onFormSearchSubmit()
+				}, 200)
+			}
 		})
 
 		this.formSearch.addEventListener('submit', (e) => {
@@ -140,42 +128,29 @@ export default class Map {
 				})
 			}
 		})
-
-		this.searchAreaButton.addEventListener('click', (e) => {
-			e.preventDefault()
-			this.currentRadius = this.currentRadius + this.options.markersUpdate.stepRadius
-			const { lat, lng } = this.getCenter()
-			this.triggerRequest({
-				lat,
-				lng,
-				fitBounds: false // Prevent fitBounds when bounds changed (move or zoom)
-			})
-		})
 	}
 
 	onFormSearchSubmit() {
-		mapBoxGeocode({
-			value: this.inputSearch.value,
-			token: this.Storelocatorjs.mapBoxToken
-		}).then((results) => {
-			this.renderAutocomplete({
-				results
+		if (
+			typeof this.geocoder.provider === 'string' &&
+			this.geocoderFunctions[this.geocoder.provider]
+		) {
+			this.geocoderFunctions[this.geocoder.provider]({
+				value: this.inputSearch.value,
+				token: this.geocoder?.token,
+				countries: this.geocoder.countries?.join(',') || 'fr'
+			}).then((results) => {
+				this.renderAutocomplete({
+					results
+				})
 			})
-		})
-
-		// googleMapsGeocode({ value: this.inputSearch.value }).then((results) => {
-		// 	this.renderAutocomplete({
-		// 		results
-		// 	})
-		// })
-
-		// openStreetMapGeocode({
-		// 	value: this.inputSearch.value
-		// }).then((results) => {
-		// 	this.renderAutocomplete({
-		// 		results
-		// 	})
-		// })
+		} else if (this.geocoder.provider instanceof Function) {
+			this.geocoderFunctions[this.geocoder.provider]().then((results) => {
+				this.renderAutocomplete({
+					results
+				})
+			})
+		}
 	}
 
 	renderAutocomplete({ results }) {
@@ -197,10 +172,10 @@ export default class Map {
 			this.isLoading = true
 		} else {
 			// Wait a moment to show the loader
-			setTimeout(() => {
-				this.loader.classList.remove('active')
-				this.isLoading = false
-			}, 1050)
+			// setTimeout(() => {
+			this.loader.classList.remove('active')
+			this.isLoading = false
+			// }, 1050)
 		}
 	}
 
@@ -210,7 +185,7 @@ export default class Map {
 	initMap() {
 		this.markers = []
 		this.boundsChangeTimer = null
-		this.currentRadius = this.options.requests.searchRadius
+		this.currentRadius = this.api.radius
 		this.searchData = {
 			position: null
 		}
@@ -220,28 +195,6 @@ export default class Map {
 			position: null
 		}
 		this.boundsGlobal = this.latLngBounds()
-
-		// this.createCluster()
-
-		// Called the user callback if available
-		if (typeof this.onReady === 'function') {
-			// this.onReady(this.instance)
-		}
-	}
-
-	/**
-	 * Initialize the user geolocation
-	 */
-	initGeolocation() {
-		// Check the browser support
-		if (navigator.geolocation) {
-			// Start geolocation on page load
-			// if (this.options.geolocation.startOnLoad) {
-			if (window.location.protocol === 'https:') {
-				this.checkUserPosition()
-			}
-			// }
-		}
 	}
 
 	/**
@@ -343,15 +296,6 @@ export default class Map {
 		)
 	}
 
-	autocompleteSelection({ lat, lng }) {
-		this.loading(true)
-
-		this.autocompleteRequest({
-			lat,
-			lng
-		})
-	}
-
 	/**
 	 * Function called on autocomplete changes
 	 * Trigger a request with the new user research
@@ -360,10 +304,6 @@ export default class Map {
 	 */
 	autocompleteRequest({ lat, lng }) {
 		this.userPositionChecked = false
-
-		// Reset currentRadius on new search
-		this.currentRadius = this.options.requests.searchRadius
-
 		this.triggerRequest({
 			lat,
 			lng
@@ -377,7 +317,7 @@ export default class Map {
 	 * @param {String} lng Longitude of the research
 	 * @param {Boolean} fitBounds Fit bounds on the map
 	 */
-	triggerRequest({ lat, lng, fitBounds = true }) {
+	triggerRequest({ lat, lng }) {
 		this.mapHasRequest = true
 		this.loading(true)
 
@@ -401,7 +341,7 @@ export default class Map {
 		}
 
 		// Fecth store datas from the web service
-		fetch(this.options.webServiceUrl, fetchConf)
+		fetch(this.api.url, fetchConf)
 			.then((response) => {
 				if (!response.ok) {
 					throw new Error(response)
@@ -412,8 +352,7 @@ export default class Map {
 			.then((features) => {
 				features !== null &&
 					this.parseStores({
-						features,
-						fitBounds
+						features
 					})
 			})
 		// .catch((error) => {
@@ -437,7 +376,7 @@ export default class Map {
 		}
 
 		formDatas.radius = this.currentRadius
-		formDatas.limit = this.options.requests.storesLimit
+		formDatas.limit = this.api.limit
 
 		return formDatas
 	}
@@ -448,13 +387,9 @@ export default class Map {
 	 * Create all store results
 	 * @param {Object} options Store datas from the web service
 	 */
-	parseStores({ features, fitBounds }) {
-		// Destroy old markers before parse new stores
+	parseStores({ features }) {
 		this.destroyMarkers()
-
-		if (this.options.markersUpdate.status) {
-			this.boundsGlobal = this.latLngBounds()
-		}
+		this.boundsGlobal = this.latLngBounds()
 
 		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
@@ -464,32 +399,29 @@ export default class Map {
 		if (features.length) {
 			let html = '<ul class="sidebar-resultsList">'
 			features.forEach((feature, index) => {
-				feature.index = index
-				feature.position = this.latLng({
+				const latLng = this.latLng({
 					lat: feature.geometry.coordinates[1],
 					lng: feature.geometry.coordinates[0]
 				})
-				this.markers.push(this.createMarker({ feature, type: 'search' }))
+
+				feature.index = index
+				feature.latLng = latLng
+
+				const marker = this.createMarker({ feature, type: 'search' })
+
+				this.latLngBoundsExtend({
+					latLngBounds: this.boundsGlobal,
+					latLng
+				})
+				this.markers.push(marker)
+
 				html += TemplateSidebarResult({ feature })
 			})
 			html += '</ul>'
 
 			this.sidebarResults.innerHTML = html
 
-			if (this.options.cluster.status) {
-				// this.updateCluster({ features })
-			}
-
-			// Create custom bounds with limit viewport, no fitBounds the boundsGlobal
-			if (this.options.markersUpdate.status) {
-				this.createViewportWithLimitMarker({
-					features,
-					fitBounds
-				})
-			} else {
-				// Else, and if requested, fitbounds the boundsGlobal
-				fitBounds && this.fitBounds({ latLngBounds: this.boundsGlobal })
-			}
+			this.fitBounds({ latLngBounds: this.boundsGlobal })
 		} else {
 			this.sidebarResults.innerHTML =
 				'<p class="sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
@@ -501,55 +433,12 @@ export default class Map {
 	}
 
 	/**
-	 * Create a custom viewport (boundsWithLimit)
-	 * Display a minimal list of markers according to the limitInViewport option
-	 * @param {Object} options Datas to create the custom viewport
-	 */
-	createViewportWithLimitMarker({ features, fitBounds }) {
-		const maxMarkersInViewport = this.options.markersUpdate.limitInViewport
-		const maxLoop =
-			features.length < maxMarkersInViewport ? features.length : maxMarkersInViewport
-
-		// If geolocation enabled, add geolocation marker to the list and extend the bounds limit
-		if (this.geolocationData.userPositionChecked) {
-			this.latLngBoundsExtend({
-				latLngBounds: this.boundsGlobal,
-				latLng: this.geolocationData.position
-			})
-		}
-
-		for (let i = 0; i < maxLoop; i++) {
-			this.latLngBoundsExtend({
-				latLngBounds: this.boundsGlobal,
-				latLng: features[i].position
-			})
-		}
-
-		fitBounds && this.fitBounds({ latLngBounds: this.boundsGlobal })
-
-		if (this.options.debug) {
-			this.removeOverlay()
-
-			this.createOverlay({
-				boundsGlobal: this.boundsGlobal
-			})
-		}
-	}
-
-	/**
 	 * Destroy all created Google Map markers
 	 */
 	destroyMarkers() {
-		// Destroy all maskers references in cluster is enabled
-		if (this.markers.length && this.options.cluster.status) {
-			// this.clearCluster()
-		}
-
-		// Loop backwards on markers and remove them
 		for (let i = this.markers.length - 1; i >= 0; i--) {
 			this.removeMarker(this.markers[i])
 		}
-
 		this.markers = []
 	}
 }
