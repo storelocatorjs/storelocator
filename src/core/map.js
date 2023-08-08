@@ -1,36 +1,49 @@
-import 'components/loader/loader.css'
-import 'components/popup/popup.css'
-import 'components/sidebar-result/sidebar-result.css'
-
 import TemplateSidebarResult from 'components/sidebar-result/templates/sidebar-result'
-import TemplateLoader from 'components/loader/templates/loader'
 
 import validateTarget from 'validate-target'
-import geocoderMapBox from '../geocoder/mapbox'
-import geocoderGoogleMaps from '../geocoder/google-maps'
-import geocoderJawg from '../geocoder/jawg'
+import Autocomplete from 'components/autocomplete/autocomplete'
 
-export default class _Map {
-	constructor({ api, map, geocoder, markers, onReady }) {
+export default class Map {
+	constructor({ api, map, geocoder, onReady }) {
 		this.api = api
 		this.map = map
 		this.geocoder = geocoder
 		this.onReady = onReady
 
-		this.geocoderFunctions = {
-			mapbox: geocoderMapBox,
-			googlemaps: geocoderGoogleMaps,
-			jawg: geocoderJawg
+		this.elements = {
+			container: null,
+			autocomplete: null,
+			map: null,
+			formSearch: null,
+			inputSearch: null,
+			nav: null,
+			sidebar: null,
+			sidebarResults: null,
+			geolocButton: null
 		}
 
-		this.timerAutocomplete = null
+		this.autocomplete = new Autocomplete({
+			map: this
+		})
+
+		this.onClickSidebarResultItem = this.onClickSidebarResultItem.bind(this)
+		this.onClickOnNav = this.onClickOnNav.bind(this)
+		this.onClickGeolocationButton = this.onClickGeolocationButton.bind(this)
 	}
 
-	/**
-	 * Build the player
-	 */
 	build() {
+		const container = document.querySelector('.storelocator')
+		this.elements.container = container
+		this.elements.map = container.querySelector('.sl-map')
+		this.elements.formSearch = container.querySelector('.sl-formSearch')
+		this.elements.inputSearch = container.querySelector('.sl-formSearch-input')
+		this.elements.nav = container.querySelector('.sl-nav')
+		this.elements.sidebar = container.querySelector('.sl-sidebar')
+		this.elements.sidebarResults = container.querySelector('.sl-sidebar-results')
+		this.elements.geolocButton = container.querySelector('.sl-geolocButton')
+
 		this.init()
+		this.autocomplete.init()
 	}
 
 	/**
@@ -41,125 +54,73 @@ export default class _Map {
 		throw new Error('You have to implement the function "init".')
 	}
 
-	/**
-	 * waitUntilVideoIsReady
-	 * Extends by the provider
-	 */
-	waitUntilVideoIsReady() {
-		throw new Error('You have to implement the function "waitUntilVideoIsReady".')
+	waitUntilApiIsReady() {
+		throw new Error('You have to implement the function "waitUntilApiIsReady".')
 	}
 
-	/**
-	 * getInstance
-	 * Extends by the provider
-	 */
 	getInstance() {
 		throw new Error('You have to implement the function "getInstance".')
 	}
 
-	/**
-	 * On the player is ready
-	 */
-	onReady() {
-		this.container = document.querySelector('.storelocator')
-		this.formSearch = this.container.querySelector('.formSearch')
-		this.inputSearch = this.container.querySelector('.formSearch-input')
-		this.nav = this.container.querySelector('.nav')
-		this.sidebar = this.container.querySelector('.sidebar')
-		this.sidebarResults = this.container.querySelector('.sidebar-results')
-		this.geolocButton = this.container.querySelector('.storelocator-geolocButton')
-		this.autocomplete = this.sidebar.querySelector('.autocomplete')
-		this.searchAreaButton = this.container.querySelector('.storelocator-searchArea')
+	getMarkerLatLng() {
+		throw new Error('You have to implement the function "getMarkerLatLng".')
+	}
 
-		this.buildLoader()
+	panTo() {
+		throw new Error('You have to implement the function "panTo".')
+	}
+
+	setZoom() {
+		throw new Error('You have to implement the function "setZoom".')
+	}
+
+	latLngBounds() {
+		throw new Error('You have to implement the function "latLngBounds".')
+	}
+
+	latLngBoundsExtend() {
+		throw new Error('You have to implement the function "latLngBoundsExtend".')
+	}
+
+	fitBounds() {
+		throw new Error('You have to implement the function "fitBounds".')
+	}
+
+	latLng() {
+		throw new Error('You have to implement the function "latLng".')
+	}
+
+	createMarker() {
+		throw new Error('You have to implement the function "createMarker".')
+	}
+
+	openPopup() {
+		throw new Error('You have to implement the function "openPopup".')
+	}
+
+	removeMarker() {
+		throw new Error('You have to implement the function "removeMarker".')
+	}
+
+	resize() {
+		throw new Error('You have to implement the function "resize".')
+	}
+
+	destroy() {
+		throw new Error('You have to implement the function "destroy".')
+	}
+
+	onReady() {
 		this.initMap()
-		this.inputSearch.focus()
+		this.elements.inputSearch.focus()
 		this.addEvents()
 		this.onReady instanceof Function && this.onReady(this.instance)
 	}
 
-	/**
-	 * Build the loader
-	 */
-	buildLoader() {
-		this.container.insertAdjacentHTML('afterbegin', TemplateLoader())
-		this.loader = this.container.querySelector('.loader')
-	}
-
 	addEvents() {
-		// Event listener on sidebar result items
-		this.sidebarResults.addEventListener('click', this.onClickSidebarResultItem.bind(this))
-
-		// Event listeners on sidebar navigation items
-		const buttons = [...this.nav.querySelectorAll('[data-switch-view]')]
-		buttons.forEach((button) => {
-			button.addEventListener('click', this.onClickSidebarNav.bind(this))
-		})
-
-		this.inputSearch.addEventListener('keyup', (e) => {
-			e.preventDefault()
-
-			if (e.target.value !== '') {
-				window.clearTimeout(this.timerAutocomplete)
-				this.timerAutocomplete = window.setTimeout(() => {
-					this.onFormSearchSubmit()
-				}, 200)
-			}
-		})
-
-		this.formSearch.addEventListener('submit', (e) => {
-			e.preventDefault()
-		})
-
-		this.geolocButton.addEventListener('click', this.onClickGeolocationButton.bind(this))
-
-		this.autocomplete.addEventListener('click', (e) => {
-			const target = e.target
-			const item = validateTarget({
-				target,
-				selectorString: '.autocomplete-item',
-				nodeName: 'div'
-			})
-
-			if (item) {
-				this.autocompleteRequest({
-					lat: parseFloat(target.getAttribute('data-lat')),
-					lng: parseFloat(target.getAttribute('data-lng'))
-				})
-			}
-		})
-	}
-
-	onFormSearchSubmit() {
-		if (
-			typeof this.geocoder.provider === 'string' &&
-			this.geocoderFunctions[this.geocoder.provider]
-		) {
-			this.geocoderFunctions[this.geocoder.provider]({
-				value: this.inputSearch.value,
-				token: this.geocoder?.token,
-				countries: this.geocoder.countries?.join(',') || 'fr'
-			}).then((results) => {
-				this.renderAutocomplete({
-					results
-				})
-			})
-		} else if (this.geocoder.provider instanceof Function) {
-			this.geocoderFunctions[this.geocoder.provider]().then((results) => {
-				this.renderAutocomplete({
-					results
-				})
-			})
-		}
-	}
-
-	renderAutocomplete({ results }) {
-		const html = results
-			.map(({ text, lat, lng }) => {
-				return `<div class="autocomplete-item" data-lat="${lat}" data-lng="${lng}">${text}</div>`
-			})
-			.join('')
-		this.autocomplete.innerHTML = html
+		this.elements.sidebarResults.addEventListener('click', this.onClickSidebarResultItem)
+		this.elements.nav.addEventListener('click', this.onClickOnNav)
+		this.elements.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 	}
 
 	/**
@@ -167,16 +128,8 @@ export default class _Map {
 	 * @param {Boolean} state Status of the loader
 	 */
 	loading(state) {
-		if (state) {
-			this.loader.classList.add('active')
-			this.isLoading = true
-		} else {
-			// Wait a moment to show the loader
-			// setTimeout(() => {
-			this.loader.classList.remove('active')
-			this.isLoading = false
-			// }, 1050)
-		}
+		this.isLoading = state
+		this.elements.loader.classList[state ? 'add' : 'remove']('sl-active')
 	}
 
 	/**
@@ -184,15 +137,9 @@ export default class _Map {
 	 */
 	initMap() {
 		this.markers = []
-		this.boundsChangeTimer = null
-		this.currentRadius = this.api.radius
-		this.searchData = {
-			position: null
-		}
 		this.geolocationData = {
 			userPositionChecked: false,
-			marker: null,
-			position: null
+			marker: null
 		}
 		this.boundsGlobal = this.latLngBounds()
 	}
@@ -209,25 +156,32 @@ export default class _Map {
 		}
 	}
 
-	/**
-	 * Click on sidebar navigation item
-	 * @param {Object} e Event listener datas
-	 */
-	onClickSidebarNav(e) {
-		const mapView = this.container.querySelector('.storelocator-googleMaps')
+	onClickOnNav(e) {
+		const target = e.target
+		const isNavButton = validateTarget({
+			target,
+			selectorString: '.sl-nav-button',
+			nodeName: 'button'
+		})
 
+		if (isNavButton) {
+			this.onClickOnNavButton(e)
+		}
+	}
+
+	onClickOnNavButton(e) {
 		e.preventDefault()
 
-		this.nav.querySelector('.active').classList.remove('active')
-		e.target.parentNode.classList.add('active')
+		this.elements.nav.querySelector('.sl-active').classList.remove('sl-active')
+		e.target.parentNode.classList.add('sl-active')
 
 		if (e.target.getAttribute('data-target') === 'map') {
-			mapView.classList.add('active')
-			this.sidebar.classList.remove('active')
+			this.elements.map.classList.add('sl-active')
+			this.elements.sidebar.classList.remove('sl-active')
 			this.resize()
 		} else {
-			this.sidebar.classList.add('active')
-			mapView.classList.remove('active')
+			this.elements.sidebar.classList.add('sl-active')
+			this.elements.map.classList.remove('sl-active')
 		}
 	}
 
@@ -239,7 +193,7 @@ export default class _Map {
 		const target = e.target
 		const isSidebarResult = validateTarget({
 			target,
-			selectorString: '.sidebarResult',
+			selectorString: '.sl-sidebarResult',
 			nodeName: 'div'
 		})
 
@@ -251,7 +205,9 @@ export default class _Map {
 
 			this.panTo(this.getMarkerLatLng(marker))
 			this.openPopup(marker)
-			// this.container.querySelector('[data-switch-view][data-target="map"]').click()
+			this.elements.nav
+				.querySelector('.sl-nav-button[data-target="map"]')
+				.dispatchEvent(new window.Event('click', { bubbles: true }))
 			this.resize()
 		}
 	}
@@ -263,25 +219,21 @@ export default class _Map {
 	checkUserPosition() {
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude: lat, longitude: lng } }) => {
-				const position = this.latLng({
-					lat,
-					lng
-				})
-
 				const marker = this.createMarker({
 					feature: {
-						position
+						latLng: this.latLng({
+							lat,
+							lng
+						})
 					},
 					type: 'geolocation'
 				})
 
-				// Store geolocation data
 				this.geolocationData.userPositionChecked = true
-				this.geolocationData.position = position
 				this.geolocationData.marker = marker
 
-				if (this.inputSearch.value !== '') {
-					this.inputSearch.value = ''
+				if (this.elements.inputSearch.value !== '') {
+					this.elements.inputSearch.value = ''
 				}
 
 				this.triggerRequest({
@@ -297,20 +249,6 @@ export default class _Map {
 	}
 
 	/**
-	 * Function called on autocomplete changes
-	 * Trigger a request with the new user research
-	 * @param {String} lat Latitude of the research
-	 * @param {String} lng Longitude of the research
-	 */
-	autocompleteRequest({ lat, lng }) {
-		this.userPositionChecked = false
-		this.triggerRequest({
-			lat,
-			lng
-		})
-	}
-
-	/**
 	 * Trigger a request to the web service to get all store results
 	 * according to the position (lat, lng)
 	 * @param {String} lat Latitude of the research
@@ -318,7 +256,6 @@ export default class _Map {
 	 * @param {Boolean} fitBounds Fit bounds on the map
 	 */
 	triggerRequest({ lat, lng }) {
-		this.mapHasRequest = true
 		this.loading(true)
 
 		const requestDatas = this.serializeForm({
@@ -326,22 +263,13 @@ export default class _Map {
 			lng
 		})
 
-		// Update search data stored
-		this.searchData.lat = lat
-		this.searchData.lng = lng
-		this.searchData.position = this.latLng({ lat, lng })
-
-		// Fecth configuration
-		const fetchConf = {
+		fetch(this.api.url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(requestDatas)
-		}
-
-		// Fecth store datas from the web service
-		fetch(this.api.url, fetchConf)
+		})
 			.then((response) => {
 				if (!response.ok) {
 					throw new Error(response)
@@ -355,10 +283,10 @@ export default class _Map {
 						features
 					})
 			})
-		// .catch((error) => {
-		// 	this.loading(false)
-		// 	throw new Error(error)
-		// })
+			.catch((error) => {
+				this.loading(false)
+				throw new Error(error)
+			})
 	}
 
 	/**
@@ -375,7 +303,7 @@ export default class _Map {
 			formDatas.lng = lng
 		}
 
-		formDatas.radius = this.currentRadius
+		formDatas.radius = this.api.radius
 		formDatas.limit = this.api.limit
 
 		return formDatas
@@ -391,13 +319,12 @@ export default class _Map {
 		this.destroyMarkers()
 		this.boundsGlobal = this.latLngBounds()
 
-		// If geolocation enabled, add geolocation marker to the list and extend the bounds global
 		if (this.geolocationData.userPositionChecked) {
 			this.markers.push(this.geolocationData.marker)
 		}
 
 		if (features.length) {
-			let html = '<ul class="sidebar-resultsList">'
+			let html = '<ul class="sl-sidebar-resultsList">'
 			features.forEach((feature, index) => {
 				const latLng = this.latLng({
 					lat: feature.geometry.coordinates[1],
@@ -415,15 +342,17 @@ export default class _Map {
 				})
 				this.markers.push(marker)
 
-				html += TemplateSidebarResult({ feature })
+				html += `<li class="sl-sidebar-resultsListItem">${TemplateSidebarResult({
+					feature
+				})}</li>`
 			})
 			html += '</ul>'
 
-			this.sidebarResults.innerHTML = html
+			this.elements.sidebarResults.innerHTML = html
 
 			this.fitBounds({ latLngBounds: this.boundsGlobal })
 		} else {
-			this.sidebarResults.innerHTML =
+			this.elements.sidebarResults.innerHTML =
 				'<p class="sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 
 			this.removeOverlay()

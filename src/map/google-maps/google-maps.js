@@ -1,5 +1,4 @@
 import Map from 'core/map'
-
 import { extend } from 'shared/utils/utils'
 import TemplatePopup from 'components/popup/templates/popup.js'
 
@@ -64,14 +63,15 @@ export default class MapGoogle extends Map {
 					scaleControl: false,
 					scrollwheel: true,
 					streetViewControl: false,
-					styles: [],
 					zoom: 6
 				},
 				this.map.options
 			)
 
-			const googleMapsCanvas = document.querySelector('#storelocator-mapCanvas')
-			this.instance = new window.google.maps.Map(googleMapsCanvas, mapOptions)
+			this.instance = new window.google.maps.Map(
+				document.querySelector('#sl-map'),
+				mapOptions
+			)
 
 			resolve()
 		})

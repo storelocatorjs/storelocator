@@ -46,49 +46,44 @@ The extended usage of the Storelocatorjs with filters and store categories used 
 
 ```html
 <div class="storelocator">
-  <div class="storelocator-loader"></div>
-  <div class="storelocator-sidebar">
-    <form class="storelocator-formSearch" name="form-search">
-      <input
-        type="text"
-        class="storelocator-inputSearch"
-        placeholder="Enter a location"
-        autocomplete="off"
-      />
-      <div class="storelocator-formFilters">
-        <div class="storelocator-formFiltersRow">
-          <div class="storelocator-formCheckbox">
+  <div class="sl-loader"></div>
+  <div class="sl-sidebar">
+    <form class="sl-formSearch" name="form-search">
+      <input type="text" class="sl-inputSearch" placeholder="Enter a location" autocomplete="off" />
+      <div class="sl-formFilters">
+        <div class="sl-formFiltersRow">
+          <div class="sl-formCheckbox">
             <input type="checkbox" id="cat-1" data-filter checked="checked" value="1" />
             <label for="cat-1" class="category-1">Categorie 1</label>
           </div>
-          <div class="storelocator-formCheckbox">
+          <div class="sl-formCheckbox">
             <input type="checkbox" id="cat-2" data-filter checked="checked" value="2" />
             <label for="cat-2" class="category-2">Categorie 2</label>
           </div>
         </div>
-        <div class="storelocator-formFiltersRow">
-          <div class="storelocator-formCheckbox">
+        <div class="sl-formFiltersRow">
+          <div class="sl-formCheckbox">
             <input type="checkbox" id="cat-3" data-filter value="3" />
             <label for="cat-3" class="category-3">Categorie 3</label>
           </div>
         </div>
       </div>
     </form>
-    <nav class="storelocator-nav">
-      <ul class="storelocator-navList">
-        <li class="storelocator-navListItem active">
-          <button class="storelocator-navButton" data-switch-view data-target="map">Map</button>
+    <nav class="sl-nav">
+      <ul class="sl-navList">
+        <li class="sl-navListItem active">
+          <button class="sl-navButton" data-switch-view data-target="map">Map</button>
         </li>
-        <li class="storelocator-navListItem">
-          <button class="storelocator-navButton" data-switch-view data-target="list">List</button>
+        <li class="sl-navListItem">
+          <button class="sl-navButton" data-switch-view data-target="list">List</button>
         </li>
       </ul>
     </nav>
-    <div class="storelocator-sidebarResults"></div>
+    <div class="sl-sidebarResults"></div>
   </div>
-  <div class="storelocator-googleMaps active">
-    <div id="storelocator-mapCanvas"></div>
-    <button class="storelocator-geolocButton"></button>
+  <div class="sl-googleMaps active">
+    <div id="sl-mapCanvas"></div>
+    <button class="sl-geolocButton"></button>
   </div>
 </div>
 ```

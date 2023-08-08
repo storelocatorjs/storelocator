@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css'
-import Map from 'core/map'
 
+import Map from 'core/map'
 import { extend } from 'shared/utils/utils'
 import Leaflet from 'leaflet'
 import TemplatePopup from 'components/popup/templates/popup.js'
@@ -46,7 +46,7 @@ export default class MapLeaflet extends Map {
 				this.map.options
 			)
 
-			this.instance = Leaflet.map('storelocator-mapCanvas', mapOptions)
+			this.instance = Leaflet.map('sl-map', mapOptions)
 
 			Leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?', {
 				maxZoom: 19,

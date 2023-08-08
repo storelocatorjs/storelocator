@@ -1,26 +1,10 @@
-html,
-body {
-	height: auto;
-	margin: 0;
-}
-
 .storelocator {
 	position: relative;
-	height: auto;
+	font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+		Arial, sans-serif;
 
 	&,
 	* {
 		box-sizing: border-box;
-	}
-}
-
-@media (--media-tablet) {
-	html,
-	body {
-		height: 100%;
-	}
-
-	.storelocator {
-		height: 100%;
 	}
 }

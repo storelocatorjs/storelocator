@@ -1,6 +1,6 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
-import Map from 'core/map'
 
+import Map from 'core/map'
 import { extend } from 'shared/utils/utils'
 import maplibregl from '!maplibre-gl'
 import TemplatePopup from 'components/popup/templates/popup.js'
@@ -39,7 +39,7 @@ export default class MapMapLibre extends Map {
 			const mapOptions = extend(
 				true,
 				{
-					container: 'storelocator-mapCanvas',
+					container: 'sl-map',
 					style: 'https://demotiles.maplibre.org/style.json',
 					center: [2.213749, 46.227638],
 					zoom: 6
@@ -88,7 +88,7 @@ export default class MapMapLibre extends Map {
 	createMarker({ feature, type }) {
 		const svgData = this.markersOptions[type]
 		const markerIcon = document.createElement('div')
-		markerIcon.classList.add('storelocator-marker')
+		markerIcon.classList.add('sl-marker')
 		markerIcon.insertAdjacentHTML('beforeend', svgData.svg)
 
 		const marker = new maplibregl.Marker({

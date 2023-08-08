@@ -1,6 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css'
-import Map from 'core/map'
 
+import Map from 'core/map'
 import { extend } from 'shared/utils/utils'
 import mapboxgl from '!mapbox-gl'
 import TemplatePopup from 'components/popup/templates/popup.js'
@@ -8,7 +8,7 @@ import TemplatePopup from 'components/popup/templates/popup.js'
 export default class MapMapbox extends Map {
 	constructor(props) {
 		super(props)
-		console.log(props)
+
 		this.map = props.map
 		this.markersOptions = props.markersOptions
 		this.currentPopup = null
@@ -40,7 +40,7 @@ export default class MapMapbox extends Map {
 			const mapOptions = extend(
 				true,
 				{
-					container: 'storelocator-mapCanvas',
+					container: 'sl-map',
 					style: 'mapbox://styles/mapbox/streets-v12',
 					center: [2.213749, 46.227638],
 					zoom: 6
@@ -90,7 +90,7 @@ export default class MapMapbox extends Map {
 	createMarker({ feature, type }) {
 		const svgData = this.markersOptions[type]
 		const markerIcon = document.createElement('div')
-		markerIcon.classList.add('storelocator-marker')
+		markerIcon.classList.add('sl-marker')
 		markerIcon.insertAdjacentHTML('beforeend', svgData.svg)
 
 		const marker = new mapboxgl.Marker({

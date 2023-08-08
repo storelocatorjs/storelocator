@@ -1,3 +1,30 @@
-.autocomplete {
-	/* Empty */
+.sl {
+	&-autocomplete {
+		padding: 0 15px 15px;
+		position: absolute;
+		background-color: #fff;
+		top: 67px;
+		left: 0;
+		width: 100%;
+		height: auto;
+		z-index: 1;
+		display: none;
+		border-radius: 0 0 5px 5px;
+		box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+
+		&.sl-active {
+			display: block;
+		}
+
+		&-item {
+			&:not(:last-child) {
+				margin-bottom: 5px;
+				cursor: pointer;
+			}
+
+			&:hover {
+				background-color: rgba(60, 64, 67, 4%);
+			}
+		}
+	}
 }

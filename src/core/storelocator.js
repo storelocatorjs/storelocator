@@ -1,12 +1,18 @@
 import './css/vars.css'
 import './css/storelocator.css'
-
+import 'components/autocomplete/autocomplete.css'
+import 'components/form-search/form-search.css'
+import 'components/loader/loader.css'
 import 'components/map/map.css'
+import 'components/nav/nav.css'
+import 'components/popup/popup.css'
 import 'components/sidebar/sidebar.css'
+import 'components/sidebar-result/sidebar-result.css'
 
 import defaultOptions from './default-options'
 import { extend } from 'shared/utils/utils'
 import TemplateMap from 'components/map/templates/map'
+import TemplateLoader from 'components/loader/templates/loader'
 
 /**
  * storelocatorjs
@@ -20,7 +26,7 @@ class Storelocator {
 		this.geocoder = geocoder
 		this.onReady = onReady
 
-		const customMap = new map.provider({
+		this.customMap = new map.provider({
 			api: extend(true, defaultOptions.api, api),
 			map: {
 				token: map.token,
@@ -31,12 +37,25 @@ class Storelocator {
 			onReady
 		})
 
+		this.init()
+	}
+
+	init() {
 		this.render()
-		customMap.init()
+		this.buildLoader()
+		this.customMap.build()
 	}
 
 	render() {
 		this.target.insertAdjacentHTML('beforeend', TemplateMap())
+	}
+
+	/**
+	 * Build the loader
+	 */
+	buildLoader() {
+		this.target.insertAdjacentHTML('afterbegin', TemplateLoader())
+		this.customMap.elements.loader = this.target.querySelector('.sl-loader')
 	}
 }
 

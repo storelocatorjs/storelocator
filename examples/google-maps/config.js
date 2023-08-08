@@ -2,6 +2,7 @@ import '../../dist/storelocator.css'
 import Storelocator from '../../dist/storelocator.js'
 import GoogleMaps from '../../dist/map/google-maps.js'
 import credentials from '../credentials.json'
+import mapStyles from './styles.json'
 
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
@@ -11,11 +12,14 @@ const myStorelocator = new Storelocator({
 	},
 	map: {
 		provider: GoogleMaps,
-		token: credentials.GOOGLEMAPS_TOKEN
+		token: credentials.GOOGLEMAPS_TOKEN,
+		options: {
+			styles: mapStyles.styles
+		}
 	},
 	geocoder: {
-		provider: 'googlemaps',
-		token: credentials.GOOGLEMAPS_TOKEN
+		provider: 'mapbox',
+		token: credentials.MAPBOX_TOKEN
 	},
 	onReady: (map) => {
 		console.log('onReady', map)

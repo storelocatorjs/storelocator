@@ -1,5 +1,3 @@
 export default function TemplateAutocomplete() {
-	return `
-        <div class="autocomplete"></div>
-	`
+	return `<div class="sl-autocomplete"></div>`
 }

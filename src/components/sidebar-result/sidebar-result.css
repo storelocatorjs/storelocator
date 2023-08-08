@@ -1,31 +1,30 @@
-.sidebarResult {
-	display: block;
-	padding: 20px;
-	border-top: 1px solid #e7e7e7;
-	cursor: pointer;
-
-	* {
-		pointer-events: none;
-	}
-
-	/* &:first-child {
-		border-top: none;
-	} */
-
-	&-title {
-		margin-bottom: 10px;
-		font-weight: 600;
-		font-size: 16px;
+.sl {
+	&-sidebarResult {
 		display: block;
-		background-color: transparent;
-		border: none;
-		padding: 0;
+		padding: 15px;
 		cursor: pointer;
-	}
 
-	&-adress {
-		display: block;
-		padding-bottom: 12px;
-		padding-right: 90px;
+		&:not(:last-child) {
+			border-bottom: 1px solid #e7e7e7;
+		}
+
+		* {
+			pointer-events: none;
+		}
+
+		&-title {
+			margin-bottom: 10px;
+			font-weight: 600;
+			font-size: 16px;
+			display: block;
+			background-color: transparent;
+			border: none;
+			padding: 0;
+			cursor: pointer;
+		}
+
+		&-adress {
+			display: block;
+		}
 	}
 }
