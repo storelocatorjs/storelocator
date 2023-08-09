@@ -3,7 +3,7 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		z-index: 1;
+		z-index: 500;
 		background: #fff;
 		box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
 
@@ -48,9 +48,6 @@
 			border-radius: 10px;
 			background-color: #fff;
 			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
-
-			/* overflow: hidden; */
-			/* z-index: 5; */
 
 			&-results {
 				display: block;

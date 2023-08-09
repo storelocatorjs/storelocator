@@ -150,9 +150,11 @@ export default class Map {
 	 */
 	onClickGeolocationButton(e) {
 		e.preventDefault()
-		if (navigator.geolocation) {
+		if (!navigator.geolocation) {
 			this.loading(true)
 			this.checkUserPosition()
+		} else {
+			this.elements.geolocButton.classList.add('sl-error')
 		}
 	}
 
@@ -218,7 +220,7 @@ export default class Map {
 	 */
 	checkUserPosition() {
 		navigator.geolocation.getCurrentPosition(
-			({ coords: { latitude: lat, longitude: lng } }) => {
+			async ({ coords: { latitude: lat, longitude: lng } }) => {
 				const marker = this.createMarker({
 					feature: {
 						latLng: this.latLng({
@@ -236,13 +238,16 @@ export default class Map {
 					this.elements.inputSearch.value = ''
 				}
 
-				this.triggerRequest({
+				await this.triggerRequest({
 					lat,
 					lng
 				})
+				this.elements.geolocButton.classList.add('sl-active')
 				this.loading(false)
 			},
-			() => {
+			(response) => {
+				console.log('error check user position', response)
+				this.elements.geolocButton.classList.add('sl-error')
 				this.loading(false)
 			}
 		)
@@ -255,7 +260,7 @@ export default class Map {
 	 * @param {String} lng Longitude of the research
 	 * @param {Boolean} fitBounds Fit bounds on the map
 	 */
-	triggerRequest({ lat, lng }) {
+	async triggerRequest({ lat, lng }) {
 		this.loading(true)
 
 		const requestDatas = this.serializeForm({
@@ -263,29 +268,18 @@ export default class Map {
 			lng
 		})
 
-		fetch(this.api.url, {
+		const response = await fetch(this.api.url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(requestDatas)
 		})
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error(response)
-				}
-				return response
-			})
-			.then((res) => res.json())
-			.then((features) => {
-				features !== null &&
-					this.parseStores({
-						features
-					})
-			})
-			.catch((error) => {
-				this.loading(false)
-				throw new Error(error)
+		const responseJson = await response.json()
+
+		responseJson !== null &&
+			this.parseStores({
+				features: responseJson
 			})
 	}
 
@@ -320,7 +314,7 @@ export default class Map {
 		this.boundsGlobal = this.latLngBounds()
 
 		if (this.geolocationData.userPositionChecked) {
-			this.markers.push(this.geolocationData.marker)
+			// this.markers.push(this.geolocationData.marker)
 		}
 
 		if (features.length) {

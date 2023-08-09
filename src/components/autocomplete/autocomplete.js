@@ -76,11 +76,15 @@ export default class Autocomplete {
 				})
 			})
 		} else if (this.map.geocoder.provider instanceof Function) {
-			this.geocoderFunctions[this.map.geocoder.provider]().then((results) => {
-				this.renderAutocomplete({
-					results
+			this.map.geocoder
+				.provider({
+					value: this.map.elements.inputSearch.value
 				})
-			})
+				.then((results) => {
+					this.renderAutocomplete({
+						results
+					})
+				})
 		}
 	}
 

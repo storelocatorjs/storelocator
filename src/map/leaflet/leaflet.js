@@ -1,4 +1,5 @@
 import 'leaflet/dist/leaflet.css'
+import markerSvg from 'shared/assets/svgs/marker.svg'
 
 import Map from 'core/map'
 import { extend } from 'shared/utils/utils'
@@ -10,7 +11,6 @@ export default class MapLeaflet extends Map {
 		super(props)
 
 		this.map = props.map
-		this.markersOptions = props.markersOptions
 	}
 
 	init() {
@@ -90,10 +90,10 @@ export default class MapLeaflet extends Map {
 	}
 
 	createMarker({ feature, type }) {
-		const svgData = this.markersOptions[type]
 		const marker = Leaflet.marker(feature.latLng, {
-			icon: Leaflet.icon({
-				iconUrl: `${'data:image/svg+xml;charset=utf-8,'}${encodeURIComponent(svgData.svg)}`
+			icon: Leaflet.divIcon({
+				className: `sl-marker sl-marker-${type}`,
+				html: markerSvg
 			})
 		}).addTo(this.instance)
 

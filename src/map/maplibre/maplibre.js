@@ -1,4 +1,5 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
+import markerSvg from 'shared/assets/svgs/marker.svg'
 
 import Map from 'core/map'
 import { extend } from 'shared/utils/utils'
@@ -10,7 +11,6 @@ export default class MapMapLibre extends Map {
 		super(props)
 
 		this.map = props.map
-		this.markersOptions = props.markersOptions
 	}
 
 	init() {
@@ -86,10 +86,9 @@ export default class MapMapLibre extends Map {
 	}
 
 	createMarker({ feature, type }) {
-		const svgData = this.markersOptions[type]
 		const markerIcon = document.createElement('div')
-		markerIcon.classList.add('sl-marker')
-		markerIcon.insertAdjacentHTML('beforeend', svgData.svg)
+		markerIcon.classList.add('sl-marker', `sl-marker-${type}`)
+		markerIcon.insertAdjacentHTML('beforeend', markerSvg)
 
 		const marker = new maplibregl.Marker({
 			element: markerIcon,

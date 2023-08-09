@@ -1,3 +1,4 @@
+import markerSvg from 'shared/assets/svgs/marker.svg'
 import Map from 'core/map'
 import { extend } from 'shared/utils/utils'
 import TemplatePopup from 'components/popup/templates/popup.js'
@@ -7,8 +8,6 @@ export default class MapGoogle extends Map {
 		super(props)
 
 		this.map = props.map
-		this.markersOptions = props.markersOptions
-
 		this.currentPopup = null
 	}
 
@@ -57,7 +56,7 @@ export default class MapGoogle extends Map {
 						lng: 2.213749
 					},
 					disableDefaultUI: false,
-					fullscreenControl: true,
+					fullscreenControl: false,
 					mapTypeControl: false,
 					mapTypeId: 'roadmap',
 					scaleControl: false,
@@ -110,12 +109,12 @@ export default class MapGoogle extends Map {
 	}
 
 	createMarker({ feature, type }) {
-		const svgData = this.markersOptions[type]
+		// @todo: color marker geoloc not working
 		const marker = new window.google.maps.Marker({
 			position: feature.latLng,
 			map: this.instance,
 			icon: {
-				url: `${'data:image/svg+xml;charset=utf-8,'}${encodeURIComponent(svgData.svg)}`
+				url: `${'data:image/svg+xml;charset=utf-8,'}${encodeURIComponent(markerSvg)}`
 			}
 		})
 

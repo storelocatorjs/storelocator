@@ -9,7 +9,6 @@ import 'components/popup/popup.css'
 import 'components/sidebar/sidebar.css'
 import 'components/sidebar-result/sidebar-result.css'
 
-import defaultOptions from './default-options'
 import { extend } from 'shared/utils/utils'
 import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
@@ -19,7 +18,7 @@ import TemplateLoader from 'components/loader/templates/loader'
  * @module storelocatorjs
  */
 class Storelocator {
-	constructor({ target, api, map, geocoder, markers, onReady }) {
+	constructor({ target, api, map, geocoder, onReady }) {
 		this.target = target
 		this.api = api
 		this.map = map
@@ -27,13 +26,19 @@ class Storelocator {
 		this.onReady = onReady
 
 		this.customMap = new map.provider({
-			api: extend(true, defaultOptions.api, api),
+			api: Object.assign(
+				{},
+				{
+					radius: 50,
+					limit: 50
+				},
+				api
+			),
 			map: {
 				token: map.token,
 				options: map.options
 			},
 			geocoder,
-			markersOptions: extend(true, defaultOptions.markers, markers),
 			onReady
 		})
 

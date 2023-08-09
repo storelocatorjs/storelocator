@@ -10,13 +10,12 @@
 
 	&-geolocButton {
 		position: absolute;
-		top: 10px;
-		right: 10px;
+		top: 125px;
+		right: 15px;
 		width: 40px;
 		height: 40px;
 		background-color: #fff;
-
-		/* z-index: 5; */
+		z-index: 500;
 		border: none;
 		cursor: pointer;
 		border-radius: 10px;
@@ -28,16 +27,27 @@
 			transform: translate(-50%, -50%);
 			width: 20px;
 			height: 20px;
+			transition: opacity var(--sl-transition);
+		}
+
+		&.sl-error {
+			svg {
+				opacity: 0.2;
+			}
 		}
 
 		&.sl-active svg {
-			fill: #1a73e8;
+			fill: var(--sl-blue);
 		}
 	}
 
 	&-marker {
 		width: 20px;
 		height: 20px;
+
+		&.sl-marker-geolocation {
+			--sl-marker-fill: var(--sl-blue);
+		}
 	}
 }
 
@@ -46,6 +56,10 @@
 		&-map {
 			aspect-ratio: auto;
 			height: 100vh;
+		}
+
+		&-geolocButton {
+			top: 15px;
 		}
 	}
 }
