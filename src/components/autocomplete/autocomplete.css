@@ -21,9 +21,17 @@
 				margin-bottom: 5px;
 				cursor: pointer;
 			}
+		}
+	}
+}
 
-			&:hover {
-				background-color: rgba(60, 64, 67, 4%);
+@media (hover: hover) {
+	.sl {
+		&-autocomplete {
+			&-item {
+				&:hover {
+					background-color: rgba(60 64 67 / 4%);
+				}
 			}
 		}
 	}

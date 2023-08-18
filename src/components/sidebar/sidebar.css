@@ -30,7 +30,7 @@
 			padding: 20px;
 			font-size: 13px;
 			line-height: 20px;
-			color: var(--grey);
+			color: var(--sl-colorSecondary);
 			font-style: italic;
 		}
 	}
@@ -40,11 +40,11 @@
 	.sl {
 		&-sidebar {
 			position: absolute;
-			top: var(--offsetSidebar);
-			left: var(--offsetSidebar);
-			width: var(--widthFormSearch);
+			top: 15px;
+			left: 15px;
+			width: 350px;
 			height: auto;
-			max-height: calc(100% - calc(var(--offsetSidebar) * 2));
+			max-height: calc(100% - calc(15px * 2));
 			border-radius: 10px;
 			background-color: #fff;
 			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);

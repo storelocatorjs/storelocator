@@ -1,15 +1,8 @@
-:root {
-	--offsetSidebar: 15px;
-	--breakpointModile: 767px;
-	--widthFormSearch: 350px;
-	--heightFormSearch: 161px;
-	--colorDetailStore: #000;
-	--colorMobileNav: #b9b8b8;
-	--grey: #b9b8b8;
-
+.storelocator {
+	--sl-markerSearchColor: #107a8b;
+	--sl-markerGeolocationColor: #1da1f2;
+	--sl-colorSecondary: #b9b8b8;
 	--sl-transition: 0.25s ease;
-
-	--sl-blue: #1da1f2;
 }
 
 @custom-media --media-tablet only screen and (min-width: 750px);

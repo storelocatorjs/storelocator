@@ -5,21 +5,15 @@ module.exports = {
 		'declaration-colon-newline-after': null,
 		'value-list-comma-newline-after': null,
 		'custom-property-pattern': [
-			'([a-z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)?$',
+			'^sl(-[a-zA-Z]+)?$',
 			{
-				message: 'Expected custom property name to be FUN-case'
+				message: 'Expected custom property name to be FUN-case with prefix "sl-"'
 			}
 		],
 		'selector-class-pattern': [
-			'^([a-z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)?$',
+			'^sl(-[a-zA-Z0-9]+)?$',
 			{
-				message: 'Expected class selector to be FUN-case'
-			}
-		],
-		'selector-id-pattern': [
-			'^([a-z][a-zA-Z0-9]*)(-[a-z][a-zA-Z0-9]+)?$',
-			{
-				message: 'Expected id selector to be FUN-case'
+				message: 'Expected class selector to be FUN-case with prefix "sl-"'
 			}
 		]
 	}

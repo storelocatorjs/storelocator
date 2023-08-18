@@ -21,6 +21,14 @@ const myStorelocator = new Storelocator({
 		provider: 'mapbox',
 		token: credentials.MAPBOX_TOKEN
 	},
+	// templates: {
+	// 	popup: ({ feature }) => {
+	// 		return `${feature.properties.title}`
+	// 	},
+	// 	sidebarResult: ({ feature }) => {
+	// 		return `${feature.properties.title}`
+	// 	}
+	// },
 	onReady: (map) => {
 		console.log('onReady', map)
 	}

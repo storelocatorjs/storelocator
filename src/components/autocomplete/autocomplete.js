@@ -32,22 +32,28 @@ export default class Autocomplete {
 
 	onClickOnAutocomplete(e) {
 		const target = e.target
-		const isAutocompleteItem = validateTarget({
+		const isAutocompleteResult = validateTarget({
 			target,
 			selectorString: '.sl-autocomplete-item',
 			nodeName: 'div'
 		})
 
-		if (isAutocompleteItem) {
-			this.map.elements.autocomplete.classList.remove('sl-active')
-			this.map.elements.autocomplete.replaceChildren()
-			this.map.userPositionChecked = false
-
-			this.map.triggerRequest({
-				lat: parseFloat(target.getAttribute('data-lat')),
-				lng: parseFloat(target.getAttribute('data-lng'))
-			})
+		if (isAutocompleteResult) {
+			this.onClickOnAutocompleteResult(e)
 		}
+	}
+
+	onClickOnAutocompleteResult(e) {
+		const target = e.target
+
+		this.map.elements.autocomplete.classList.remove('sl-active')
+		this.map.elements.autocomplete.replaceChildren()
+		this.map.userPositionChecked = false
+
+		this.map.requestStores({
+			lat: parseFloat(target.getAttribute('data-lat')),
+			lng: parseFloat(target.getAttribute('data-lng'))
+		})
 	}
 
 	onKeyupOnInputSearch(e) {
@@ -55,9 +61,7 @@ export default class Autocomplete {
 
 		if (e.target.value !== '') {
 			window.clearTimeout(this.timerAutocomplete)
-			this.timerAutocomplete = window.setTimeout(() => {
-				this.onFormSearchSubmit()
-			}, 200)
+			this.timerAutocomplete = window.setTimeout(() => this.onFormSearchSubmit(), 200)
 		}
 	}
 

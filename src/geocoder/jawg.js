@@ -4,11 +4,11 @@ export default async function jawgGeocode({ value, countries, token }) {
 	const response = await fetchFromGeocoder(
 		`https://api.jawg.io/places/v1/search?text=${value}&boundary.country=${countries}&access-token=${token}`
 	)
-	return response.features.map(({ geometry, properties }) => {
+	return response.features.map((result) => {
 		return {
-			text: properties.label,
-			lat: geometry.coordinates[1],
-			lng: geometry.coordinates[0]
+			text: result.properties.label,
+			lat: result.geometry.coordinates[1],
+			lng: result.geometry.coordinates[0]
 		}
 	})
 }

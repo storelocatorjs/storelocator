@@ -5,7 +5,7 @@ export default function TemplatePopup({ feature }) {
                 ${feature.properties.title}
             </span>
             <span class="sl-popup-address">
-                ${feature.properties?.address} ${feature.properties?.zipcode} $
+                ${feature.properties?.address} ${feature.properties?.zipcode}
                 ${feature.properties?.city}
             </span>
             <a class="sl-popup-phone" href="tel:${feature.properties.phone}">

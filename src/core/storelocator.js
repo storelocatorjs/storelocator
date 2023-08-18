@@ -9,7 +9,7 @@ import 'components/popup/popup.css'
 import 'components/sidebar/sidebar.css'
 import 'components/sidebar-result/sidebar-result.css'
 
-import { extend } from 'shared/utils/utils'
+import Map from 'core/map'
 import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
 
@@ -18,14 +18,11 @@ import TemplateLoader from 'components/loader/templates/loader'
  * @module storelocatorjs
  */
 class Storelocator {
-	constructor({ target, api, map, geocoder, onReady }) {
+	constructor({ target, api, map, geocoder, templates, onReady }) {
 		this.target = target
-		this.api = api
-		this.map = map
-		this.geocoder = geocoder
-		this.onReady = onReady
 
-		this.customMap = new map.provider({
+		const MapProvider = map.provider(Map)
+		this.mapProvider = new MapProvider({
 			api: Object.assign(
 				{},
 				{
@@ -39,6 +36,7 @@ class Storelocator {
 				options: map.options
 			},
 			geocoder,
+			templates,
 			onReady
 		})
 
@@ -48,7 +46,7 @@ class Storelocator {
 	init() {
 		this.render()
 		this.buildLoader()
-		this.customMap.build()
+		this.mapProvider.build()
 	}
 
 	render() {
@@ -60,7 +58,7 @@ class Storelocator {
 	 */
 	buildLoader() {
 		this.target.insertAdjacentHTML('afterbegin', TemplateLoader())
-		this.customMap.elements.loader = this.target.querySelector('.sl-loader')
+		this.mapProvider.elements.loader = this.target.querySelector('.sl-loader')
 	}
 }
 

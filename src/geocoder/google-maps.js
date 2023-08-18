@@ -1,6 +1,7 @@
 import { fetchFromGeocoder } from 'shared/utils/utils'
 
 export default async function googleMapsGeocode({ value, countries, token }) {
+	// @todo: CORS error
 	const response = await fetchFromGeocoder(
 		`https://maps.googleapis.com/maps/api/geocode/json?address=${value}&region=${countries}&key=${token}`
 	)

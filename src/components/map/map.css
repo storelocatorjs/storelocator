@@ -31,23 +31,21 @@
 		}
 
 		&.sl-error {
+			cursor: not-allowed;
+
 			svg {
 				opacity: 0.2;
 			}
 		}
 
 		&.sl-active svg {
-			fill: var(--sl-blue);
+			fill: var(--sl-markerGeolocationColor);
 		}
 	}
 
 	&-marker {
 		width: 20px;
 		height: 20px;
-
-		&.sl-marker-geolocation {
-			--sl-marker-fill: var(--sl-blue);
-		}
 	}
 }
 

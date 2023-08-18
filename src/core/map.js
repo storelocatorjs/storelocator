@@ -1,14 +1,17 @@
-import TemplateSidebarResult from 'components/sidebar-result/templates/sidebar-result'
-
 import validateTarget from 'validate-target'
+import { extend } from 'shared/utils/utils'
+import markerSvg from 'shared/assets/svgs/marker.svg'
 import Autocomplete from 'components/autocomplete/autocomplete'
+import TemplateSidebarResult from 'components/sidebar-result/templates/sidebar-result'
+import TemplatePopup from 'components/popup/templates/popup.js'
 
 export default class Map {
-	constructor({ api, map, geocoder, onReady }) {
+	constructor({ api, map, geocoder, templates, onReady }) {
 		this.api = api
 		this.map = map
 		this.geocoder = geocoder
-		this.onReady = onReady
+		this.templates = templates
+		this.callback = onReady
 
 		this.elements = {
 			container: null,
@@ -26,7 +29,7 @@ export default class Map {
 			map: this
 		})
 
-		this.onClickSidebarResultItem = this.onClickSidebarResultItem.bind(this)
+		this.onClickSidebarResult = this.onClickSidebarResult.bind(this)
 		this.onClickOnNav = this.onClickOnNav.bind(this)
 		this.onClickGeolocationButton = this.onClickGeolocationButton.bind(this)
 	}
@@ -111,51 +114,60 @@ export default class Map {
 	}
 
 	onReady() {
-		this.initMap()
-		this.elements.inputSearch.focus()
+		this.markers = []
+		this.markerWithColors = this.getMarkerWithColors()
 		this.addEvents()
-		this.onReady instanceof Function && this.onReady(this.instance)
+		this.elements.inputSearch.focus()
+		this.callback instanceof Function && this.callback(this)
+	}
+
+	getMarkerWithColors() {
+		const styles = getComputedStyle(this.elements.container)
+		const searchColor = styles.getPropertyValue('--sl-markerSearchColor')
+		const geolocationColor = styles.getPropertyValue('--sl-markerGeolocationColor')
+
+		return {
+			search: markerSvg.replace('{{markerColor}}', searchColor),
+			geolocation: markerSvg.replace('{{markerColor}}', geolocationColor)
+		}
 	}
 
 	addEvents() {
-		this.elements.sidebarResults.addEventListener('click', this.onClickSidebarResultItem)
+		this.elements.sidebarResults.addEventListener('click', this.onClickSidebarResult)
 		this.elements.nav.addEventListener('click', this.onClickOnNav)
 		this.elements.geolocButton.addEventListener('click', this.onClickGeolocationButton)
 	}
 
 	/**
-	 * Update the loader status
-	 * @param {Boolean} state Status of the loader
-	 */
-	loading(state) {
-		this.isLoading = state
-		this.elements.loader.classList[state ? 'add' : 'remove']('sl-active')
-	}
-
-	/**
-	 * Initialize the Google Maps
-	 */
-	initMap() {
-		this.markers = []
-		this.geolocationData = {
-			userPositionChecked: false,
-			marker: null
-		}
-		this.boundsGlobal = this.latLngBounds()
-	}
-
-	/**
-	 * On click on geolocation button
+	 * On click on sidebar result item
 	 * @param {Object} e Event listener datas
 	 */
-	onClickGeolocationButton(e) {
-		e.preventDefault()
-		if (!navigator.geolocation) {
-			this.loading(true)
-			this.checkUserPosition()
-		} else {
-			this.elements.geolocButton.classList.add('sl-error')
+	onClickSidebarResult(e) {
+		const target = e.target
+		const isSidebarResultItem = validateTarget({
+			target,
+			selectorString: '.sl-sidebarResult',
+			nodeName: 'div'
+		})
+
+		if (isSidebarResultItem) {
+			this.onClickSidebarResultItem(e)
 		}
+	}
+
+	onClickSidebarResultItem(e) {
+		e.preventDefault()
+
+		const target = e.target
+		const markerIndex = target.getAttribute('data-marker-index')
+		const marker = this.markers[markerIndex]
+
+		this.panTo(this.getMarkerLatLng(marker))
+		this.openPopup(marker)
+		this.elements.nav
+			.querySelector('.sl-nav-button[data-target="map"]')
+			.dispatchEvent(new window.Event('click', { bubbles: true }))
+		this.resize()
 	}
 
 	onClickOnNav(e) {
@@ -168,6 +180,20 @@ export default class Map {
 
 		if (isNavButton) {
 			this.onClickOnNavButton(e)
+		}
+	}
+
+	/**
+	 * On click on geolocation button
+	 * @param {Object} e Event listener datas
+	 */
+	onClickGeolocationButton(e) {
+		e.preventDefault()
+		if (navigator.geolocation) {
+			this.loading(true)
+			this.checkUserPosition()
+		} else {
+			this.elements.geolocButton.classList.add('sl-error')
 		}
 	}
 
@@ -188,40 +214,13 @@ export default class Map {
 	}
 
 	/**
-	 * On click on sidebar result item
-	 * @param {Object} e Event listener datas
-	 */
-	onClickSidebarResultItem(e) {
-		const target = e.target
-		const isSidebarResult = validateTarget({
-			target,
-			selectorString: '.sl-sidebarResult',
-			nodeName: 'div'
-		})
-
-		if (isSidebarResult) {
-			e.preventDefault()
-
-			const markerIndex = target.getAttribute('data-marker-index')
-			const marker = this.markers[markerIndex]
-
-			this.panTo(this.getMarkerLatLng(marker))
-			this.openPopup(marker)
-			this.elements.nav
-				.querySelector('.sl-nav-button[data-target="map"]')
-				.dispatchEvent(new window.Event('click', { bubbles: true }))
-			this.resize()
-		}
-	}
-
-	/**
 	 * Check user position with Google Maps geolocation API
 	 * Get the user current position if available
 	 */
 	checkUserPosition() {
 		navigator.geolocation.getCurrentPosition(
-			async ({ coords: { latitude: lat, longitude: lng } }) => {
-				const marker = this.createMarker({
+			({ coords: { latitude: lat, longitude: lng } }) => {
+				this.createMarker({
 					feature: {
 						latLng: this.latLng({
 							lat,
@@ -231,22 +230,19 @@ export default class Map {
 					type: 'geolocation'
 				})
 
-				this.geolocationData.userPositionChecked = true
-				this.geolocationData.marker = marker
-
 				if (this.elements.inputSearch.value !== '') {
 					this.elements.inputSearch.value = ''
 				}
 
-				await this.triggerRequest({
+				this.requestStores({
 					lat,
 					lng
+				}).then(() => {
+					this.elements.geolocButton.classList.add('sl-active')
 				})
-				this.elements.geolocButton.classList.add('sl-active')
-				this.loading(false)
 			},
-			(response) => {
-				console.log('error check user position', response)
+			(error) => {
+				console.warn('Storelocator::checkUserPosition', error)
 				this.elements.geolocButton.classList.add('sl-error')
 				this.loading(false)
 			}
@@ -260,47 +256,45 @@ export default class Map {
 	 * @param {String} lng Longitude of the research
 	 * @param {Boolean} fitBounds Fit bounds on the map
 	 */
-	async triggerRequest({ lat, lng }) {
+	requestStores({ lat, lng }) {
 		this.loading(true)
 
-		const requestDatas = this.serializeForm({
-			lat,
-			lng
+		return new window.Promise((resolve) => {
+			try {
+				fetch(this.api.url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						lat,
+						lng,
+						radius: this.api.radius,
+						limit: this.api.limit
+					})
+				})
+					.then((response) => {
+						console.log(response)
+						if (response.ok) {
+							return response.json()
+						}
+
+						console.warn('Storelocatorjs::requestStores', response)
+						this.loading(false)
+					})
+					.then((features) => {
+						features &&
+							this.parseStores({
+								features
+							})
+						this.loading(false)
+						resolve()
+					})
+			} catch (error) {
+				console.warn('Storelocatorjs::requestStores', error)
+				this.loading(false)
+			}
 		})
-
-		const response = await fetch(this.api.url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(requestDatas)
-		})
-		const responseJson = await response.json()
-
-		responseJson !== null &&
-			this.parseStores({
-				features: responseJson
-			})
-	}
-
-	/**
-	 * Serialize form datas
-	 * @param {String} lat Latitude
-	 * @param {String} lng Longitude
-	 * @return {Object} formData Datas required for the request (lat, lng, storesLimit, input, radius)
-	 */
-	serializeForm({ lat = false, lng = false }) {
-		const formDatas = {}
-
-		if (lat && lng) {
-			formDatas.lat = lat
-			formDatas.lng = lng
-		}
-
-		formDatas.radius = this.api.radius
-		formDatas.limit = this.api.limit
-
-		return formDatas
 	}
 
 	/**
@@ -312,10 +306,6 @@ export default class Map {
 	parseStores({ features }) {
 		this.destroyMarkers()
 		this.boundsGlobal = this.latLngBounds()
-
-		if (this.geolocationData.userPositionChecked) {
-			// this.markers.push(this.geolocationData.marker)
-		}
 
 		if (features.length) {
 			let html = '<ul class="sl-sidebar-resultsList">'
@@ -336,7 +326,7 @@ export default class Map {
 				})
 				this.markers.push(marker)
 
-				html += `<li class="sl-sidebar-resultsListItem">${TemplateSidebarResult({
+				html += `<li class="sl-sidebar-resultsListItem">${this.getSidebarResultTemplate()({
 					feature
 				})}</li>`
 			})
@@ -347,9 +337,7 @@ export default class Map {
 			this.fitBounds({ latLngBounds: this.boundsGlobal })
 		} else {
 			this.elements.sidebarResults.innerHTML =
-				'<p class="sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
-
-			this.removeOverlay()
+				'<p class="sl-sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 		}
 
 		this.loading(false)
@@ -363,5 +351,32 @@ export default class Map {
 			this.removeMarker(this.markers[i])
 		}
 		this.markers = []
+	}
+
+	loading(state) {
+		this.isLoading = state
+		this.elements.loader.classList[state ? 'add' : 'remove']('sl-active')
+	}
+
+	getPopupTemplate() {
+		if (this.templates?.popup instanceof Function) {
+			return this.templates.popup
+		}
+
+		return TemplatePopup
+	}
+
+	getSidebarResultTemplate() {
+		if (this.templates?.sidebarResult instanceof Function) {
+			return this.templates.sidebarResult
+		}
+
+		return TemplateSidebarResult
+	}
+
+	utils() {
+		return {
+			extend
+		}
 	}
 }

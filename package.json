@@ -19,14 +19,11 @@
 	"homepage": "https://storelocatorjs.github.io",
 	"bugs": "https://github.com/yoriiis/storelocatorjs/issues",
 	"repository": "https://github.com/yoriiis/storelocatorjs.git",
+	"license": "TODO",
 	"author": "Joris DANIEL",
 	"main": "dist/storelocator.js",
 	"files": [
 		"./src"
-	],
-	"browserslist": [
-		"defaults",
-		"not ie 11"
 	],
 	"scripts": {
 		"build": "rm -rf ./dist/ && rollup --config ./config/rollup.config.js --environment ENV:production",
@@ -36,6 +33,10 @@
 		"start:example": "rm -rf ./examples/dist/ && npm run credentials && webpack serve --mode=development --config=./examples/webpack.config.js",
 		"test": "echo \"No test specified\" && exit 0"
 	},
+	"browserslist": [
+		"defaults",
+		"not ie 11"
+	],
 	"prettier": "./config/prettier.config.js",
 	"dependencies": {
 		"leaflet": "^1.9.3",
@@ -48,7 +49,7 @@
 		"@babel/plugin-proposal-class-properties": "^7.18.6",
 		"@babel/preset-env": "^7.21.4",
 		"@babel/preset-react": "^7.22.5",
-		"@csstools/postcss-global-data": "^2.0.0",
+		"@csstools/postcss-global-data": "^2.0.1",
 		"@rollup/plugin-alias": "^5.0.0",
 		"@rollup/plugin-buble": "^0.21.3",
 		"@rollup/plugin-commonjs": "^25.0.3",
