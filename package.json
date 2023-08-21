@@ -23,7 +23,8 @@
 	"author": "Joris DANIEL",
 	"main": "dist/storelocator.js",
 	"files": [
-		"./src"
+		"./src",
+		"./dist"
 	],
 	"scripts": {
 		"build": "rm -rf ./dist/ && rollup --config ./config/rollup.config.js --environment ENV:production",
