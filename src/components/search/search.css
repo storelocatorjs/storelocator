@@ -40,8 +40,6 @@
 		&-autocomplete {
 			margin-top: 5px;
 			padding: 15px 10px;
-			top: 67px;
-			left: 0;
 			width: 100%;
 			height: auto;
 			z-index: 1;
@@ -49,7 +47,6 @@
 			position: absolute;
 			top: 56px;
 			left: 0;
-			width: 100%;
 			background-color: #fff;
 
 			&.sl-active {

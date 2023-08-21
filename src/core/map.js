@@ -117,10 +117,6 @@ export default class Map {
 		throw new Error('You have to implement the function "resize".')
 	}
 
-	destroy() {
-		throw new Error('You have to implement the function "destroy".')
-	}
-
 	onReady() {
 		this.markers = []
 		this.markerWithColors = this.getMarkerWithColors()
