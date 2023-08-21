@@ -11,8 +11,7 @@ const myStorelocator = new Storelocator({
 		url: 'https://storelocatorjs-functions.vercel.app'
 	},
 	map: {
-		provider: Leaflet,
-		token: credentials.MAPBOX_TOKEN
+		provider: Leaflet
 	},
 	geocoder: {
 		provider: 'mapbox',

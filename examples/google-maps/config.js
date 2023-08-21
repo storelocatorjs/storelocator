@@ -25,7 +25,7 @@ const myStorelocator = new Storelocator({
 	// 	popup: ({ feature }) => {
 	// 		return `${feature.properties.title}`
 	// 	},
-	// 	sidebarResult: ({ feature }) => {
+	// 	result: ({ feature }) => {
 	// 		return `${feature.properties.title}`
 	// 	}
 	// },

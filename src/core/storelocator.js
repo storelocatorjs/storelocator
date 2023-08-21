@@ -1,13 +1,10 @@
 import './css/vars.css'
 import './css/storelocator.css'
-import 'components/autocomplete/autocomplete.css'
-import 'components/form-search/form-search.css'
 import 'components/loader/loader.css'
 import 'components/map/map.css'
-import 'components/nav/nav.css'
 import 'components/popup/popup.css'
-import 'components/sidebar/sidebar.css'
-import 'components/sidebar-result/sidebar-result.css'
+import 'components/search/search.css'
+import 'components/result/result.css'
 
 import Map from 'core/map'
 import TemplateMap from 'components/map/templates/map'
@@ -57,8 +54,14 @@ class Storelocator {
 	 * Build the loader
 	 */
 	buildLoader() {
-		this.target.insertAdjacentHTML('afterbegin', TemplateLoader())
+		this.target
+			.querySelector('.storelocator')
+			.insertAdjacentHTML('afterbegin', TemplateLoader())
 		this.mapProvider.elements.loader = this.target.querySelector('.sl-loader')
+	}
+
+	destroy() {
+		this.mapProvider.destroy()
 	}
 }
 

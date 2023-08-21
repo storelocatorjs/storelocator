@@ -1,12 +1,19 @@
-import TemplateSidebar from 'components/sidebar/templates/sidebar'
 import locationSvg from 'shared/assets/svgs/location.svg'
+import plusSvg from 'shared/assets/svgs/plus.svg'
+import minusSvg from 'shared/assets/svgs/minus.svg'
 
 export default function TemplateMap() {
 	return `
 		<div class="storelocator">
-			${TemplateSidebar()}
-			<div id="sl-map" class="sl-map sl-active"></div>
-            <button class="sl-geolocButton">${locationSvg}</button>
+			<div class="sl-map">
+                <div id="sl-mapCanvas" class="sl-mapCanvas"></div>
+                <div class="sl-controls">
+                    <button class="sl-geolocButton sl-button">${locationSvg}</button>
+                    <button class="sl-zoomInButton sl-button">${plusSvg}</button>
+                    <button class="sl-zoomOutButton sl-button">${minusSvg}</button>
+                </div>
+            </div>
+            <div class="sl-results"></div>
 		</div>
 	`
 }

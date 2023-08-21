@@ -31,7 +31,7 @@ export default function LeafletMap(Map) {
 					this.map.options
 				)
 
-				this.instance = Leaflet.map('sl-map', mapOptions)
+				this.instance = Leaflet.map('sl-mapCanvas', mapOptions)
 
 				Leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?', {
 					maxZoom: 19,
@@ -56,6 +56,10 @@ export default function LeafletMap(Map) {
 
 		setZoom(value) {
 			this.instance.setZoom(value)
+		}
+
+		getZoom() {
+			return this.instance.getZoom()
 		}
 
 		latLngBounds() {
@@ -107,6 +111,9 @@ export default function LeafletMap(Map) {
 			this.instance.invalidateSize()
 		}
 
-		destroy() {}
+		destroy() {
+			this.instance.remove()
+			super.destroy()
+		}
 	}
 }

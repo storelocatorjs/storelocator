@@ -79,7 +79,7 @@ The extended usage of the Storelocatorjs with filters and store categories used 
         </li>
       </ul>
     </nav>
-    <div class="sl-sidebarResults"></div>
+    <div class="sl-results"></div>
   </div>
   <div class="sl-googleMaps active">
     <div id="sl-mapCanvas"></div>

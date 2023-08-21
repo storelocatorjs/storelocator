@@ -25,7 +25,7 @@ export default function Mapbox(Map) {
 				const mapOptions = this.utils().extend(
 					true,
 					{
-						container: 'sl-map',
+						container: 'sl-mapCanvas',
 						style: 'mapbox://styles/mapbox/streets-v12',
 						center: [2.213749, 46.227638],
 						zoom: 6
@@ -53,6 +53,10 @@ export default function Mapbox(Map) {
 
 		setZoom(value) {
 			this.instance.setZoom(value)
+		}
+
+		getZoom() {
+			return this.instance.getZoom()
 		}
 
 		latLngBounds() {
@@ -119,6 +123,9 @@ export default function Mapbox(Map) {
 			this.instance.resize()
 		}
 
-		destroy() {}
+		destroy() {
+			this.instance.remove()
+			super.destroy()
+		}
 	}
 }

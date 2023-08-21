@@ -1,8 +1,9 @@
 .storelocator {
 	--sl-markerSearchColor: #107a8b;
 	--sl-markerGeolocationColor: #1da1f2;
-	--sl-colorSecondary: #b9b8b8;
+	--sl-colorSecondary: rgba(0 0 0 / 15%);
 	--sl-transition: 0.25s ease;
+	--sl-controlsColor: #000;
 }
 
 @custom-media --media-tablet only screen and (min-width: 750px);

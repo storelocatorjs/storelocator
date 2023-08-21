@@ -1,9 +1,10 @@
+import TemplateSearch from 'components/search/templates/search'
 import validateTarget from 'validate-target'
 import geocoderMapBox from 'geocoder/mapbox'
 import geocoderGoogleMaps from 'geocoder/google-maps'
 import geocoderJawg from 'geocoder/jawg'
 
-export default class Autocomplete {
+export default class Search {
 	constructor({ map }) {
 		this.map = map
 		this.geocoderFunctions = {
@@ -18,36 +19,46 @@ export default class Autocomplete {
 	}
 
 	init() {
-		this.map.elements.autocomplete =
-			this.map.elements.container.querySelector('.sl-autocomplete')
+		this.render()
+
+		this.map.elements.search = this.map.elements.container.querySelector('.sl-search')
+		this.map.elements.searchForm = this.map.elements.container.querySelector('.sl-search-form')
+		this.map.elements.searchInput =
+			this.map.elements.container.querySelector('.sl-search-input')
+		this.map.elements.searchAutocomplete =
+			this.map.elements.container.querySelector('.sl-search-autocomplete')
 
 		this.addEvents()
 	}
 
+	render() {
+		this.map.elements.container.insertAdjacentHTML('afterbegin', TemplateSearch())
+	}
+
 	addEvents() {
-		this.map.elements.autocomplete.addEventListener('click', this.onClickOnAutocomplete)
-		this.map.elements.inputSearch.addEventListener('keyup', this.onKeyupOnInputSearch)
-		this.map.elements.formSearch.addEventListener('submit', (e) => e.preventDefault())
+		this.map.elements.searchAutocomplete.addEventListener('click', this.onClickOnAutocomplete)
+		this.map.elements.searchInput.addEventListener('keyup', this.onKeyupOnInputSearch)
+		this.map.elements.searchForm.addEventListener('submit', (e) => e.preventDefault())
 	}
 
 	onClickOnAutocomplete(e) {
 		const target = e.target
-		const isAutocompleteResult = validateTarget({
+		const isAutocompleteItem = validateTarget({
 			target,
-			selectorString: '.sl-autocomplete-item',
+			selectorString: '.sl-search-autocompleteItem',
 			nodeName: 'div'
 		})
 
-		if (isAutocompleteResult) {
-			this.onClickOnAutocompleteResult(e)
+		if (isAutocompleteItem) {
+			this.onClickOnAutocompleteItem(e)
 		}
 	}
 
-	onClickOnAutocompleteResult(e) {
+	onClickOnAutocompleteItem(e) {
 		const target = e.target
 
-		this.map.elements.autocomplete.classList.remove('sl-active')
-		this.map.elements.autocomplete.replaceChildren()
+		this.map.elements.searchAutocomplete.classList.remove('sl-active')
+		this.map.elements.searchAutocomplete.replaceChildren()
 		this.map.userPositionChecked = false
 
 		this.map.requestStores({
@@ -71,7 +82,7 @@ export default class Autocomplete {
 			this.geocoderFunctions[this.map.geocoder.provider]
 		) {
 			this.geocoderFunctions[this.map.geocoder.provider]({
-				value: this.map.elements.inputSearch.value,
+				value: this.map.elements.searchInput.value,
 				token: this.map.geocoder?.token,
 				countries: this.map.geocoder.countries?.join(',') || 'fr'
 			}).then((results) => {
@@ -82,7 +93,7 @@ export default class Autocomplete {
 		} else if (this.map.geocoder.provider instanceof Function) {
 			this.map.geocoder
 				.provider({
-					value: this.map.elements.inputSearch.value
+					value: this.map.elements.searchInput.value
 				})
 				.then((results) => {
 					this.renderAutocomplete({
@@ -95,10 +106,10 @@ export default class Autocomplete {
 	renderAutocomplete({ results }) {
 		const html = results
 			.map(({ text, lat, lng }) => {
-				return `<div class="sl-autocomplete-item" data-lat="${lat}" data-lng="${lng}">${text}</div>`
+				return `<div class="sl-search-autocompleteItem" data-lat="${lat}" data-lng="${lng}">${text}</div>`
 			})
 			.join('')
-		this.map.elements.autocomplete.innerHTML = html
-		this.map.elements.autocomplete.classList.add('sl-active')
+		this.map.elements.searchAutocomplete.innerHTML = html
+		this.map.elements.searchAutocomplete.classList.add('sl-active')
 	}
 }

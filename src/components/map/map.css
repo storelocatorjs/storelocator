@@ -1,17 +1,16 @@
 .sl {
 	&-map {
+		position: relative;
 		aspect-ratio: 1/1;
-		display: none;
-
-		&.sl-active {
-			display: block;
-		}
+		max-height: 100vh;
 	}
 
-	&-geolocButton {
-		position: absolute;
-		top: 125px;
-		right: 15px;
+	&-mapCanvas {
+		width: 100%;
+		height: 100%;
+	}
+
+	&-button {
 		width: 40px;
 		height: 40px;
 		background-color: #fff;
@@ -19,6 +18,21 @@
 		border: none;
 		cursor: pointer;
 		border-radius: 10px;
+		appearance: none;
+		outline: none;
+		color: inherit;
+		font-size: inherit;
+		font-family: inherit;
+		transition: opacity var(--sl-transition);
+		opacity: 0.9;
+
+		* {
+			pointer-events: none;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
 
 		svg {
 			position: absolute;
@@ -27,20 +41,39 @@
 			transform: translate(-50%, -50%);
 			width: 20px;
 			height: 20px;
-			transition: opacity var(--sl-transition);
+			transition: fill var(--sl-transition);
+			fill: var(--sl-controlsColor);
 		}
+	}
+
+	&-geolocButton {
+		position: absolute;
+		top: 15px;
+		right: 15px;
 
 		&.sl-error {
 			cursor: not-allowed;
 
 			svg {
-				opacity: 0.2;
+				fill: var(--sl-colorSecondary);
 			}
 		}
 
 		&.sl-active svg {
 			fill: var(--sl-markerGeolocationColor);
 		}
+	}
+
+	&-zoomInButton {
+		position: absolute;
+		bottom: 75px;
+		right: 15px;
+	}
+
+	&-zoomOutButton {
+		position: absolute;
+		bottom: 20px;
+		right: 15px;
 	}
 
 	&-marker {
@@ -51,11 +84,6 @@
 
 @media (--media-tablet) {
 	.sl {
-		&-map {
-			aspect-ratio: auto;
-			height: 100vh;
-		}
-
 		&-geolocButton {
 			top: 15px;
 		}

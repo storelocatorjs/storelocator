@@ -1,8 +1,8 @@
 import validateTarget from 'validate-target'
 import { extend } from 'shared/utils/utils'
 import markerSvg from 'shared/assets/svgs/marker.svg'
-import Autocomplete from 'components/autocomplete/autocomplete'
-import TemplateSidebarResult from 'components/sidebar-result/templates/sidebar-result'
+import Search from 'components/search/search'
+import TemplateResult from 'components/result/templates/result'
 import TemplatePopup from 'components/popup/templates/popup.js'
 
 export default class Map {
@@ -15,38 +15,42 @@ export default class Map {
 
 		this.elements = {
 			container: null,
-			autocomplete: null,
+			search: null,
+			searchForm: null,
+			searchInput: null,
+			searchAutocomplete: null,
 			map: null,
-			formSearch: null,
-			inputSearch: null,
 			nav: null,
-			sidebar: null,
-			sidebarResults: null,
-			geolocButton: null
+			results: null,
+			controls: null,
+			geolocButton: null,
+			zoomInButton: null,
+			zoomOutButton: null
 		}
 
-		this.autocomplete = new Autocomplete({
+		this.search = new Search({
 			map: this
 		})
 
-		this.onClickSidebarResult = this.onClickSidebarResult.bind(this)
-		this.onClickOnNav = this.onClickOnNav.bind(this)
+		this.onClickResult = this.onClickResult.bind(this)
 		this.onClickGeolocationButton = this.onClickGeolocationButton.bind(this)
+		this.onClickZoomInButton = this.onClickZoomInButton.bind(this)
+		this.onClickZoomOutButton = this.onClickZoomOutButton.bind(this)
 	}
 
 	build() {
 		const container = document.querySelector('.storelocator')
 		this.elements.container = container
+		this.elements.results = container.querySelector('.sl-results')
 		this.elements.map = container.querySelector('.sl-map')
-		this.elements.formSearch = container.querySelector('.sl-formSearch')
-		this.elements.inputSearch = container.querySelector('.sl-formSearch-input')
 		this.elements.nav = container.querySelector('.sl-nav')
-		this.elements.sidebar = container.querySelector('.sl-sidebar')
-		this.elements.sidebarResults = container.querySelector('.sl-sidebar-results')
+		this.elements.controls = container.querySelector('.sl-controls')
 		this.elements.geolocButton = container.querySelector('.sl-geolocButton')
+		this.elements.zoomInButton = container.querySelector('.sl-zoomInButton')
+		this.elements.zoomOutButton = container.querySelector('.sl-zoomOutButton')
 
 		this.init()
-		this.autocomplete.init()
+		this.search.init()
 	}
 
 	/**
@@ -75,6 +79,10 @@ export default class Map {
 
 	setZoom() {
 		throw new Error('You have to implement the function "setZoom".')
+	}
+
+	getZoom() {
+		throw new Error('You have to implement the function "getZoom".')
 	}
 
 	latLngBounds() {
@@ -117,7 +125,7 @@ export default class Map {
 		this.markers = []
 		this.markerWithColors = this.getMarkerWithColors()
 		this.addEvents()
-		this.elements.inputSearch.focus()
+		this.elements.searchInput.focus()
 		this.callback instanceof Function && this.callback(this)
 	}
 
@@ -133,29 +141,30 @@ export default class Map {
 	}
 
 	addEvents() {
-		this.elements.sidebarResults.addEventListener('click', this.onClickSidebarResult)
-		this.elements.nav.addEventListener('click', this.onClickOnNav)
+		this.elements.results.addEventListener('click', this.onClickResult)
 		this.elements.geolocButton.addEventListener('click', this.onClickGeolocationButton)
+		this.elements.zoomInButton.addEventListener('click', this.onClickZoomInButton)
+		this.elements.zoomOutButton.addEventListener('click', this.onClickZoomOutButton)
 	}
 
 	/**
 	 * On click on sidebar result item
 	 * @param {Object} e Event listener datas
 	 */
-	onClickSidebarResult(e) {
+	onClickResult(e) {
 		const target = e.target
-		const isSidebarResultItem = validateTarget({
+		const isResultItem = validateTarget({
 			target,
-			selectorString: '.sl-sidebarResult',
+			selectorString: '.sl-result',
 			nodeName: 'div'
 		})
 
-		if (isSidebarResultItem) {
-			this.onClickSidebarResultItem(e)
+		if (isResultItem) {
+			this.onClickResultItem(e)
 		}
 	}
 
-	onClickSidebarResultItem(e) {
+	onClickResultItem(e) {
 		e.preventDefault()
 
 		const target = e.target
@@ -164,23 +173,7 @@ export default class Map {
 
 		this.panTo(this.getMarkerLatLng(marker))
 		this.openPopup(marker)
-		this.elements.nav
-			.querySelector('.sl-nav-button[data-target="map"]')
-			.dispatchEvent(new window.Event('click', { bubbles: true }))
 		this.resize()
-	}
-
-	onClickOnNav(e) {
-		const target = e.target
-		const isNavButton = validateTarget({
-			target,
-			selectorString: '.sl-nav-button',
-			nodeName: 'button'
-		})
-
-		if (isNavButton) {
-			this.onClickOnNavButton(e)
-		}
 	}
 
 	/**
@@ -197,20 +190,14 @@ export default class Map {
 		}
 	}
 
-	onClickOnNavButton(e) {
+	onClickZoomInButton(e) {
 		e.preventDefault()
+		this.setZoom(this.getZoom() + 1)
+	}
 
-		this.elements.nav.querySelector('.sl-active').classList.remove('sl-active')
-		e.target.parentNode.classList.add('sl-active')
-
-		if (e.target.getAttribute('data-target') === 'map') {
-			this.elements.map.classList.add('sl-active')
-			this.elements.sidebar.classList.remove('sl-active')
-			this.resize()
-		} else {
-			this.elements.sidebar.classList.add('sl-active')
-			this.elements.map.classList.remove('sl-active')
-		}
+	onClickZoomOutButton(e) {
+		e.preventDefault()
+		this.setZoom(this.getZoom() - 1)
 	}
 
 	/**
@@ -230,8 +217,8 @@ export default class Map {
 					type: 'geolocation'
 				})
 
-				if (this.elements.inputSearch.value !== '') {
-					this.elements.inputSearch.value = ''
+				if (this.elements.searchInput.value !== '') {
+					this.elements.searchInput.value = ''
 				}
 
 				this.requestStores({
@@ -308,7 +295,7 @@ export default class Map {
 		this.boundsGlobal = this.latLngBounds()
 
 		if (features.length) {
-			let html = '<ul class="sl-sidebar-resultsList">'
+			let html = '<ul class="sl-results-list">'
 			features.forEach((feature, index) => {
 				const latLng = this.latLng({
 					lat: feature.geometry.coordinates[1],
@@ -326,17 +313,17 @@ export default class Map {
 				})
 				this.markers.push(marker)
 
-				html += `<li class="sl-sidebar-resultsListItem">${this.getSidebarResultTemplate()({
+				html += `<li class="sl-results-listItem">${this.getResultTemplate()({
 					feature
 				})}</li>`
 			})
 			html += '</ul>'
 
-			this.elements.sidebarResults.innerHTML = html
+			this.elements.results.innerHTML = html
 
 			this.fitBounds({ latLngBounds: this.boundsGlobal })
 		} else {
-			this.elements.sidebarResults.innerHTML =
+			this.elements.results.innerHTML =
 				'<p class="sl-sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 		}
 
@@ -366,17 +353,28 @@ export default class Map {
 		return TemplatePopup
 	}
 
-	getSidebarResultTemplate() {
-		if (this.templates?.sidebarResult instanceof Function) {
-			return this.templates.sidebarResult
+	getResultTemplate() {
+		if (this.templates?.result instanceof Function) {
+			return this.templates.result
 		}
 
-		return TemplateSidebarResult
+		return TemplateResult
 	}
 
 	utils() {
 		return {
 			extend
 		}
+	}
+
+	removeEvents() {
+		this.elements.results.addEventListener('click', this.onClickResult)
+		this.elements.nav.addEventListener('click', this.onClickOnNav)
+		this.elements.geolocButton.addEventListener('click', this.onClickGeolocationButton)
+	}
+
+	destroy() {
+		this.removeEvents()
+		this.elements.container.remove()
 	}
 }

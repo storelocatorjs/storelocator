@@ -17,6 +17,7 @@ export default function GoogleMaps(Map) {
 
 		waitUntilApiIsReady() {
 			return new window.Promise((resolve) => {
+				// @todo: check if sdk is already loaded
 				window.googleMapLoaded = () => this.initGoogleMaps().then(resolve)
 				this.loadSdk()
 			})
@@ -38,7 +39,7 @@ export default function GoogleMaps(Map) {
 							lat: 46.227638,
 							lng: 2.213749
 						},
-						disableDefaultUI: false,
+						disableDefaultUI: true,
 						fullscreenControl: false,
 						mapTypeControl: false,
 						mapTypeId: 'roadmap',
@@ -51,7 +52,7 @@ export default function GoogleMaps(Map) {
 				)
 
 				this.instance = new window.google.maps.Map(
-					document.querySelector('#sl-map'),
+					document.querySelector('#sl-mapCanvas'),
 					mapOptions
 				)
 
@@ -81,6 +82,10 @@ export default function GoogleMaps(Map) {
 
 		setZoom(value) {
 			this.instance.setZoom(value)
+		}
+
+		getZoom() {
+			return this.instance.getZoom()
 		}
 
 		latLngBounds() {
@@ -144,6 +149,9 @@ export default function GoogleMaps(Map) {
 			window.google.maps.event.trigger(this.instance, 'resize')
 		}
 
-		destroy() {}
+		destroy() {
+			// this.instance.destroy()
+			super.destroy()
+		}
 	}
 }

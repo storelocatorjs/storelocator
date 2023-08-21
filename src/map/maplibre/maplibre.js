@@ -24,7 +24,7 @@ export default function MapLibre(Map) {
 				const mapOptions = this.utils().extend(
 					true,
 					{
-						container: 'sl-map',
+						container: 'sl-mapCanvas',
 						style: 'https://demotiles.maplibre.org/style.json',
 						center: [2.213749, 46.227638],
 						zoom: 6
@@ -52,6 +52,10 @@ export default function MapLibre(Map) {
 
 		setZoom(value) {
 			this.instance.setZoom(value)
+		}
+
+		getZoom() {
+			return this.instance.getZoom()
 		}
 
 		latLngBounds() {
@@ -118,6 +122,9 @@ export default function MapLibre(Map) {
 			this.instance.resize()
 		}
 
-		destroy() {}
+		destroy() {
+			this.instance.remove()
+			super.destroy()
+		}
 	}
 }
