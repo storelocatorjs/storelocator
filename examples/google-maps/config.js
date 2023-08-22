@@ -31,5 +31,24 @@ const myStorelocator = new Storelocator({
 	// },
 	onReady: (map) => {
 		console.log('onReady', map)
+
+		map.on('progress', () => {
+			console.log('progress')
+		})
+		map.on('checkUserPosition', (data) => {
+			console.log('checkUserPosition', data)
+		})
+		map.on('storeFound', () => {
+			console.log('storeFound')
+		})
+		map.on('storeNotFound', () => {
+			console.log('storeNotFound')
+		})
+		map.on('zoomIn', () => {
+			console.log('zoomIn')
+		})
+		map.on('zoomOut', () => {
+			console.log('zoomOut')
+		})
 	}
 })

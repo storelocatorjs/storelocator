@@ -1,11 +1,25 @@
 .sl {
 	&-results {
-		height: 500px;
 		overflow: auto;
+		display: none;
+		position: absolute;
+		top: 70px;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #fff;
+		z-index: 1000;
+		overflow: hidden;
+
+		&.sl-visible {
+			display: block;
+		}
 
 		&-list {
 			padding: 0;
 			margin: 0;
+			height: 100%;
+			overflow: auto;
 		}
 	}
 
@@ -44,6 +58,23 @@
 
 		&-adress {
 			display: block;
+		}
+	}
+}
+
+@media (--media-tablet) {
+	.sl {
+		&-results {
+			top: auto;
+			bottom: 15px;
+			left: 15px;
+			width: 350px;
+			height: calc(100% - 115px);
+			border-radius: 10px;
+
+			&.sl-active {
+				display: block;
+			}
 		}
 	}
 }

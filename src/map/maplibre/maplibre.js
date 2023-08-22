@@ -50,6 +50,10 @@ export default function MapLibre(Map) {
 			this.instance.panTo(lngLat)
 		}
 
+		panBy(x, y) {
+			this.instance.panBy(this.point(x, y))
+		}
+
 		setZoom(value) {
 			this.instance.setZoom(value)
 		}
@@ -70,8 +74,26 @@ export default function MapLibre(Map) {
 			this.instance.fitBounds(latLngBounds)
 		}
 
+		onFitBoundsEnd(callback) {
+			const context = this
+			function onMoveEnd() {
+				context.instance.off('moveend', onMoveEnd)
+				callback()
+			}
+			this.instance.on('moveend', onMoveEnd)
+		}
+
 		latLng({ lat, lng }) {
 			return new maplibregl.LngLat(lng, lat)
+		}
+
+		getLatLngWithOffset({ latLng, offsetX = 0, offsetY = 0 }) {
+			const { x, y } = this.instance.project(latLng)
+			return this.instance.unproject(this.point(x - offsetX, y + offsetY))
+		}
+
+		point(x, y) {
+			return new maplibregl.Point(x, y)
 		}
 
 		createMarker({ feature, type }) {

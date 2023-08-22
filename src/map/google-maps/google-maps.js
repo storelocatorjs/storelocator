@@ -77,7 +77,12 @@ export default function GoogleMaps(Map) {
 		}
 
 		panTo(latLng) {
+			// @todo: move common method into base class?
 			this.instance.panTo(latLng)
+		}
+
+		panBy(x, y) {
+			this.instance.panBy(x, y)
 		}
 
 		setZoom(value) {
@@ -100,8 +105,25 @@ export default function GoogleMaps(Map) {
 			this.instance.fitBounds(latLngBounds)
 		}
 
+		onFitBoundsEnd(callback) {
+			callback()
+		}
+
 		latLng({ lat, lng }) {
 			return new window.google.maps.LatLng(lat, lng)
+		}
+
+		getLatLngWithOffset({ latLng, offsetX = 0, offsetY = 0 }) {
+			const scale = Math.pow(2, this.getZoom())
+			const projection = this.instance.getProjection()
+			const { x, y } = projection.fromLatLngToPoint(latLng)
+			return projection.fromPointToLatLng(
+				this.point(x - offsetX / scale, y + offsetY / scale)
+			)
+		}
+
+		point(x, y) {
+			return new google.maps.Point(x, y)
 		}
 
 		createMarker({ feature, type }) {
@@ -132,7 +154,7 @@ export default function GoogleMaps(Map) {
 		}
 
 		openPopup(marker) {
-			const popup = new window.google.maps.InfoWindow()
+			const popup = new window.google.maps.InfoWindow({ disableAutoPan: true })
 			popup.setContent(
 				this.getPopupTemplate()({
 					feature: marker.feature
@@ -150,6 +172,7 @@ export default function GoogleMaps(Map) {
 		}
 
 		destroy() {
+			this.instance = null
 			// this.instance.destroy()
 			super.destroy()
 		}

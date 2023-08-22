@@ -54,6 +54,10 @@ export default function LeafletMap(Map) {
 			this.instance.panTo(latLng)
 		}
 
+		panBy(x, y) {
+			this.instance.panBy(this.point(x, y))
+		}
+
 		setZoom(value) {
 			this.instance.setZoom(value)
 		}
@@ -74,8 +78,21 @@ export default function LeafletMap(Map) {
 			this.instance.fitBounds(latLngBounds)
 		}
 
+		onFitBoundsEnd(callback) {
+			callback()
+		}
+
 		latLng({ lat, lng }) {
 			return Leaflet.latLng(lat, lng)
+		}
+
+		getLatLngWithOffset({ latLng, offsetX = 0, offsetY = 0 }) {
+			const { x, y } = this.instance.project(latLng)
+			return this.instance.unproject(this.point(x - offsetX, y + offsetY))
+		}
+
+		point(x, y) {
+			return Leaflet.point(x, y)
 		}
 
 		createMarker({ feature, type }) {

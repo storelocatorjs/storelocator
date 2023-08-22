@@ -1,8 +1,7 @@
 .sl {
 	&-map {
 		position: relative;
-		aspect-ratio: 1/1;
-		max-height: 100vh;
+		aspect-ratio: 16/9;
 	}
 
 	&-mapCanvas {
@@ -62,6 +61,12 @@
 		&.sl-active svg {
 			fill: var(--sl-markerGeolocationColor);
 		}
+	}
+
+	&-resultButton {
+		position: absolute;
+		top: 70px;
+		right: 15px;
 	}
 
 	&-zoomInButton {

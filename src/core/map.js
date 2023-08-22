@@ -18,6 +18,7 @@ export default class Map {
 			search: null,
 			searchForm: null,
 			searchInput: null,
+			searchToggleButton: null,
 			searchAutocomplete: null,
 			map: null,
 			nav: null,
@@ -27,6 +28,7 @@ export default class Map {
 			zoomInButton: null,
 			zoomOutButton: null
 		}
+		this.mapEvents = []
 
 		this.search = new Search({
 			map: this
@@ -53,10 +55,6 @@ export default class Map {
 		this.search.init()
 	}
 
-	/**
-	 * init
-	 * Extends by the provider
-	 */
 	init() {
 		throw new Error('You have to implement the function "init".')
 	}
@@ -125,6 +123,27 @@ export default class Map {
 		this.callback instanceof Function && this.callback(this)
 	}
 
+	on(type, listener) {
+		if (listener instanceof Function) {
+			this.mapEvents.push({ type, listener })
+			this.elements.container.addEventListener(type, listener)
+		}
+	}
+
+	off(type, listener) {
+		if (listener instanceof Function) {
+			this.elements.container.removeEventListener(type, listener)
+		}
+	}
+
+	dispatchEvent(type, detail) {
+		this.elements.container.dispatchEvent(
+			new window.CustomEvent(type, {
+				detail
+			})
+		)
+	}
+
 	getMarkerWithColors() {
 		const styles = getComputedStyle(this.elements.container)
 		const searchColor = styles.getPropertyValue('--sl-markerSearchColor')
@@ -143,10 +162,6 @@ export default class Map {
 		this.elements.zoomOutButton.addEventListener('click', this.onClickZoomOutButton)
 	}
 
-	/**
-	 * On click on sidebar result item
-	 * @param {Object} e Event listener datas
-	 */
 	onClickResult(e) {
 		const target = e.target
 		const isResultItem = validateTarget({
@@ -166,16 +181,29 @@ export default class Map {
 		const target = e.target
 		const markerIndex = target.getAttribute('data-marker-index')
 		const marker = this.markers[markerIndex]
+		const center = this.isMobile()
+			? this.getLatLngWithOffset({
+					latLng: this.getMarkerLatLng(marker),
+					offsetX: this.elements.search.offsetWidth / 2
+			  })
+			: this.getMarkerLatLng(marker)
 
-		this.panTo(this.getMarkerLatLng(marker))
+		this.panTo(center)
 		this.openPopup(marker)
 		this.resize()
+		this.elements.results.classList.contains('sl-visible') && this.toggleMapList()
 	}
 
-	/**
-	 * On click on geolocation button
-	 * @param {Object} e Event listener datas
-	 */
+	toggleMapList() {
+		this.elements.results.classList.toggle('sl-visible')
+		this.elements.searchToggleButton
+			.querySelector('.sl-search-toggleMap')
+			.classList.toggle('sl-active')
+		this.elements.searchToggleButton
+			.querySelector('.sl-search-toggleList')
+			.classList.toggle('sl-active')
+	}
+
 	onClickGeolocationButton(e) {
 		e.preventDefault()
 		if (navigator.geolocation) {
@@ -189,20 +217,22 @@ export default class Map {
 	onClickZoomInButton(e) {
 		e.preventDefault()
 		this.setZoom(this.getZoom() + 1)
+		this.dispatchEvent('zoomIn')
 	}
 
 	onClickZoomOutButton(e) {
 		e.preventDefault()
 		this.setZoom(this.getZoom() - 1)
+		this.dispatchEvent('zoomOut')
 	}
 
-	/**
-	 * Check user position with Google Maps geolocation API
-	 * Get the user current position if available
-	 */
 	checkUserPosition() {
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude: lat, longitude: lng } }) => {
+				this.dispatchEvent('checkUserPosition', {
+					lat,
+					lng
+				})
 				this.createMarker({
 					feature: {
 						latLng: this.latLng({
@@ -232,13 +262,6 @@ export default class Map {
 		)
 	}
 
-	/**
-	 * Trigger a request to the web service to get all store results
-	 * according to the position (lat, lng)
-	 * @param {String} lat Latitude of the research
-	 * @param {String} lng Longitude of the research
-	 * @param {Boolean} fitBounds Fit bounds on the map
-	 */
 	requestStores({ lat, lng }) {
 		this.loading(true)
 
@@ -270,7 +293,6 @@ export default class Map {
 							this.parseStores({
 								features
 							})
-						this.loading(false)
 						resolve()
 					})
 			} catch (error) {
@@ -280,12 +302,6 @@ export default class Map {
 		})
 	}
 
-	/**
-	 * Parse store datas from the web service
-	 * Create all markers
-	 * Create all store results
-	 * @param {Object} options Store datas from the web service
-	 */
 	parseStores({ features }) {
 		this.destroyMarkers()
 		this.boundsGlobal = this.latLngBounds()
@@ -318,17 +334,22 @@ export default class Map {
 			this.elements.results.innerHTML = html
 
 			this.fitBounds({ latLngBounds: this.boundsGlobal })
+			this.onFitBoundsEnd(() => {
+				this.panBy(-(this.elements.search.offsetWidth / 2), 0)
+			})
+
+			this.dispatchEvent('storeFound')
 		} else {
+			this.dispatchEvent('storeNotFound')
 			this.elements.results.innerHTML =
 				'<p class="sl-sidebar-noResults">No results for your request.<br />Please try a new search with differents choices.</p>'
 		}
 
+		this.elements.searchToggleButton.classList.add('sl-active')
+		this.elements.results.classList.add('sl-active')
 		this.loading(false)
 	}
 
-	/**
-	 * Destroy all created Google Map markers
-	 */
 	destroyMarkers() {
 		for (let i = this.markers.length - 1; i >= 0; i--) {
 			this.removeMarker(this.markers[i])
@@ -339,6 +360,7 @@ export default class Map {
 	loading(state) {
 		this.isLoading = state
 		this.elements.loader.classList[state ? 'add' : 'remove']('sl-active')
+		this.dispatchEvent('progress')
 	}
 
 	getPopupTemplate() {
@@ -361,6 +383,10 @@ export default class Map {
 		return {
 			extend
 		}
+	}
+
+	isMobile() {
+		return window.matchMedia('(min-width: 750px)').matches
 	}
 
 	removeEvents() {

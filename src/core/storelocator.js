@@ -10,10 +10,6 @@ import Map from 'core/map'
 import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
 
-/**
- * storelocatorjs
- * @module storelocatorjs
- */
 class Storelocator {
 	constructor({ target, api, map, geocoder, templates, onReady }) {
 		this.target = target
@@ -50,9 +46,6 @@ class Storelocator {
 		this.target.insertAdjacentHTML('beforeend', TemplateMap())
 	}
 
-	/**
-	 * Build the loader
-	 */
 	buildLoader() {
 		this.target
 			.querySelector('.storelocator')

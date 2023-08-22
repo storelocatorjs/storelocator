@@ -16,6 +16,7 @@ export default class Search {
 
 		this.onClickOnAutocomplete = this.onClickOnAutocomplete.bind(this)
 		this.onKeyupOnInputSearch = this.onKeyupOnInputSearch.bind(this)
+		this.onClickOnToggleButton = this.onClickOnToggleButton.bind(this)
 	}
 
 	init() {
@@ -27,6 +28,8 @@ export default class Search {
 			this.map.elements.container.querySelector('.sl-search-input')
 		this.map.elements.searchAutocomplete =
 			this.map.elements.container.querySelector('.sl-search-autocomplete')
+		this.map.elements.searchToggleButton =
+			this.map.elements.container.querySelector('.sl-search-toggleButton')
 
 		this.addEvents()
 	}
@@ -39,6 +42,7 @@ export default class Search {
 		this.map.elements.searchAutocomplete.addEventListener('click', this.onClickOnAutocomplete)
 		this.map.elements.searchInput.addEventListener('keyup', this.onKeyupOnInputSearch)
 		this.map.elements.searchForm.addEventListener('submit', (e) => e.preventDefault())
+		this.map.elements.searchToggleButton.addEventListener('click', this.onClickOnToggleButton)
 	}
 
 	onClickOnAutocomplete(e) {
@@ -110,6 +114,12 @@ export default class Search {
 			})
 			.join('')
 		this.map.elements.searchAutocomplete.innerHTML = html
+		this.map.elements.results.classList.contains('sl-visible') && this.map.toggleMapList()
 		this.map.elements.searchAutocomplete.classList.add('sl-active')
+	}
+
+	onClickOnToggleButton(e) {
+		e.preventDefault()
+		this.map.toggleMapList()
 	}
 }

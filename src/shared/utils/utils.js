@@ -1,19 +1,7 @@
-/**
- * Check whether an object has the property
- * @param {Object} obj Object reference
- * @param {String} key Object property key inside the object
- * @returns {Boolean} Object has the property key
- */
 export function hasOwn(obj, key) {
 	return Object.prototype.hasOwnProperty.call(obj, key)
 }
 
-/**
- * Deep clone for multiple objects
- * @param {Boolean} deep Deep clone
- * @param {Array<Object>} objects List of objects to merged
- * @returns Merged object
- */
 export function extend(deep = false, ...objects) {
 	const extended = {}
 

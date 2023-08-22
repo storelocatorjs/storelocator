@@ -5,7 +5,7 @@
 		flex-direction: column;
 		background: #fff;
 		padding: 15px;
-		z-index: 501;
+		z-index: 1002;
 
 		&-form {
 			position: relative;
@@ -14,7 +14,7 @@
 			border-radius: 5px;
 		}
 
-		&-icon {
+		&-glass {
 			position: absolute;
 			top: 13px;
 			left: 10px;
@@ -35,6 +35,57 @@
 			border: none;
 			outline: none;
 			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+		}
+
+		&-toggleButton {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 40px;
+			height: 40px;
+			cursor: pointer;
+			display: none;
+			background-color: transparent;
+			justify-content: center;
+			align-items: center;
+			border: none;
+			appearance: none;
+			outline: none;
+
+			* {
+				pointer-events: none;
+			}
+
+			&.sl-active {
+				display: flex;
+			}
+
+			svg {
+				width: 15px;
+				height: 15px;
+				fill: var(--sl-controlsColor);
+			}
+		}
+
+		&-toggleMap {
+			svg {
+				width: 18px;
+			}
+		}
+
+		&-toggleList {
+			svg {
+				width: 16px;
+			}
+		}
+
+		&-toggleMap,
+		&-toggleList {
+			display: none;
+
+			&.sl-active {
+				display: flex;
+			}
 		}
 
 		&-autocomplete {
@@ -78,6 +129,13 @@
 			background-color: #fff;
 			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
 
+			&-toggleButton {
+				&,
+				&.sl-active {
+					display: none;
+				}
+			}
+
 			&-autocomplete {
 				position: relative;
 				top: auto;
@@ -93,6 +151,7 @@
 		&-search {
 			&-autocompleteItem {
 				&:hover {
+					/* @TODO: update style */
 					background-color: rgba(60 64 67 / 4%);
 				}
 			}
