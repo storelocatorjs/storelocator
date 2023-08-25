@@ -1,6 +1,5 @@
 .sl {
 	&-results {
-		overflow: auto;
 		display: none;
 		position: absolute;
 		top: 70px;
@@ -62,7 +61,7 @@
 	}
 }
 
-@media (--media-tablet) {
+@media only screen and (min-width: 750px) {
 	.sl {
 		&-results {
 			top: auto;

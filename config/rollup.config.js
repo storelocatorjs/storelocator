@@ -6,6 +6,7 @@ import alias from '@rollup/plugin-alias'
 import { terser } from 'rollup-plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
 import { banner, mapProviders } from './package'
+import copy from 'rollup-plugin-copy'
 
 const isProduction = process.env.ENV === 'production'
 const outputDirectory = resolve(__dirname, '../dist')
@@ -40,6 +41,14 @@ const createConfig = ({ input, outputFile }) => {
 					{ find: 'geocoder', replacement: resolve('src/geocoder') }
 				]
 			}),
+			copy({
+				targets: [
+					{
+						src: resolve('node_modules/leaflet/dist/images'),
+						dest: `${outputDirectory}/map`
+					}
+				]
+			}),
 			...(isProduction ? [terser()] : [])
 		]
 	}
@@ -53,7 +62,7 @@ export default [
 		})
 	),
 	createConfig({
-		input: `./src/core/storelocator.js`,
+		input: `./src/core/app.js`,
 		outputFile: `storelocator.js`
 	})
 ]

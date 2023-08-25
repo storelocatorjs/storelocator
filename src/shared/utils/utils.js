@@ -33,16 +33,6 @@ export function extend(deep = false, ...objects) {
 
 export function fetchFromGeocoder(url) {
 	return fetch(url, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error(response)
-			}
-			return response
-		})
-		.then((res) => res.json())
+		method: 'GET'
+	}).then((res) => res.json())
 }

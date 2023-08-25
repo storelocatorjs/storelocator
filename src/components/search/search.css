@@ -106,17 +106,18 @@
 		}
 
 		&-autocompleteItem {
-			&:not(:last-child) {
-				margin-bottom: 5px;
-				padding-bottom: 5px;
-				border-bottom: 1px solid var(--sl-colorSecondary);
-				cursor: pointer;
+			cursor: pointer;
+			padding-top: 5px;
+			padding-bottom: 5px;
+
+			&:not(:first-child) {
+				border-top: 1px solid var(--sl-colorSecondary);
 			}
 		}
 	}
 }
 
-@media (--media-tablet) {
+@media only screen and (min-width: 750px) {
 	.sl {
 		&-search {
 			position: absolute;
@@ -151,7 +152,6 @@
 		&-search {
 			&-autocompleteItem {
 				&:hover {
-					/* @TODO: update style */
 					background-color: rgba(60 64 67 / 4%);
 				}
 			}

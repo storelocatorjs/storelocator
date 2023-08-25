@@ -7,6 +7,7 @@ import mapStyles from './styles.json'
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
 	target: document.querySelector('#app'),
+	licenseKey: 'xxx',
 	api: {
 		url: 'https://storelocatorjs-functions.vercel.app'
 	},

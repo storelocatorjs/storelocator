@@ -4,7 +4,7 @@ import minusSvg from 'shared/assets/svgs/minus.svg'
 
 export default function TemplateMap() {
 	return `
-		<div class="storelocator">
+		<div class="sl-app">
 			<div class="sl-map">
                 <div id="sl-mapCanvas" class="sl-mapCanvas"></div>
                 <div class="sl-controls">

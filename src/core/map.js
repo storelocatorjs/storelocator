@@ -21,7 +21,6 @@ export default class Map {
 			searchToggleButton: null,
 			searchAutocomplete: null,
 			map: null,
-			nav: null,
 			results: null,
 			controls: null,
 			geolocButton: null,
@@ -41,11 +40,10 @@ export default class Map {
 	}
 
 	build() {
-		const container = document.querySelector('.storelocator')
+		const container = document.querySelector('.sl-app')
 		this.elements.container = container
 		this.elements.results = container.querySelector('.sl-results')
 		this.elements.map = container.querySelector('.sl-map')
-		this.elements.nav = container.querySelector('.sl-nav')
 		this.elements.controls = container.querySelector('.sl-controls')
 		this.elements.geolocButton = container.querySelector('.sl-geolocButton')
 		this.elements.zoomInButton = container.querySelector('.sl-zoomInButton')
@@ -181,14 +179,18 @@ export default class Map {
 		const target = e.target
 		const markerIndex = target.getAttribute('data-marker-index')
 		const marker = this.markers[markerIndex]
-		const center = this.isMobile()
-			? this.getLatLngWithOffset({
+
+		if (this.isMobile()) {
+			this.panTo(
+				this.getLatLngWithOffset({
 					latLng: this.getMarkerLatLng(marker),
 					offsetX: this.elements.search.offsetWidth / 2
-			  })
-			: this.getMarkerLatLng(marker)
+				})
+			)
+		} else {
+			this.panTo(this.getMarkerLatLng(marker))
+		}
 
-		this.panTo(center)
 		this.openPopup(marker)
 		this.resize()
 		this.elements.results.classList.contains('sl-visible') && this.toggleMapList()
@@ -390,12 +392,14 @@ export default class Map {
 	}
 
 	removeEvents() {
-		this.elements.results.addEventListener('click', this.onClickResult)
-		this.elements.nav.addEventListener('click', this.onClickOnNav)
-		this.elements.geolocButton.addEventListener('click', this.onClickGeolocationButton)
+		this.elements.results.removeEventListener('click', this.onClickResult)
+		this.elements.geolocButton.removeEventListener('click', this.onClickGeolocationButton)
+		this.elements.zoomInButton.removeEventListener('click', this.onClickZoomInButton)
+		this.elements.zoomOutButton.removeEventListener('click', this.onClickZoomOutButton)
 	}
 
 	destroy() {
+		this.instance = null
 		this.removeEvents()
 		this.elements.container.remove()
 	}

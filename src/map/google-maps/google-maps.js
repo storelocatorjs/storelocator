@@ -1,4 +1,6 @@
 export default function GoogleMaps(Map) {
+	const GOOGLE_MAPS_CALLBACK = 'googleMapLoaded'
+
 	return class GoogleMaps extends Map {
 		constructor(props) {
 			super(props)
@@ -17,9 +19,12 @@ export default function GoogleMaps(Map) {
 
 		waitUntilApiIsReady() {
 			return new window.Promise((resolve) => {
-				// @todo: check if sdk is already loaded
-				window.googleMapLoaded = () => this.initGoogleMaps().then(resolve)
-				this.loadSdk()
+				if (typeof window[GOOGLE_MAPS_CALLBACK] === 'undefined') {
+					window[GOOGLE_MAPS_CALLBACK] = () => this.initGoogleMaps().then(resolve)
+					this.loadSdk()
+				} else {
+					this.initGoogleMaps().then(resolve)
+				}
 			})
 		}
 
@@ -64,7 +69,7 @@ export default function GoogleMaps(Map) {
 			const script = document.createElement('script')
 			script.async = true
 			script.type = 'text/javascript'
-			script.src = `https://maps.googleapis.com/maps/api/js?key=${this.map.token}&callback=window.googleMapLoaded`
+			script.src = `https://maps.googleapis.com/maps/api/js?key=${this.map.token}&callback=window.${GOOGLE_MAPS_CALLBACK}`
 			document.getElementsByTagName('body')[0].appendChild(script)
 		}
 
@@ -77,7 +82,6 @@ export default function GoogleMaps(Map) {
 		}
 
 		panTo(latLng) {
-			// @todo: move common method into base class?
 			this.instance.panTo(latLng)
 		}
 
@@ -123,7 +127,7 @@ export default function GoogleMaps(Map) {
 		}
 
 		point(x, y) {
-			return new google.maps.Point(x, y)
+			return new window.google.maps.Point(x, y)
 		}
 
 		createMarker({ feature, type }) {
@@ -172,8 +176,6 @@ export default function GoogleMaps(Map) {
 		}
 
 		destroy() {
-			this.instance = null
-			// this.instance.destroy()
 			super.destroy()
 		}
 	}

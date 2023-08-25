@@ -1,5 +1,5 @@
 import 'mapbox-gl/dist/mapbox-gl.css'
-import mapboxgl from '!mapbox-gl'
+import mapboxgl from 'mapbox-gl'
 
 export default function Mapbox(Map) {
 	return class Mapbox extends Map {

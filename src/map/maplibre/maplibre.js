@@ -1,5 +1,5 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
-import maplibregl from '!maplibre-gl'
+import maplibregl from 'maplibre-gl'
 
 export default function MapLibre(Map) {
 	return class MapLibre extends Map {

@@ -1,5 +1,4 @@
-import './css/vars.css'
-import './css/storelocator.css'
+import './app.css'
 import 'components/loader/loader.css'
 import 'components/map/map.css'
 import 'components/popup/popup.css'
@@ -11,8 +10,9 @@ import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
 
 class Storelocator {
-	constructor({ target, api, map, geocoder, templates, onReady }) {
+	constructor({ target, licenseKey, api, map, geocoder, templates, onReady }) {
 		this.target = target
+		this.licenseKey = licenseKey
 
 		const MapProvider = map.provider(Map)
 		this.mapProvider = new MapProvider({
@@ -36,10 +36,31 @@ class Storelocator {
 		this.init()
 	}
 
+	checkLicense() {
+		return new window.Promise((resolve) => {
+			fetch('https://api.gumroad.com/v2/licenses/verify', {
+				method: 'POST',
+				body: JSON.stringify({
+					product_id: 'RspHbyOxxkC8KsDwAnM9Pw==',
+					license_key: this.licenseKey,
+					increment_uses_count: false
+				})
+			})
+				.then((res) => res.json())
+				.then((response) => resolve(response))
+		})
+	}
+
 	init() {
+		// this.checkLicense().then(({ success, message }) => {
+		// if (success) {
 		this.render()
 		this.buildLoader()
 		this.mapProvider.build()
+		// 	} else {
+		// 		throw new Error(`Storelocator::${message}`)
+		// 	}
+		// })
 	}
 
 	render() {
@@ -47,9 +68,7 @@ class Storelocator {
 	}
 
 	buildLoader() {
-		this.target
-			.querySelector('.storelocator')
-			.insertAdjacentHTML('afterbegin', TemplateLoader())
+		this.target.querySelector('.sl-app').insertAdjacentHTML('afterbegin', TemplateLoader())
 		this.mapProvider.elements.loader = this.target.querySelector('.sl-loader')
 	}
 
