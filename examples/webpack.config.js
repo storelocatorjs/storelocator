@@ -1,15 +1,15 @@
-const fs = require('fs')
-const path = require('path')
-const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+import fs from 'fs'
+import path from 'path'
+import webpack from 'webpack'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const appDirectory = fs.realpathSync(process.cwd())
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 
-module.exports = (env, argv) => {
+export default function webpackConfig(env, argv) {
 	const isProduction = argv.mode === 'production'
 
 	const config = {
@@ -33,15 +33,7 @@ module.exports = (env, argv) => {
 			rules: [
 				{
 					test: /\.js$/,
-					include: [resolveApp('examples'), resolveApp('dist')],
-					use: [
-						{
-							loader: 'babel-loader',
-							options: {
-								configFile: resolveApp('config/babel.config.js')
-							}
-						}
-					]
+					include: [resolveApp('examples'), resolveApp('dist')]
 				},
 				{
 					test: /\.css$/,
@@ -55,7 +47,7 @@ module.exports = (env, argv) => {
 							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
-									config: resolveApp('config/postcss.config.js')
+									config: resolveApp('config/postcss.config.cjs')
 								}
 							}
 						}
@@ -105,25 +97,18 @@ module.exports = (env, argv) => {
 		],
 		resolve: {
 			alias: {
-				'images/layers.png$': path.resolve(
-					__dirname,
-					'../node_modules/leaflet/dist/images/layers.png'
+				'images/layers.png$': resolveApp('node_modules/leaflet/dist/images/layers.png'),
+				'images/layers-2x.png$': resolveApp(
+					'node_modules/leaflet/dist/images/layers-2x.png'
 				),
-				'images/layers-2x.png$': path.resolve(
-					__dirname,
-					'../node_modules/leaflet/dist/images/layers-2x.png'
+				'images/marker-icon.png$': resolveApp(
+					'node_modules/leaflet/dist/images/marker-icon.png'
 				),
-				'images/marker-icon.png$': path.resolve(
-					__dirname,
-					'../node_modules/leaflet/dist/images/marker-icon.png'
+				'images/marker-icon-2x.png$': resolveApp(
+					'node_modules/leaflet/dist/images/marker-icon-2x.png'
 				),
-				'images/marker-icon-2x.png$': path.resolve(
-					__dirname,
-					'../node_modules/leaflet/dist/images/marker-icon-2x.png'
-				),
-				'images/marker-shadow.png$': path.resolve(
-					__dirname,
-					'../node_modules/leaflet/dist/images/marker-shadow.png'
+				'images/marker-shadow.png$': resolveApp(
+					'node_modules/leaflet/dist/images/marker-shadow.png'
 				)
 			}
 		},

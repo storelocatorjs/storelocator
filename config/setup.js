@@ -1,6 +1,11 @@
-const fs = require('fs')
-const path = require('path')
-require('dotenv').config({ path: path.resolve(__dirname, '../examples/.env') })
+import fs from 'fs'
+import path from 'path'
+import dotenv from 'dotenv'
+
+const appDirectory = fs.realpathSync(process.cwd())
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
+
+dotenv.config({ path: resolveApp('examples/.env') })
 
 let googleMapsToken = process.env.GOOGLEMAPS_TOKEN
 let mapBoxToken = process.env.MAPBOX_TOKEN
@@ -23,7 +28,7 @@ if (googleMapsToken && mapBoxToken && jawgToken) {
 		'\t'
 	)
 
-	fs.writeFile(path.resolve(__dirname, '../examples/credentials.json'), data, 'utf8', (err) => {
+	fs.writeFile(resolveApp('examples/credentials.json'), data, 'utf8', (err) => {
 		if (err) {
 			console.error('An error occured when creating credentials file', err)
 		} else {

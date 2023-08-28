@@ -6,6 +6,7 @@ import 'components/search/search.css'
 import 'components/result/result.css'
 
 import Map from 'core/map'
+import check from './check'
 import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
 
@@ -36,31 +37,17 @@ class Storelocator {
 		this.init()
 	}
 
-	checkLicense() {
-		return new window.Promise((resolve) => {
-			fetch('https://api.gumroad.com/v2/licenses/verify', {
-				method: 'POST',
-				body: JSON.stringify({
-					product_id: 'RspHbyOxxkC8KsDwAnM9Pw==',
-					license_key: this.licenseKey,
-					increment_uses_count: false
-				})
-			})
-				.then((res) => res.json())
-				.then((response) => resolve(response))
-		})
-	}
-
 	init() {
-		// this.checkLicense().then(({ success, message }) => {
-		// if (success) {
-		this.render()
-		this.buildLoader()
-		this.mapProvider.build()
-		// 	} else {
-		// 		throw new Error(`Storelocator::${message}`)
-		// 	}
-		// })
+		check(this.licenseKey).then(({ success, message, dev }) => {
+			if (success) {
+				dev && console.warn(dev)
+				this.render()
+				this.buildLoader()
+				this.mapProvider.build()
+			} else {
+				throw new Error(`Storelocator::${message}`)
+			}
+		})
 	}
 
 	render() {

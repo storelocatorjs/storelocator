@@ -27,7 +27,7 @@ const createConfig = ({ input, outputFile }) => {
 			svg(),
 			postcss({
 				config: {
-					path: resolve(__dirname, 'postcss.config.js')
+					path: resolve(__dirname, 'postcss.config.cjs')
 				},
 				extract: true,
 				minimize: isProduction
