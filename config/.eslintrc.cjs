@@ -5,10 +5,8 @@ module.exports = {
 		ecmaVersion: 6,
 		ecmaFeatures: {
 			impliedStrict: true,
-			experimentalObjectRestSpread: true,
-			jsx: true
+			experimentalObjectRestSpread: true
 		},
-		babelOptions: { configFile: './config/babel.config.js' },
 		sourceType: 'module'
 	},
 

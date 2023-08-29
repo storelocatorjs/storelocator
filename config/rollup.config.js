@@ -38,7 +38,8 @@ const createConfig = ({ input, outputFile }) => {
 					{ find: 'shared', replacement: resolve('src/shared') },
 					{ find: 'components', replacement: resolve('src/components') },
 					{ find: 'map', replacement: resolve('src/map') },
-					{ find: 'geocoder', replacement: resolve('src/geocoder') }
+					{ find: 'geocoder', replacement: resolve('src/geocoder') },
+					{ find: 'check', replacement: resolve('../license-check/index.js') }
 				]
 			}),
 			copy({

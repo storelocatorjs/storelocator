@@ -7,7 +7,7 @@ import mapStyles from './styles.json'
 /* eslint-disable no-unused-vars */
 const myStorelocator = new Storelocator({
 	target: document.querySelector('#app'),
-	licenseKey: 'xxx',
+	licenseKey: credentials.LEMON_SQUEEZY_LICENSE_KEY,
 	api: {
 		url: 'https://storelocatorjs-functions.vercel.app'
 	},

@@ -257,7 +257,7 @@ export default class Map {
 				})
 			},
 			(error) => {
-				console.warn('Storelocator::checkUserPosition', error)
+				console.warn('Storelocator: checkUserPosition', error)
 				this.elements.geolocButton.classList.add('sl-error')
 				this.loading(false)
 			}
@@ -287,7 +287,7 @@ export default class Map {
 							return response.json()
 						}
 
-						console.warn('Storelocatorjs::requestStores', response)
+						console.warn('Storelocatorjs: requestStores', response)
 						this.loading(false)
 					})
 					.then((features) => {
@@ -298,7 +298,7 @@ export default class Map {
 						resolve()
 					})
 			} catch (error) {
-				console.warn('Storelocatorjs::requestStores', error)
+				console.warn('Storelocatorjs: requestStores', error)
 				this.loading(false)
 			}
 		})
@@ -327,9 +327,11 @@ export default class Map {
 				})
 				this.markers.push(marker)
 
-				html += `<li class="sl-results-listItem">${this.getResultTemplate()({
+				html += `<li class="sl-results-listItem"><div class="sl-result" data-marker-index="${
+					feature.index
+				}">${this.getResultTemplate()({
 					feature
-				})}</li>`
+				})}</div></li>`
 			})
 			html += '</ul>'
 

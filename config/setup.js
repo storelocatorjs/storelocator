@@ -10,11 +10,13 @@ dotenv.config({ path: resolveApp('examples/.env') })
 let googleMapsToken = process.env.GOOGLEMAPS_TOKEN
 let mapBoxToken = process.env.MAPBOX_TOKEN
 let jawgToken = process.env.JAWG_TOKEN
+let lemonSqueezyLicenseKey = process.env.LEMON_SQUEEZY_LICENSE_KEY
 
 if (process.env.CI) {
 	googleMapsToken = 'xxxx'
 	mapBoxToken = 'xxxx'
 	jawgToken = 'xxxx'
+	lemonSqueezyLicenseKey = 'xxxx'
 }
 
 if (googleMapsToken && mapBoxToken && jawgToken) {
@@ -22,7 +24,8 @@ if (googleMapsToken && mapBoxToken && jawgToken) {
 		{
 			GOOGLEMAPS_TOKEN: process.env.GOOGLEMAPS_TOKEN,
 			MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
-			JAWG_TOKEN: process.env.JAWG_TOKEN
+			JAWG_TOKEN: process.env.JAWG_TOKEN,
+			LEMON_SQUEEZY_LICENSE_KEY: process.env.LEMON_SQUEEZY_LICENSE_KEY
 		},
 		null,
 		'\t'

@@ -7,6 +7,7 @@ import 'components/result/result.css'
 
 import Map from 'core/map'
 import check from './check'
+// import check from 'check'
 import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
 
@@ -38,16 +39,16 @@ class Storelocator {
 	}
 
 	init() {
-		check(this.licenseKey).then(({ success, message, dev }) => {
-			if (success) {
-				dev && console.warn(dev)
-				this.render()
-				this.buildLoader()
-				this.mapProvider.build()
-			} else {
-				throw new Error(`Storelocator::${message}`)
-			}
-		})
+		check(this.licenseKey)
+			.then(({ valid, message, dev }) => {
+				if (valid) {
+					dev && console.warn(dev)
+					this.render()
+					this.buildLoader()
+					this.mapProvider.build()
+				}
+			})
+			.catch((error) => console.error(error))
 	}
 
 	render() {
