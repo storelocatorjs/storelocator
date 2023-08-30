@@ -7,19 +7,7 @@ const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 
 dotenv.config({ path: resolveApp('examples/.env') })
 
-let googleMapsToken = process.env.GOOGLEMAPS_TOKEN
-let mapBoxToken = process.env.MAPBOX_TOKEN
-let jawgToken = process.env.JAWG_TOKEN
-let lemonSqueezyLicenseKey = process.env.LEMON_SQUEEZY_LICENSE_KEY
-
-if (process.env.CI) {
-	googleMapsToken = 'xxxx'
-	mapBoxToken = 'xxxx'
-	jawgToken = 'xxxx'
-	lemonSqueezyLicenseKey = 'xxxx'
-}
-
-if (googleMapsToken && mapBoxToken && jawgToken) {
+try {
 	const data = JSON.stringify(
 		{
 			GOOGLEMAPS_TOKEN: process.env.GOOGLEMAPS_TOKEN,
@@ -38,7 +26,7 @@ if (googleMapsToken && mapBoxToken && jawgToken) {
 			console.log('Credentials file created')
 		}
 	})
-} else {
+} catch (error) {
 	throw new Error(
 		'Environments variables are missing in .env ("GOOGLEMAPS_TOKEN", "MAPBOX_TOKEN", "JAWG_TOKEN")'
 	)
