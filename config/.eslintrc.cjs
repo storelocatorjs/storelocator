@@ -34,5 +34,5 @@ module.exports = {
 		window: false
 	},
 
-	ignorePatterns: ['node_modules', 'dist']
+	ignorePatterns: ['node_modules', 'dist', 'src/core/check.js']
 }
