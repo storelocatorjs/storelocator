@@ -1,26 +1,25 @@
-const fs = require('fs')
-const path = require('path')
-const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+import fs from 'fs'
+import path from 'path'
+import webpack from 'webpack'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const appDirectory = fs.realpathSync(process.cwd())
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
 
-module.exports = (env, argv) => {
+export default function webpackConfig(env, argv) {
 	const isProduction = argv.mode === 'production'
 
 	const config = {
 		context: appDirectory,
 		entry: {
 			home: resolveApp('examples/home/config.js'),
-			'usage-basic': resolveApp('examples/usage-basic/config.js'),
-			'usage-with-callback': resolveApp('examples/usage-with-callback/config.js'),
-			'usage-with-categories': resolveApp('examples/usage-with-categories/config.js'),
-			'usage-with-clusters': resolveApp('examples/usage-with-clusters/config.js'),
-			'usage-with-map-styles': resolveApp('examples/usage-with-map-styles/config.js')
+			'google-maps': resolveApp('examples/google-maps/config.js'),
+			leaflet: resolveApp('examples/leaflet/config.js'),
+			mapbox: resolveApp('examples/mapbox/config.js'),
+			maplibre: resolveApp('examples/maplibre/config.js')
 		},
 		watchOptions: {
 			ignored: /node_modules/
@@ -34,15 +33,7 @@ module.exports = (env, argv) => {
 			rules: [
 				{
 					test: /\.js$/,
-					include: [resolveApp('examples'), resolveApp('dist')],
-					use: [
-						{
-							loader: 'babel-loader',
-							options: {
-								configFile: resolveApp('config/babel.config.js')
-							}
-						}
-					]
+					include: [resolveApp('examples'), resolveApp('dist')]
 				},
 				{
 					test: /\.css$/,
@@ -56,7 +47,7 @@ module.exports = (env, argv) => {
 							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
-									config: resolveApp('config/postcss.config.js')
+									config: resolveApp('config/postcss.config.cjs')
 								}
 							}
 						}
@@ -80,36 +71,47 @@ module.exports = (env, argv) => {
 				chunks: ['home']
 			}),
 			new HtmlWebpackPlugin({
-				filename: 'usage-basic/index.html',
-				template: resolveApp('examples/usage-basic/index.html'),
-				chunks: ['usage-basic'],
+				filename: 'google-maps/index.html',
+				template: resolveApp('examples/google-maps/index.html'),
+				chunks: ['google-maps'],
 				publicPath: '../'
 			}),
 			new HtmlWebpackPlugin({
-				filename: 'usage-with-callback/index.html',
-				template: resolveApp('examples/usage-with-callback/index.html'),
-				chunks: ['usage-with-callback'],
+				filename: 'leaflet/index.html',
+				template: resolveApp('examples/leaflet/index.html'),
+				chunks: ['leaflet'],
 				publicPath: '../'
 			}),
 			new HtmlWebpackPlugin({
-				filename: 'usage-with-categories/index.html',
-				template: resolveApp('examples/usage-with-categories/index.html'),
-				chunks: ['usage-with-categories'],
+				filename: 'mapbox/index.html',
+				template: resolveApp('examples/mapbox/index.html'),
+				chunks: ['mapbox'],
 				publicPath: '../'
 			}),
 			new HtmlWebpackPlugin({
-				filename: 'usage-with-clusters/index.html',
-				template: resolveApp('examples/usage-with-clusters/index.html'),
-				chunks: ['usage-with-clusters'],
-				publicPath: '../'
-			}),
-			new HtmlWebpackPlugin({
-				filename: 'usage-with-map-styles/index.html',
-				template: resolveApp('examples/usage-with-map-styles/index.html'),
-				chunks: ['usage-with-map-styles'],
+				filename: 'maplibre/index.html',
+				template: resolveApp('examples/maplibre/index.html'),
+				chunks: ['maplibre'],
 				publicPath: '../'
 			})
 		],
+		resolve: {
+			alias: {
+				'images/layers.png$': resolveApp('node_modules/leaflet/dist/images/layers.png'),
+				'images/layers-2x.png$': resolveApp(
+					'node_modules/leaflet/dist/images/layers-2x.png'
+				),
+				'images/marker-icon.png$': resolveApp(
+					'node_modules/leaflet/dist/images/marker-icon.png'
+				),
+				'images/marker-icon-2x.png$': resolveApp(
+					'node_modules/leaflet/dist/images/marker-icon-2x.png'
+				),
+				'images/marker-shadow.png$': resolveApp(
+					'node_modules/leaflet/dist/images/marker-shadow.png'
+				)
+			}
+		},
 		stats: {
 			assets: true,
 			colors: true,
@@ -156,7 +158,8 @@ module.exports = (env, argv) => {
 			historyApiFallback: true,
 			port: 3000,
 			compress: true,
-			hot: true
+			hot: true,
+			https: true
 		}
 	}
 

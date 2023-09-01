@@ -1,0 +1,160 @@
+.sl {
+	&-search {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		background: #fff;
+		padding: 15px;
+		z-index: 1002;
+
+		&-form {
+			position: relative;
+			width: 100%;
+			height: auto;
+			border-radius: 5px;
+		}
+
+		&-glass {
+			position: absolute;
+			top: 13px;
+			left: 10px;
+			pointer-events: none;
+
+			svg {
+				width: 15px;
+				height: 15px;
+				fill: var(--sl-colorSecondary);
+			}
+		}
+
+		&-input {
+			width: 100%;
+			height: 40px;
+			padding-left: 35px;
+			font-size: 15px;
+			border: none;
+			outline: none;
+			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+		}
+
+		&-toggleButton {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 40px;
+			height: 40px;
+			cursor: pointer;
+			display: none;
+			background-color: transparent;
+			justify-content: center;
+			align-items: center;
+			border: none;
+			appearance: none;
+			outline: none;
+
+			* {
+				pointer-events: none;
+			}
+
+			&.sl-active {
+				display: flex;
+			}
+
+			svg {
+				width: 15px;
+				height: 15px;
+				fill: var(--sl-controlsColor);
+			}
+		}
+
+		&-toggleMap {
+			svg {
+				width: 18px;
+			}
+		}
+
+		&-toggleList {
+			svg {
+				width: 16px;
+			}
+		}
+
+		&-toggleMap,
+		&-toggleList {
+			display: none;
+
+			&.sl-active {
+				display: flex;
+			}
+		}
+
+		&-autocomplete {
+			margin-top: 5px;
+			padding: 15px 10px;
+			width: 100%;
+			height: auto;
+			z-index: 1;
+			display: none;
+			position: absolute;
+			top: 56px;
+			left: 0;
+			background-color: #fff;
+
+			&.sl-active {
+				display: block;
+			}
+		}
+
+		&-autocompleteItem {
+			cursor: pointer;
+			padding-top: 5px;
+			padding-bottom: 5px;
+
+			&:not(:first-child) {
+				border-top: 1px solid var(--sl-colorSecondary);
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 750px) {
+	.sl {
+		&-search {
+			position: absolute;
+			top: 15px;
+			left: 15px;
+			width: 350px;
+			height: auto;
+			max-height: calc(100% - calc(15px * 2));
+			border-radius: 10px;
+			background-color: #fff;
+			box-shadow: 0 2px 4px rgb(0 0 0 / 20%), 0 -1px 0 rgb(0 0 0 / 2%);
+
+			&-toggleButton {
+				&,
+				&.sl-active {
+					display: none;
+				}
+			}
+
+			&-autocomplete {
+				position: relative;
+				top: auto;
+				left: auto;
+				padding-bottom: 0;
+			}
+		}
+	}
+}
+
+@media (hover: hover) {
+	.sl {
+		&-search {
+			&-autocompleteItem {
+				&:hover {
+					background-color: rgba(60 64 67 / 4%);
+				}
+			}
+		}
+	}
+}

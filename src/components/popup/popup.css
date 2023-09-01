@@ -1,0 +1,44 @@
+.sl {
+	&-popup {
+		padding: 10px 0 10px 10px;
+		max-width: 250px;
+
+		&-picture {
+			margin-bottom: 20px;
+			display: block;
+			max-width: 250px;
+
+			img {
+				display: block;
+				width: 100%;
+				height: auto;
+			}
+		}
+
+		&-title {
+			display: block;
+			font-weight: 600;
+			margin-bottom: 10px;
+		}
+
+		&-address {
+			display: inline-block;
+			margin-bottom: 10px;
+		}
+
+		&-phone {
+			display: block;
+			color: #000;
+
+			&:focus-visible {
+				outline: none;
+			}
+		}
+
+		&-url {
+			margin-top: 10px;
+			display: block;
+			color: #000;
+		}
+	}
+}

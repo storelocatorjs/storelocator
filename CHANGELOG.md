@@ -78,7 +78,7 @@
 
 ### Updates
 
-- Add prefix `.storelocator-` before all CSS classes use by storelocatorjs to prevent conflicts
+- Add prefix `.st-` before all CSS classes use by storelocatorjs to prevent conflicts
 - Rename all CSS class with [FUN](https://benfrain.com/enduring-css-writing-style-sheets-rapidly-changing-long-lived-projects/#h-H2_5) methodology
 
 ## 1.0.0
