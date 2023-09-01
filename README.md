@@ -2,7 +2,22 @@
 
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/yoriiis/storelocatorjs/build.yml?branch=main&style=for-the-badge)](https://github.com/yoriiis/storelocatorjs/actions/workflows/build.yml) [![jsDelivr](https://img.shields.io/jsdelivr/npm/hm/storelocatorjs?color=%23ff5627&style=for-the-badge)](https://www.jsdelivr.com/package/npm/storelocatorjs)
 
-Storelocatorjs is a **fast** and **lightweight** Javascript library to easily build a store locator using <a href="https://developers.google.com/maps/documentation/javascript/" target="_blank" title="Documentation">Google Maps API V3</a>. Only **6Kb** on production with gzip, Storelocatorjs has no dependency with any framework or library and is written in **Javascript native**.<br /><br />
+<!-- LOGO -->
+
+## Features
+
+- **Video & audio** - [HTML5 video](./src/providers/html5/README.md), [HTML5 audio](./src/providers/html5/README.md), [Youtube](./src/providers/youtube/README.md), [Vimeo](./src/providers/vimeo/README.md), [Dailymotion](./src/providers/dailymotion/README.md).
+- **Customization** - Choose the control elements you want to display.
+- **No dependency** - Written in native Javascript without any framework.
+- [**Provider API**](./src/providers/README.md) - Use the available providers or create your own.
+- [**Geocoder API**](./src/plugins/README.md) - Use the available geocoder or create your own.
+- [**Events**](#events) - Standardized events for all web browsers, providers and plugins.
+- **Autoload API** - Google Maps, Leaflet, Mapbox and MapLibre API are automatically loaded by their provider.
+- **SVG icons** - SVG are inlined into the library, no sprites to includes.
+- [**Shortcuts**](#shortcuts) - Supports keyboard shortcuts.
+
+<!-- TODO -->
+<!-- - **Accessibility** - W3C and A11Y valid. -->
 
 <p align="center">
     <a href="https://storelocatorjs.github.io/demo" title="Storelocatorjs demo">
@@ -10,7 +25,13 @@ Storelocatorjs is a **fast** and **lightweight** Javascript library to easily bu
     </a>
 </p>
 
-## Examples
+:sparkles: You can support this project with [GitHub Sponsors](https://github.com/sponsors/storelocatorjs)! &#9825;
+
+## License
+
+The project is available with a license key on the Lemon Squeezy store. [Read more about fullPage's license](https://storelocator.lemonsqueezy.com/checkout/buy/5d697bb7-4cc8-4e6e-b7d7-fec4372a94b1?discount=0).
+
+### Examples
 
 The project includes several examples of `storelocatorjs` implementation in the directory `examples`. Run the following commands to build the assets for the examples:
 
@@ -20,7 +41,11 @@ npm run build && npm run build:example
 
 ## Installation
 
-The library is available as the `storelocatorjs` package name on [npm](https://www.npmjs.com/package/storelocatorjs).
+> **Warning** storelocatorjs@3 is ESM and uses the [Node.js package `exports`](https://nodejs.org/api/packages.html#exports).
+
+### NPM
+
+NPM is the recommended installation method. Install `storelocatorjs` in your project with the following command:
 
 ```bash
 npm install storelocatorjs --save-dev
@@ -30,99 +55,167 @@ npm install storelocatorjs --save-dev
 yarn add storelocatorjs --dev
 ```
 
-## Demo
+> **Note** Minimum supported `Node.js` version is `16.20.0`.
 
-Online demo is available on [https://storelocatorjs.github.io/demo](https://storelocatorjs.github.io/demo).
+### CDN
+
+You can also download it and include it with a script tag as an ESM.
+
+```html
+<link
+  href="https://cdn.jsdelivr.net/npm/storelocatorjs@3/dist/storelocator.css"
+  rel="stylesheet"
+  crossorigin
+/>
+<script type="module">
+  import Storelocatorjs from 'https://cdn.jsdelivr.net/npm/storelocatorjs@3';
+</script>
+```
+
+> **Note** You can browse the source of the NPM package at [jsdelivr.com/package/npm/storelocatorjs](https://www.jsdelivr.com/package/npm/storelocatorjs).
 
 ## How it works
 
-### Cloud functions
-
-All requests to filter stores by geoposition are send to a cloud function as a web service. Storelocatorjs includes the cloud functions project from [Google Firebase](https://firebase.google.com/docs/functions) located in the `./functions` folder.
-
-### Structure
-
-The extended usage of the Storelocatorjs with filters and store categories used a minimalist HTML structure.
+### HTML
 
 ```html
-<div class="storelocator">
-  <div class="sl-loader"></div>
-  <div class="sl-sidebar">
-    <form class="sl-formSearch" name="form-search">
-      <input type="text" class="sl-inputSearch" placeholder="Enter a location" autocomplete="off" />
-      <div class="sl-formFilters">
-        <div class="sl-formFiltersRow">
-          <div class="sl-formCheckbox">
-            <input type="checkbox" id="cat-1" data-filter checked="checked" value="1" />
-            <label for="cat-1" class="category-1">Categorie 1</label>
-          </div>
-          <div class="sl-formCheckbox">
-            <input type="checkbox" id="cat-2" data-filter checked="checked" value="2" />
-            <label for="cat-2" class="category-2">Categorie 2</label>
-          </div>
-        </div>
-        <div class="sl-formFiltersRow">
-          <div class="sl-formCheckbox">
-            <input type="checkbox" id="cat-3" data-filter value="3" />
-            <label for="cat-3" class="category-3">Categorie 3</label>
-          </div>
-        </div>
-      </div>
-    </form>
-    <nav class="sl-nav">
-      <ul class="sl-navList">
-        <li class="sl-navListItem active">
-          <button class="sl-navButton" data-switch-view data-target="map">Map</button>
-        </li>
-        <li class="sl-navListItem">
-          <button class="sl-navButton" data-switch-view data-target="list">List</button>
-        </li>
-      </ul>
-    </nav>
-    <div class="sl-results"></div>
-  </div>
-  <div class="sl-googleMaps active">
-    <div id="sl-mapCanvas"></div>
-    <button class="sl-geolocButton"></button>
-  </div>
-</div>
+<div id="app"></div>
 ```
 
-### Options
+### Initialization
 
-Storelocatorjs contains many options to allow you to easily configure your map according to your needs. Options are available on the [Storelocatorjs website](https://storelocatorjs.github.io/available-options.html).
+Import `storelocatorjs` styleheet and the JavaScript library as an ES6 modules.
 
-#### Example with the onReady function
+```javascript
+import 'storelocatorjs/storelocator.css';
+import Storelocatorjs from 'storelocatorjs';
+```
 
-The `onReady` function expose the Google Maps instance as `map` variable and is called when the map is instantiated and ready. With the example below, an automatic search is triggered with location coordinates passed in parameters.
+The `storelocatorjs` constructor accepts an object as configuration with the following parameters:
 
-```js
-new Storelocator({
-    apiKey: '',
-    webServiceUrl: ''
-}, onReady: function(map) {
-    this.triggerRequest({
-        'lat': 48.8589507,
-        'lng': 2.2770202
+| Arguments           |        Type        | Description                                                                      |
+| ------------------- | :----------------: | -------------------------------------------------------------------------------- |
+| `target`            |   `HTMLElement`    | Unique `HTMLElement` to target the storelocator                                  |
+| `licenseKey`        |      `String`      | Mandatory license key                                                            |
+| `api.url`           |      `String`      | Endpoint to request and search stores                                            |
+| `api.radius`        |      `Number`      | Radius in km for the research                                                    |
+| `api.limit`         |      `Number`      | Limit of search result in the research                                           |
+| `map.provider`      |      `String`      | Map provider                                                                     |
+| `map.token`         |      `String`      | Map provider token                                                               |
+| `map.options`       |      `String`      | Map provider options                                                             |
+| `geocoder.provider` | `String\|Function` | Geocoder provider                                                                |
+| `geocoder.token`    |      `String`      | Geocoder provider token                                                          |
+| `templates.popup`   |     `Function`     | Custom template for marker popup                                                 |
+| `templates.result`  |     `Function`     | Custom template for search result                                                |
+| `onReady`           |     `Function`     | Callback function executed when the [storelocator is ready](#storelocator-ready) |
+
+Initialize the storelocator with the configuration object.
+
+```javascript
+new Storelocatorjs({
+  target: document.querySelector('#app'),
+  licenseKey: 'LICENSE_KEY',
+  api: {
+    url: 'ENDPOINT_URL'
+  },
+  map: {
+    provider: GoogleMaps,
+    token: 'MAP_PROVIDER_TOKEN'
+  },
+  geocoder: {
+    provider: 'mapbox',
+    token: 'GEOCODER_PROVIDER_TOKEN'
+  }
+});
+```
+
+---
+
+<!-- TODO: add geocoder doc -->
+<!-- TODO: add endpoint doc and hosting -->
+
+### Storelocator ready
+
+The callback function `onReady` is automatically executed when the storelocator is ready. The Google Maps, Leaflet, Mapbox and MapLibre provider listen to the `onready` event returned by their API.
+
+The function exposes the `storelocator` parameter as the storelocator instance. You can use it to interact with the storelocator instance and the [storelocator methods](#methods).
+
+Example of a storelocator with geolocation requested when ready:
+
+```javascript
+new Storelocatorjs({
+  onReady: function (storelocator) {
+    storelocator.requestUserPosition();
+  }
+});
+```
+
+> **Note** The `onReady` function can also be written with an arrow function.
+
+### Events
+
+`storelocatorjs` exposes the following native `Event` on the `.sl-app` element. Events are standardized for all providers.
+
+| Event Type      | Description                                                                      |
+| --------------- | -------------------------------------------------------------------------------- |
+| `progress`      | Sent periodically to inform interested parties of progress downloading the media |
+| `userPosition`  | Sent when the user location is requested                                         |
+| `storeFound`    | Sent when results where found                                                    |
+| `storeNotFound` | Sent when no results found                                                       |
+| `zoomIn`        | Sent when zooming in                                                             |
+| `zoomOut`       | Sent when zooming out                                                            |
+
+Example of a listener when the storelocator triggers the user position event.
+
+```javascript
+new Storelocatorjs({
+  onReady: (storelocator) => {
+    storelocator.on('userPosition', () => {
+      // The user location is requested
     });
-})
+  }
+});
 ```
 
-## Browsers support
+### Methods
 
-The project is fully compatible with the most popular web browsers. More information about the Google Maps support on <a href="https://developers.google.com/maps/documentation/javascript/browsersupport?hl=fr" target="_blank" title="Google Maps support">Google Developers</a>. HTML and CSS files are W3C valid.
+The storelocator instance exposes the following methods, accessible when the storelocator is ready.
 
-## Licenses
+| Method                  |     Parameters     | Promise | Description                                                         |
+| ----------------------- | :----------------: | :-----: | ------------------------------------------------------------------- |
+| `requestUserPosition()` |         -          |    -    | Request the user position to search for results around its position |
+| `getInstance()`         |         -          |    -    | Get the storelocator instance                                       |
+| `loading()`             |     `Boolean`      |    -    | Set the loading status                                              |
+| `on(event, function)`   | `String, Function` |    -    | Add an event listener                                               |
+| `off(event, function)`  | `String, Function` |    -    | Remove an event listener                                            |
+| `destroy()`             |         -          |    -    | Destroy the storelocator                                            |
 
-### Commercial license
+Example of media `duration` recovery.
 
-If you want to use Storelocatorjs to develop commercial sites, themes, projects, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary.
-Purchase a Storelocatorjs Commercial License on the [license page](https://storelocatorjs.github.io/licenses.html#purchasing).
+```javascript
+new Storelocatorjs({
+  onReady: (storelocator) => {
+    storelocator.requestUserPosition();
+  }
+});
+```
 
-### Open source license
+### Custom CSS properties
 
-If you are creating an open source application under a license compatible with the [GNU GPL license v3](https://www.gnu.org/licenses/gpl-3.0.html), you may use Storelocatorjs under the terms of the GPLv3.
+The storelocator exposes some custom CSS properties, locally scopped under the `.v-vlite` selector. You can use them to customize the design.
 
-## Contributors
+| Name                          | Value        | Description              |
+| ----------------------------- | ------------ | ------------------------ |
+| `--sl-markerSearchColor`      | `#107a8b`    | Marker search color      |
+| `--sl-markerGeolocationColor` | `#107a8b`    | Marker geolocation color |
+| `--sl-colorSecondary`         | `0.25s ease` | Secondary color          |
+| `--sl-transition`             | `0.25s ease` | Transition               |
+| `--sl-controlsColor`          | `0.25s ease` | Controls color           |
 
-Created with ♥ by [@yoriiis](http://github.com/yoriiis)
+---
+
+## License
+
+<!-- `storelocatorjs` is licensed under the [MIT License](https://opensource.org/licenses/MIT). -->
+
+Created with &#9825; by [@yoriiis](https://github.com/yoriiis).

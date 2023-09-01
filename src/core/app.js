@@ -6,8 +6,8 @@ import 'components/search/search.css'
 import 'components/result/result.css'
 
 import Map from 'core/map'
-import check from './check'
-// import check from 'check'
+// import check from './check'
+import check from 'check'
 import TemplateMap from 'components/map/templates/map'
 import TemplateLoader from 'components/loader/templates/loader'
 
@@ -40,9 +40,9 @@ class Storelocator {
 
 	init() {
 		check(this.licenseKey)
-			.then(({ valid, message, dev }) => {
+			.then(({ valid, message }) => {
 				if (valid) {
-					dev && console.warn(dev)
+					message && console.warn(message)
 					this.render()
 					this.buildLoader()
 					this.mapProvider.build()

@@ -181,14 +181,14 @@ export default class Map {
 		const marker = this.markers[markerIndex]
 
 		if (this.isMobile()) {
+			this.panTo(this.getMarkerLatLng(marker))
+		} else {
 			this.panTo(
 				this.getLatLngWithOffset({
 					latLng: this.getMarkerLatLng(marker),
 					offsetX: this.elements.search.offsetWidth / 2
 				})
 			)
-		} else {
-			this.panTo(this.getMarkerLatLng(marker))
 		}
 
 		this.openPopup(marker)
@@ -209,8 +209,7 @@ export default class Map {
 	onClickGeolocationButton(e) {
 		e.preventDefault()
 		if (navigator.geolocation) {
-			this.loading(true)
-			this.checkUserPosition()
+			this.requestUserPosition()
 		} else {
 			this.elements.geolocButton.classList.add('sl-error')
 		}
@@ -228,10 +227,11 @@ export default class Map {
 		this.dispatchEvent('zoomOut')
 	}
 
-	checkUserPosition() {
+	requestUserPosition() {
+		this.loading(true)
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude: lat, longitude: lng } }) => {
-				this.dispatchEvent('checkUserPosition', {
+				this.dispatchEvent('userPosition', {
 					lat,
 					lng
 				})
@@ -257,7 +257,7 @@ export default class Map {
 				})
 			},
 			(error) => {
-				console.warn('Storelocator: checkUserPosition', error)
+				console.warn('Storelocator: requestUserPosition', error)
 				this.elements.geolocButton.classList.add('sl-error')
 				this.loading(false)
 			}
@@ -338,9 +338,8 @@ export default class Map {
 			this.elements.results.innerHTML = html
 
 			this.fitBounds({ latLngBounds: this.boundsGlobal })
-			this.onFitBoundsEnd(() => {
-				this.panBy(-(this.elements.search.offsetWidth / 2), 0)
-			})
+			!this.isMobile() &&
+				this.onFitBoundsEnd(() => this.panBy(-(this.elements.search.offsetWidth / 2), 0))
 
 			this.dispatchEvent('storeFound')
 		} else {
@@ -390,7 +389,7 @@ export default class Map {
 	}
 
 	isMobile() {
-		return window.matchMedia('(min-width: 750px)').matches
+		return !window.matchMedia('(min-width: 750px)').matches
 	}
 
 	removeEvents() {

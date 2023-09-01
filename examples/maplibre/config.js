@@ -1,11 +1,11 @@
 import '../../dist/storelocator.css'
 import '../../dist/map/maplibre.css'
-import Storelocator from '../../dist/storelocator.js'
+import Storelocatorjs from '../../dist/storelocator.js'
 import MapLibre from '../../dist/map/maplibre.js'
 import credentials from '../credentials.json'
 
 /* eslint-disable no-unused-vars */
-const myStorelocator = new Storelocator({
+const storelocator = new Storelocatorjs({
 	target: document.querySelector('#app'),
 	api: {
 		url: 'https://storelocatorjs-functions.vercel.app'
