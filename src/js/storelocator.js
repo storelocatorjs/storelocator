@@ -2,10 +2,10 @@
  * @name Storelocatorjs
  * @version 2.1.0
  * @license GPLv3 for Open Source use or Storelocatorjs Commercial License for commercial use
- * @author: Joris DANIEL aka Yoriiis
+ * @author: Yoriiis
  * @description: Storelocatorjs is a fast and lightweight Javascript library for build your own customizable store locator with a minimalist theme. The cloud function is included to handle store filter requests.
  * {@link https://storelocatorjs.github.io}
- * @copyright 2019 Joris DANIEL aka Yoriiis <https://storelocatorjs.github.io>
+ * @copyright 2019 Yoriiis <https://storelocatorjs.github.io>
  */
 
 'use strict'
