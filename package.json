@@ -19,7 +19,7 @@
 	"homepage": "https://storelocatorjs.github.io",
 	"bugs": "https://github.com/yoriiis/storelocatorjs/issues",
 	"repository": "https://github.com/yoriiis/storelocatorjs.git",
-	"author": "Joris DANIEL",
+	"author": "Yoriiis",
 	"main": "dist/storelocator.js",
 	"files": [
 		"./src"
