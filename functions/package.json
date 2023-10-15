@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"private": true,
 	"description": "Storelocatorjs cloud function",
-	"author": "Yoriiis aka Joris Daniel (joris.daniel@gmail.com)",
+	"author": "Yoriiis",
 	"main": "index.js",
 	"scripts": {
 		"build": "echo \"No build specified\" && exit 0",
